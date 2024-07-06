@@ -94,10 +94,15 @@ dependencies {
     // https://developer.android.com/training/dependency-injection/hilt-android
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     // ICONS
     // https://maven.google.com/web/index.html?q=icons#androidx.compose.material:material-icons-extended:1.7.0-beta04
     implementation(libs.androidx.material.icons.extended)
+
+    // KOTLIN COROUTINES
+    // https://developer.android.com/kotlin/coroutines
+    implementation(libs.kotlinx.coroutines.android)
 }
 
 kapt {

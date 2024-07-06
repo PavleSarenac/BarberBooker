@@ -3,6 +3,7 @@ package rs.ac.bg.etf.barberbooker.ui.stateholders.guest
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import rs.ac.bg.etf.barberbooker.data.room.repositories.BarberRepository
 import javax.inject.Inject
 
@@ -29,5 +30,6 @@ class BarberRegistrationViewModel @Inject constructor(
         private const val UI_STATE_KEY = "barber_registration_ui_state"
     }
 
-    private val _uiState = savedStateHandle.getStateFlow(UI_STATE_KEY, BarberRegistrationUiState())
+    private val _uiState = MutableStateFlow(BarberRegistrationUiState())
+    val uiState = _uiState
 }
