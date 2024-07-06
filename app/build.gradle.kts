@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
 
+    // room and hilt
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
 }
@@ -84,10 +85,10 @@ dependencies {
     // https://maven.google.com/web/index.html?#androidx.room:room-runtime:2.7.0-alpha04
     implementation(libs.androidx.room.runtime)
     // https://maven.google.com/web/index.html?#androidx.room:room-compiler:2.7.0-alpha04
-    annotationProcessor(libs.androidx.room.compiler)
+    annotationProcessor(libs.room.compiler)
     // https://maven.google.com/web/index.html?#androidx.room:room-compiler:2.7.0-alpha04
     //noinspection KaptUsageInsteadOfKsp
-    kapt(libs.androidx.room.compiler)
+    kapt(libs.room.compiler)
 
     // HILT
     // https://developer.android.com/training/dependency-injection/hilt-android

@@ -8,9 +8,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import rs.ac.bg.etf.barberbooker.data.staticRoutes
-import rs.ac.bg.etf.barberbooker.ui.elements.screens.InitialScreen
-import rs.ac.bg.etf.barberbooker.ui.elements.screens.LogInScreen
-import rs.ac.bg.etf.barberbooker.ui.elements.screens.SignUpScreen
+import rs.ac.bg.etf.barberbooker.ui.elements.screens.guest.InitialScreen
+import rs.ac.bg.etf.barberbooker.ui.elements.screens.guest.LogInScreen
+import rs.ac.bg.etf.barberbooker.ui.elements.screens.guest.SignUpAsBarberScreen
+import rs.ac.bg.etf.barberbooker.ui.elements.screens.guest.SignUpAsClientScreen
+import rs.ac.bg.etf.barberbooker.ui.elements.screens.guest.SignUpScreen
 
 @Composable
 fun BarberBookerApp() {
@@ -30,7 +32,13 @@ fun BarberBookerApp() {
                 LogInScreen()
             }
             composable(route = staticRoutes[2]) {
-                SignUpScreen()
+                SignUpScreen(navHostController)
+            }
+            composable(route = staticRoutes[3]) {
+                SignUpAsClientScreen()
+            }
+            composable(route = staticRoutes[4]) {
+                SignUpAsBarberScreen()
             }
         }
     }

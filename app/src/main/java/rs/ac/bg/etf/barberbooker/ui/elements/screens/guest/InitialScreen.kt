@@ -1,4 +1,4 @@
-package rs.ac.bg.etf.barberbooker.ui.elements.screens
+package rs.ac.bg.etf.barberbooker.ui.elements.screens.guest
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
