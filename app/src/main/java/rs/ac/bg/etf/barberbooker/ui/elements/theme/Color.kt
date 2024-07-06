@@ -1,4 +1,4 @@
-package rs.ac.bg.etf.barberbooker.ui.theme
+package rs.ac.bg.etf.barberbooker.ui.elements.theme
 
 import androidx.compose.ui.graphics.Color
 
