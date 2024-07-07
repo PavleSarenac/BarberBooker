@@ -60,7 +60,6 @@ class ClientRegistrationViewModel @Inject constructor(
     }
 
     fun registerClient(
-        uiState: ClientRegistrationUiState,
         coroutineScope: CoroutineScope,
         snackbarHostState: SnackbarHostState,
         navHostController: NavHostController
@@ -75,7 +74,7 @@ class ClientRegistrationViewModel @Inject constructor(
                 snackbarHostState.showSnackbar("Invalid data format!")
                 return@launch
             }
-            val isEmailAlreadyTaken = isEmailAlreadyTaken(uiState.email)
+            val isEmailAlreadyTaken = isEmailAlreadyTaken(email)
             if (isEmailAlreadyTaken) {
                 snackbarHostState.showSnackbar("Email already taken!")
                 return@launch

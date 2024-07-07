@@ -67,7 +67,7 @@ fun SignUpAsClientScreen(
                 ),
                 title = {
                     Text(
-                        text = "Sign up as client",
+                        text = "Sign up as a client",
                         fontWeight = FontWeight.ExtraBold
                     )
                 },
@@ -211,7 +211,6 @@ fun SignUpAsClientScreen(
             OutlinedButton(
                 onClick = {
                     clientRegistrationViewModel.registerClient(
-                        uiState,
                         coroutineScope,
                         snackbarHostState,
                         navHostController

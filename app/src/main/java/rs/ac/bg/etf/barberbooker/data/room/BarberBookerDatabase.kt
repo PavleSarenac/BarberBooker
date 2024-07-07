@@ -9,7 +9,7 @@ import rs.ac.bg.etf.barberbooker.data.room.daos.ClientDao
 import rs.ac.bg.etf.barberbooker.data.room.entities.Barber
 import rs.ac.bg.etf.barberbooker.data.room.entities.Client
 
-@Database(entities = [Client::class, Barber::class], version = 2, exportSchema = false)
+@Database(entities = [Client::class, Barber::class], version = 3, exportSchema = false)
 abstract class BarberBookerDatabase : RoomDatabase() {
     abstract fun barberDao(): BarberDao
 

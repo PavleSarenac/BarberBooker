@@ -8,13 +8,13 @@ data class Barber(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     var email: String,
     var password: String,
-    var name: String,
-    var surname: String,
+    var barbershopName: String,
     var price: Double,
-    var address: String,
-    var latitude: Double,
-    var longitude: Double,
     var phone: String,
+    var country: String,
+    var city: String,
+    var municipality: String,
+    var address: String,
     var workingDays: String,
     var workingHours: String
 )

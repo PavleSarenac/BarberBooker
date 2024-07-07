@@ -27,10 +27,8 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TimePicker
 import androidx.compose.material3.TopAppBarDefaults
@@ -55,10 +53,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
-import rs.ac.bg.etf.barberbooker.data.staticRoutes
-import rs.ac.bg.etf.barberbooker.ui.stateholders.guest.BarberRegistrationUiState
 import rs.ac.bg.etf.barberbooker.ui.stateholders.guest.BarberRegistrationViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -92,7 +86,7 @@ fun SignUpAsBarberScreen(
                 ),
                 title = {
                     Text(
-                        text = "Sign up as barber",
+                        text = "Sign up as a barber",
                         fontWeight = FontWeight.ExtraBold
                     )
                 },
@@ -165,8 +159,8 @@ fun SignUpAsBarberScreen(
                 placeholder = { Text("e.g., Milos123!") },
             )
             OutlinedTextField(
-                value = uiState.name,
-                onValueChange =  { barberRegistrationViewModel.setName(it) },
+                value = uiState.barbershopName,
+                onValueChange =  { barberRegistrationViewModel.setBarbershopName(it) },
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = MaterialTheme.colorScheme.onPrimary,
                     unfocusedBorderColor = MaterialTheme.colorScheme.onPrimary,
@@ -174,7 +168,7 @@ fun SignUpAsBarberScreen(
                     focusedLabelColor = MaterialTheme.colorScheme.onPrimary,
                     unfocusedLabelColor = MaterialTheme.colorScheme.onPrimary
                 ),
-                label = { Text(text = "Name") },
+                label = { Text(text = "Barbershop name") },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Text,
@@ -184,31 +178,8 @@ fun SignUpAsBarberScreen(
                     focusManager.moveFocus(FocusDirection.Down)
                 }),
                 modifier = Modifier.padding(horizontal = 48.dp, vertical = 8.dp),
-                isError = !uiState.isNameValid,
-                placeholder = { Text("e.g., Milos") }
-            )
-            OutlinedTextField(
-                value = uiState.surname,
-                onValueChange =  { barberRegistrationViewModel.setSurname(it) },
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = MaterialTheme.colorScheme.onPrimary,
-                    unfocusedBorderColor = MaterialTheme.colorScheme.onPrimary,
-                    cursorColor = MaterialTheme.colorScheme.onPrimary,
-                    focusedLabelColor = MaterialTheme.colorScheme.onPrimary,
-                    unfocusedLabelColor = MaterialTheme.colorScheme.onPrimary
-                ),
-                label = { Text(text = "Surname") },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Next,
-                ),
-                keyboardActions = KeyboardActions(onNext = {
-                    focusManager.moveFocus(FocusDirection.Down)
-                }),
-                modifier = Modifier.padding(horizontal = 48.dp, vertical = 8.dp),
-                isError = !uiState.isSurnameValid,
-                placeholder = { Text("e.g., Milosevic") }
+                isError = !uiState.isBarbershopNameValid,
+                placeholder = { Text("e.g., Cut&Go") }
             )
             OutlinedTextField(
                 value = uiState.phone,
@@ -246,6 +217,121 @@ fun SignUpAsBarberScreen(
                 label = { Text(text = "Price") },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions.Default.copy(
+                    keyboardType = KeyboardType.Phone,
+                    imeAction = ImeAction.Next,
+                ),
+                keyboardActions = KeyboardActions(onNext = {
+                    focusManager.moveFocus(FocusDirection.Down)
+                }),
+                modifier = Modifier.padding(horizontal = 48.dp, vertical = 8.dp),
+                isError = !uiState.isPriceValid,
+                placeholder = { Text("e.g., 1199.99") },
+            )
+            OutlinedTextField(
+                value = uiState.country,
+                onValueChange =  { barberRegistrationViewModel.setCountry(it) },
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.onPrimary,
+                    cursorColor = MaterialTheme.colorScheme.onPrimary,
+                    focusedLabelColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedLabelColor = MaterialTheme.colorScheme.onPrimary
+                ),
+                label = { Text(text = "Country") },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Next,
+                ),
+                keyboardActions = KeyboardActions(onNext = {
+                    focusManager.moveFocus(FocusDirection.Down)
+                }),
+                modifier = Modifier.padding(horizontal = 48.dp, vertical = 8.dp),
+                isError = !uiState.isCountryValid,
+                placeholder = { Text("e.g., Serbia") },
+            )
+            OutlinedTextField(
+                value = uiState.city,
+                onValueChange =  { barberRegistrationViewModel.setCity(it) },
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.onPrimary,
+                    cursorColor = MaterialTheme.colorScheme.onPrimary,
+                    focusedLabelColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedLabelColor = MaterialTheme.colorScheme.onPrimary
+                ),
+                label = { Text(text = "City") },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Next,
+                ),
+                keyboardActions = KeyboardActions(onNext = {
+                    focusManager.moveFocus(FocusDirection.Down)
+                }),
+                modifier = Modifier.padding(horizontal = 48.dp, vertical = 8.dp),
+                isError = !uiState.isCityValid,
+                placeholder = { Text("e.g., Belgrade") },
+            )
+            OutlinedTextField(
+                value = uiState.municipality,
+                onValueChange =  { barberRegistrationViewModel.setMunicipality(it) },
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.onPrimary,
+                    cursorColor = MaterialTheme.colorScheme.onPrimary,
+                    focusedLabelColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedLabelColor = MaterialTheme.colorScheme.onPrimary
+                ),
+                label = { Text(text = "Municipality") },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Next,
+                ),
+                keyboardActions = KeyboardActions(onNext = {
+                    focusManager.moveFocus(FocusDirection.Down)
+                }),
+                modifier = Modifier.padding(horizontal = 48.dp, vertical = 8.dp),
+                isError = !uiState.isMunicipalityValid,
+                placeholder = { Text("e.g., Karaburma") },
+            )
+            OutlinedTextField(
+                value = uiState.streetName,
+                onValueChange =  { barberRegistrationViewModel.setStreetName(it) },
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.onPrimary,
+                    cursorColor = MaterialTheme.colorScheme.onPrimary,
+                    focusedLabelColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedLabelColor = MaterialTheme.colorScheme.onPrimary
+                ),
+                label = { Text(text = "Street name") },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Next,
+                ),
+                keyboardActions = KeyboardActions(onNext = {
+                    focusManager.moveFocus(FocusDirection.Down)
+                }),
+                modifier = Modifier.padding(horizontal = 48.dp, vertical = 8.dp),
+                isError = !uiState.isStreetNameValid,
+                placeholder = { Text("e.g., Marijane Gregoran") },
+            )
+            OutlinedTextField(
+                value = uiState.streetNumber,
+                onValueChange =  { barberRegistrationViewModel.setStreetNumber(it) },
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.onPrimary,
+                    cursorColor = MaterialTheme.colorScheme.onPrimary,
+                    focusedLabelColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedLabelColor = MaterialTheme.colorScheme.onPrimary
+                ),
+                label = { Text(text = "Street number") },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Done,
                 ),
@@ -253,8 +339,8 @@ fun SignUpAsBarberScreen(
                     focusManager.clearFocus()
                 }),
                 modifier = Modifier.padding(horizontal = 48.dp, vertical = 8.dp),
-                isError = !uiState.isPriceValid,
-                placeholder = { Text("e.g., 1199.99") },
+                isError = !uiState.isStreetNumberValid,
+                placeholder = { Text("e.g., 66") },
             )
             Text(
                 text = "Working day start time:",
@@ -400,13 +486,20 @@ fun SignUpAsBarberScreen(
             }
             OutlinedButton(
                 onClick = {
-                    registerBarber(
-                        barberRegistrationViewModel,
-                        uiState,
-                        coroutineScope,
-                        snackbarHostState,
-                        navHostController
-                    )
+                   barberRegistrationViewModel.registerBarber(
+                       coroutineScope,
+                       snackbarHostState,
+                       navHostController,
+                       String.format("%02d:%02d", workingDayStartTimeState.hour, workingDayStartTimeState.minute),
+                       String.format("%02d:%02d", workingDayEndTimeState.hour, workingDayEndTimeState.minute),
+                       mondayCheckedState,
+                       tuesdayCheckedState,
+                       wednesdayCheckedState,
+                       thursdayCheckedState,
+                       fridayCheckedState,
+                       saturdayCheckedState,
+                       sundayCheckedState
+                   )
                 },
                 border = BorderStroke(1.dp, Color.White),
                 shape = MaterialTheme.shapes.medium,
@@ -422,42 +515,6 @@ fun SignUpAsBarberScreen(
                     text = "Sign up"
                 )
             }
-        }
-    }
-}
-
-fun registerBarber(
-    barberRegistrationViewModel: BarberRegistrationViewModel,
-    uiState: BarberRegistrationUiState,
-    coroutineScope: CoroutineScope,
-    snackbarHostState: SnackbarHostState,
-    navHostController: NavHostController
-) {
-    coroutineScope.launch {
-        if (!barberRegistrationViewModel.isDataValid(
-                uiState.email,
-                uiState.password,
-                uiState.name,
-                uiState.surname,
-                uiState.phone
-            )) {
-            snackbarHostState.showSnackbar("Invalid data format!")
-            return@launch
-        }
-        val isEmailAlreadyTaken = barberRegistrationViewModel.isEmailAlreadyTaken(uiState.email)
-        if (isEmailAlreadyTaken) {
-            snackbarHostState.showSnackbar("Email already taken!")
-            return@launch
-        }
-        barberRegistrationViewModel.addNewBarber()
-        val snackbarResult = snackbarHostState.showSnackbar(
-            message = "Registration successful!",
-            withDismissAction = true,
-            actionLabel = "Log in",
-            duration = SnackbarDuration.Indefinite
-        )
-        if (snackbarResult == SnackbarResult.ActionPerformed) {
-            navHostController.navigate(staticRoutes[1])
         }
     }
 }
