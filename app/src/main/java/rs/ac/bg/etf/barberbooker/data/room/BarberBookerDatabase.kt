@@ -6,10 +6,10 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import rs.ac.bg.etf.barberbooker.data.room.daos.BarberDao
 import rs.ac.bg.etf.barberbooker.data.room.daos.ClientDao
-import rs.ac.bg.etf.barberbooker.data.room.entites.Barber
-import rs.ac.bg.etf.barberbooker.data.room.entites.Client
+import rs.ac.bg.etf.barberbooker.data.room.entities.Barber
+import rs.ac.bg.etf.barberbooker.data.room.entities.Client
 
-@Database(entities = [Client::class, Barber::class], version = 1, exportSchema = false)
+@Database(entities = [Client::class, Barber::class], version = 2, exportSchema = false)
 abstract class BarberBookerDatabase : RoomDatabase() {
     abstract fun barberDao(): BarberDao
 

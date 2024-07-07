@@ -1,9 +1,9 @@
-package rs.ac.bg.etf.barberbooker.data.room.entites
+package rs.ac.bg.etf.barberbooker.data.room.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity
+@Entity(tableName = "barber")
 data class Barber(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     var email: String,
