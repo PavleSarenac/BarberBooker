@@ -3,12 +3,14 @@ package rs.ac.bg.etf.barberbooker.ui.elements.screens.guest
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -16,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBackIos
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -35,6 +38,7 @@ import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -42,11 +46,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.CoroutineScope
@@ -68,6 +74,14 @@ fun SignUpAsBarberScreen(
 
     val workingDayStartTimeState = rememberTimePickerState(is24Hour = true)
     val workingDayEndTimeState = rememberTimePickerState(is24Hour = true)
+
+    val (mondayCheckedState, onMondayStateChange) = remember { mutableStateOf(true) }
+    val (tuesdayCheckedState, onTuesdayStateChange) = remember { mutableStateOf(true) }
+    val (wednesdayCheckedState, onWednesdayStateChange) = remember { mutableStateOf(true) }
+    val (thursdayCheckedState, onThursdayStateChange) = remember { mutableStateOf(true) }
+    val (fridayCheckedState, onFridayStateChange) = remember { mutableStateOf(true) }
+    val (saturdayCheckedState, onSaturdayStateChange) = remember { mutableStateOf(false) }
+    val (sundayCheckedState, onSundayStateChange) = remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -244,7 +258,8 @@ fun SignUpAsBarberScreen(
             )
             Text(
                 text = "Working day start time:",
-                modifier = Modifier.padding(horizontal = 48.dp, vertical = 8.dp)
+                modifier = Modifier.padding(horizontal = 48.dp, vertical = 8.dp),
+                fontSize = 24.sp
             )
             TimePicker(
                 state = workingDayStartTimeState,
@@ -252,12 +267,137 @@ fun SignUpAsBarberScreen(
             )
             Text(
                 text = "Working day end time:",
-                modifier = Modifier.padding(horizontal = 48.dp, vertical = 8.dp)
+                modifier = Modifier.padding(horizontal = 48.dp, vertical = 8.dp),
+                fontSize = 24.sp
             )
             TimePicker(
                 state = workingDayEndTimeState,
                 modifier = Modifier.padding(vertical = 8.dp)
             )
+            Text(
+                text = "Working days:",
+                modifier = Modifier.padding(horizontal = 48.dp, vertical = 8.dp),
+                fontSize = 24.sp
+            )
+            Row(
+                modifier = Modifier
+                    .padding(horizontal = 48.dp, vertical = 8.dp)
+                    .toggleable(
+                        value = mondayCheckedState,
+                        onValueChange = { onMondayStateChange(!mondayCheckedState) },
+                        role = Role.Checkbox
+                    )
+            ) {
+                Checkbox(
+                    checked = mondayCheckedState,
+                    onCheckedChange = null
+                )
+                Text(
+                    text = "Monday"
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .padding(horizontal = 48.dp, vertical = 8.dp)
+                    .toggleable(
+                        value = tuesdayCheckedState,
+                        onValueChange = { onTuesdayStateChange(!tuesdayCheckedState) },
+                        role = Role.Checkbox
+                    )
+            ) {
+                Checkbox(
+                    checked = tuesdayCheckedState,
+                    onCheckedChange = null
+                )
+                Text(
+                    text = "Tuesday"
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .padding(horizontal = 48.dp, vertical = 8.dp)
+                    .toggleable(
+                        value = wednesdayCheckedState,
+                        onValueChange = { onWednesdayStateChange(!wednesdayCheckedState) },
+                        role = Role.Checkbox
+                    )
+            ) {
+                Checkbox(
+                    checked = wednesdayCheckedState,
+                    onCheckedChange = null
+                )
+                Text(
+                    text = "Wednesday"
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .padding(horizontal = 48.dp, vertical = 8.dp)
+                    .toggleable(
+                        value = thursdayCheckedState,
+                        onValueChange = { onThursdayStateChange(!thursdayCheckedState) },
+                        role = Role.Checkbox
+                    )
+            ) {
+                Checkbox(
+                    checked = thursdayCheckedState,
+                    onCheckedChange = null
+                )
+                Text(
+                    text = "Thursday"
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .padding(horizontal = 48.dp, vertical = 8.dp)
+                    .toggleable(
+                        value = fridayCheckedState,
+                        onValueChange = { onFridayStateChange(!fridayCheckedState) },
+                        role = Role.Checkbox
+                    )
+            ) {
+                Checkbox(
+                    checked = fridayCheckedState,
+                    onCheckedChange = null
+                )
+                Text(
+                    text = "Friday"
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .padding(horizontal = 48.dp, vertical = 8.dp)
+                    .toggleable(
+                        value = saturdayCheckedState,
+                        onValueChange = { onSaturdayStateChange(!saturdayCheckedState) },
+                        role = Role.Checkbox
+                    )
+            ) {
+                Checkbox(
+                    checked = saturdayCheckedState,
+                    onCheckedChange = null
+                )
+                Text(
+                    text = "Saturday"
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .padding(horizontal = 48.dp, vertical = 8.dp)
+                    .toggleable(
+                        value = sundayCheckedState,
+                        onValueChange = { onSundayStateChange(!sundayCheckedState) },
+                        role = Role.Checkbox
+                    )
+            ) {
+                Checkbox(
+                    checked = sundayCheckedState,
+                    onCheckedChange = null
+                )
+                Text(
+                    text = "Sunday"
+                )
+            }
             OutlinedButton(
                 onClick = {
                     registerBarber(
