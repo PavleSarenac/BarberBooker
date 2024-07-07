@@ -1,6 +1,5 @@
 package rs.ac.bg.etf.barberbooker.ui.elements.screens.guest
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -25,10 +24,8 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -48,14 +45,9 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
-import rs.ac.bg.etf.barberbooker.data.staticRoutes
-import rs.ac.bg.etf.barberbooker.ui.stateholders.guest.ClientRegistrationUiState
 import rs.ac.bg.etf.barberbooker.ui.stateholders.guest.ClientRegistrationViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun SignUpAsClientScreen(
     navHostController: NavHostController,
@@ -145,7 +137,7 @@ fun SignUpAsClientScreen(
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier.padding(horizontal = 48.dp, vertical = 8.dp),
                 isError = !uiState.isPasswordValid,
-                placeholder = { Text("e.g., aXbc1!kmn") },
+                placeholder = { Text("e.g., Milos123!") },
             )
             OutlinedTextField(
                 value = uiState.name,
@@ -218,8 +210,7 @@ fun SignUpAsClientScreen(
             )
             OutlinedButton(
                 onClick = {
-                    registerClient(
-                        clientRegistrationViewModel,
+                    clientRegistrationViewModel.registerClient(
                         uiState,
                         coroutineScope,
                         snackbarHostState,
@@ -240,42 +231,6 @@ fun SignUpAsClientScreen(
                     text = "Sign up"
                 )
             }
-        }
-    }
-}
-
-fun registerClient(
-    clientRegistrationViewModel: ClientRegistrationViewModel,
-    uiState: ClientRegistrationUiState,
-    coroutineScope: CoroutineScope,
-    snackbarHostState: SnackbarHostState,
-    navHostController: NavHostController
-) {
-    coroutineScope.launch {
-        if (!clientRegistrationViewModel.isDataValid(
-            uiState.email,
-            uiState.password,
-            uiState.name,
-            uiState.surname,
-            uiState.phone
-        )) {
-            snackbarHostState.showSnackbar("Invalid data format!")
-            return@launch
-        }
-        val isEmailAlreadyTaken = clientRegistrationViewModel.isEmailAlreadyTaken(uiState.email)
-        if (isEmailAlreadyTaken) {
-            snackbarHostState.showSnackbar("Email already taken!")
-            return@launch
-        }
-        clientRegistrationViewModel.addNewClient()
-        val snackbarResult = snackbarHostState.showSnackbar(
-            message = "Registration successful!",
-            withDismissAction = true,
-            actionLabel = "Log in",
-            duration = SnackbarDuration.Indefinite
-        )
-        if (snackbarResult == SnackbarResult.ActionPerformed) {
-            navHostController.navigate(staticRoutes[1])
         }
     }
 }

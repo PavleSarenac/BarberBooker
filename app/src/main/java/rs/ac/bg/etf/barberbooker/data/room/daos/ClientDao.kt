@@ -7,6 +7,7 @@ import rs.ac.bg.etf.barberbooker.data.room.entities.Client
 
 @Dao
 interface ClientDao {
+
     @Insert
     suspend fun addNewClient(client: Client)
 

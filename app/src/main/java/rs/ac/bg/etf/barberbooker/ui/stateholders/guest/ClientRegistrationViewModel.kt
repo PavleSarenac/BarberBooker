@@ -1,13 +1,19 @@
 package rs.ac.bg.etf.barberbooker.ui.stateholders.guest
 
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavHostController
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import rs.ac.bg.etf.barberbooker.data.room.entities.Client
 import rs.ac.bg.etf.barberbooker.data.room.repositories.ClientRepository
+import rs.ac.bg.etf.barberbooker.data.staticRoutes
 import javax.inject.Inject
 
 data class ClientRegistrationUiState(
@@ -16,6 +22,7 @@ data class ClientRegistrationUiState(
     var name: String = "",
     var surname: String = "",
     var phone: String = "",
+
     var isEmailValid: Boolean = true,
     var isEmailAlreadyTaken: Boolean = false,
     var isPasswordValid: Boolean = true,
@@ -52,26 +59,59 @@ class ClientRegistrationViewModel @Inject constructor(
         _uiState.update { it.copy(phone = phone) }
     }
 
-    suspend fun isEmailAlreadyTaken(email: String): Boolean {
-        val isEmailAlreadyTaken = clientRepository.isEmailAlreadyTaken(email)
-        _uiState.update { it.copy(isEmailAlreadyTaken = isEmailAlreadyTaken) }
-        return isEmailAlreadyTaken
-    }
-
-    fun addNewClient() = viewModelScope.launch {
+    fun registerClient(
+        uiState: ClientRegistrationUiState,
+        coroutineScope: CoroutineScope,
+        snackbarHostState: SnackbarHostState,
+        navHostController: NavHostController
+    ) {
         val email = _uiState.value.email
         val password = _uiState.value.password
         val name = _uiState.value.name
         val surname = _uiState.value.surname
         val phone = _uiState.value.phone
-        if (isDataValid(email, password, name, surname, phone)) {
-            val newClient = Client(0, email, password, name, surname, phone)
-            clientRepository.addNewClient(newClient)
-            _uiState.update { ClientRegistrationUiState() }
+        coroutineScope.launch {
+            if (!isDataValid(email, password, name, surname, phone)) {
+                snackbarHostState.showSnackbar("Invalid data format!")
+                return@launch
+            }
+            val isEmailAlreadyTaken = isEmailAlreadyTaken(uiState.email)
+            if (isEmailAlreadyTaken) {
+                snackbarHostState.showSnackbar("Email already taken!")
+                return@launch
+            }
+            addNewClient(email, password, name, surname, phone)
+            val snackbarResult = snackbarHostState.showSnackbar(
+                message = "Registration successful!",
+                withDismissAction = true,
+                actionLabel = "Log in",
+                duration = SnackbarDuration.Indefinite
+            )
+            if (snackbarResult == SnackbarResult.ActionPerformed) {
+                navHostController.navigate(staticRoutes[1])
+            }
         }
     }
 
-    fun isDataValid(
+    private suspend fun isEmailAlreadyTaken(email: String): Boolean {
+        val isEmailAlreadyTaken = clientRepository.isEmailAlreadyTaken(email)
+        _uiState.update { it.copy(isEmailAlreadyTaken = isEmailAlreadyTaken) }
+        return isEmailAlreadyTaken
+    }
+
+    private fun addNewClient(
+        email: String,
+        password: String,
+        name: String,
+        surname: String,
+        phone: String
+    ) = viewModelScope.launch {
+        val newClient = Client(0, email, password, name, surname, phone)
+        clientRepository.addNewClient(newClient)
+        _uiState.update { ClientRegistrationUiState() }
+    }
+
+    private fun isDataValid(
         email: String,
         password: String,
         name: String,

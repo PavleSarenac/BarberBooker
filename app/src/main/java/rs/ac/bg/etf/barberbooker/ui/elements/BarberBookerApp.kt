@@ -38,7 +38,7 @@ fun BarberBookerApp() {
                 SignUpAsClientScreen(navHostController)
             }
             composable(route = staticRoutes[4]) {
-                SignUpAsBarberScreen()
+                SignUpAsBarberScreen(navHostController)
             }
         }
     }
