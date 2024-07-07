@@ -4,14 +4,22 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBackIos
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -22,6 +30,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -45,6 +54,7 @@ import rs.ac.bg.etf.barberbooker.data.staticRoutes
 import rs.ac.bg.etf.barberbooker.ui.stateholders.guest.ClientRegistrationUiState
 import rs.ac.bg.etf.barberbooker.ui.stateholders.guest.ClientRegistrationViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun SignUpAsClientScreen(
@@ -57,23 +67,39 @@ fun SignUpAsClientScreen(
     val snackbarHostState = remember { SnackbarHostState() }
 
     Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.secondary,
+                    titleContentColor = MaterialTheme.colorScheme.onSecondary
+                ),
+                title = {
+                    Text(
+                        text = "Sign up as client",
+                        fontWeight = FontWeight.ExtraBold
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = { navHostController.popBackStack() }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBackIos,
+                            contentDescription = "Go back to previous screen"
+                        )
+                    }
+                }
+            )
+        },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
-    ) {
+    ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 48.dp)
+                .padding(paddingValues)
                 .background(color = MaterialTheme.colorScheme.primary)
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = "Sign up as client",
-                color = MaterialTheme.colorScheme.onPrimary,
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.ExtraBold,
-                modifier = Modifier.padding(vertical = 32.dp)
-            )
+            Spacer(modifier = Modifier.height(24.dp))
             OutlinedTextField(
                 value = uiState.email,
                 onValueChange =  { clientRegistrationViewModel.setEmail(it) },
@@ -93,7 +119,7 @@ fun SignUpAsClientScreen(
                 keyboardActions = KeyboardActions(onNext = {
                     focusManager.moveFocus(FocusDirection.Down)
                 }),
-                modifier = Modifier.padding(vertical = 8.dp),
+                modifier = Modifier.padding(horizontal = 48.dp, vertical = 8.dp),
                 isError = !uiState.isEmailValid || uiState.isEmailAlreadyTaken,
                 placeholder = { Text("e.g., milos@gmail.com") },
             )
@@ -117,7 +143,7 @@ fun SignUpAsClientScreen(
                     focusManager.moveFocus(FocusDirection.Down)
                 }),
                 visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier.padding(vertical = 8.dp),
+                modifier = Modifier.padding(horizontal = 48.dp, vertical = 8.dp),
                 isError = !uiState.isPasswordValid,
                 placeholder = { Text("e.g., aXbc1!kmn") },
             )
@@ -140,7 +166,7 @@ fun SignUpAsClientScreen(
                 keyboardActions = KeyboardActions(onNext = {
                     focusManager.moveFocus(FocusDirection.Down)
                 }),
-                modifier = Modifier.padding(vertical = 8.dp),
+                modifier = Modifier.padding(horizontal = 48.dp, vertical = 8.dp),
                 isError = !uiState.isNameValid,
                 placeholder = { Text("e.g., Milos") }
             )
@@ -163,7 +189,7 @@ fun SignUpAsClientScreen(
                 keyboardActions = KeyboardActions(onNext = {
                     focusManager.moveFocus(FocusDirection.Down)
                 }),
-                modifier = Modifier.padding(vertical = 8.dp),
+                modifier = Modifier.padding(horizontal = 48.dp, vertical = 8.dp),
                 isError = !uiState.isSurnameValid,
                 placeholder = { Text("e.g., Milosevic") }
             )
@@ -186,7 +212,7 @@ fun SignUpAsClientScreen(
                 keyboardActions = KeyboardActions(onDone = {
                     focusManager.clearFocus()
                 }),
-                modifier = Modifier.padding(vertical = 8.dp),
+                modifier = Modifier.padding(horizontal = 48.dp, vertical = 8.dp),
                 isError = !uiState.isPhoneValid,
                 placeholder = { Text("e.g., 063/222-3333") },
             )
@@ -203,7 +229,7 @@ fun SignUpAsClientScreen(
                 border = BorderStroke(1.dp, Color.White),
                 shape = MaterialTheme.shapes.medium,
                 modifier = Modifier
-                    .padding(vertical = 32.dp)
+                    .padding(horizontal = 48.dp, vertical = 32.dp)
                     .fillMaxWidth(),
                 colors = ButtonDefaults.outlinedButtonColors(
                     MaterialTheme.colorScheme.secondary,
