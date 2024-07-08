@@ -150,18 +150,18 @@ class BarberRegistrationViewModel @Inject constructor(
                 snackbarHostState.showSnackbar("Email already taken!")
                 return@launch
             }
-            addNewBarber(
-                email,
-                password,
-                barbershopName,
-                phone,
-                price,
-                country,
-                city,
-                municipality,
-                streetName,
-                streetNumber
-            )
+//            addNewBarber(
+//                email,
+//                password,
+//                barbershopName,
+//                phone,
+//                price,
+//                country,
+//                city,
+//                municipality,
+//                streetName,
+//                streetNumber
+//            )
             val snackbarResult = snackbarHostState.showSnackbar(
                 message = "Registration successful!",
                 withDismissAction = true,
@@ -231,7 +231,7 @@ class BarberRegistrationViewModel @Inject constructor(
         if (!isStreetNameValid(streetName)) isDataValid = false
         if (!isStreetNumberValid(streetNumber)) isDataValid = false
         if (!areWorkingHoursValid(workingDayStartTime, workingDayEndTime)) isDataValid = false
-
+        if (!areSelectedWorkingDaysValid(selectedWorkingDays)) isDataValid = false
         return isDataValid
     }
 
@@ -338,8 +338,13 @@ class BarberRegistrationViewModel @Inject constructor(
         workingDayStartTime: String,
         workingDayEndTime: String
     ): Boolean {
-        return (((workingDayEndTime > workingDayStartTime) || (workingDayStartTime == workingDayEndTime && workingDayStartTime == "00:00"))
-                        && (workingDayEndTime == "00" || workingDayEndTime == "30"))
+        return ((workingDayEndTime > workingDayStartTime) || (workingDayStartTime == workingDayEndTime && workingDayStartTime == "00:00"))
+                        && (workingDayEndTime.substring(3, 5) == "00" || workingDayEndTime.substring(3, 5) == "30")
+                        && (workingDayStartTime.substring(3, 5) == "00" || workingDayStartTime.substring(3, 5) == "30")
+    }
+
+    private fun areSelectedWorkingDaysValid(selectedWorkingDays: String): Boolean {
+        return selectedWorkingDays.isNotEmpty()
     }
 
 }
