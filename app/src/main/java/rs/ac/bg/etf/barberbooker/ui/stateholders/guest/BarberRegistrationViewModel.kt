@@ -150,18 +150,19 @@ class BarberRegistrationViewModel @Inject constructor(
                 snackbarHostState.showSnackbar("Email already taken!")
                 return@launch
             }
-//            addNewBarber(
-//                email,
-//                password,
-//                barbershopName,
-//                phone,
-//                price,
-//                country,
-//                city,
-//                municipality,
-//                streetName,
-//                streetNumber
-//            )
+            addNewBarber(
+                email,
+                password,
+                barbershopName,
+                price,
+                phone,
+                country,
+                city,
+                municipality,
+                "$streetName $streetNumber",
+                selectedWorkingDays,
+                "$workingDayStartTime-$workingDayEndTime"
+            )
             val snackbarResult = snackbarHostState.showSnackbar(
                 message = "Registration successful!",
                 withDismissAction = true,
@@ -178,13 +179,14 @@ class BarberRegistrationViewModel @Inject constructor(
         email: String,
         password: String,
         barbershopName: String,
-        phone: String,
         price: String,
+        phone: String,
         country: String,
         city: String,
         municipality: String,
-        streetName: String,
-        streetNumber: String
+        address: String,
+        workingDays: String,
+        workingHours: String
     ) = viewModelScope.launch {
         val newBarber = Barber(
             0,
@@ -196,11 +198,11 @@ class BarberRegistrationViewModel @Inject constructor(
             country,
             city,
             municipality,
-            "$streetName $streetNumber",
-            "",
-            ""
+            address,
+            workingDays,
+            workingHours
         )
-        //barberRepository.addNewBarber(newBarber)
+        barberRepository.addNewBarber(newBarber)
         _uiState.update { BarberRegistrationUiState() }
     }
 
