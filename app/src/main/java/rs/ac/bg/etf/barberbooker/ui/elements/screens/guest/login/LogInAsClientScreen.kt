@@ -124,10 +124,10 @@ fun LogInAsClientScreen(
                 singleLine = true,
                 keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Password,
-                    imeAction = ImeAction.Next,
+                    imeAction = ImeAction.Done,
                 ),
-                keyboardActions = KeyboardActions(onNext = {
-                    focusManager.moveFocus(FocusDirection.Down)
+                keyboardActions = KeyboardActions(onDone = {
+                    focusManager.clearFocus()
                 }),
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier.padding(horizontal = 48.dp, vertical = 8.dp)
