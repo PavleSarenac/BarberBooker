@@ -1,4 +1,4 @@
-package rs.ac.bg.etf.barberbooker.ui.stateholders.guest
+package rs.ac.bg.etf.barberbooker.ui.stateholders.guest.registration
 
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState

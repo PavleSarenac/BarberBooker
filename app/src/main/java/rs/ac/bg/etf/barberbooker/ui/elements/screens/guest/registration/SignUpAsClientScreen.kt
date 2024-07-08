@@ -1,4 +1,4 @@
-package rs.ac.bg.etf.barberbooker.ui.elements.screens.guest
+package rs.ac.bg.etf.barberbooker.ui.elements.screens.guest.registration
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -45,7 +45,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import rs.ac.bg.etf.barberbooker.ui.stateholders.guest.ClientRegistrationViewModel
+import rs.ac.bg.etf.barberbooker.ui.stateholders.guest.registration.ClientRegistrationViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

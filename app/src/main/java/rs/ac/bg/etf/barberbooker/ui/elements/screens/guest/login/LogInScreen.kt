@@ -1,4 +1,4 @@
-package rs.ac.bg.etf.barberbooker.ui.elements.screens.guest
+package rs.ac.bg.etf.barberbooker.ui.elements.screens.guest.login
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -33,7 +33,7 @@ import rs.ac.bg.etf.barberbooker.data.staticRoutes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignUpScreen(navHostController: NavHostController) {
+fun LogInScreen(navHostController: NavHostController) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -43,7 +43,7 @@ fun SignUpScreen(navHostController: NavHostController) {
                 ),
                 title = {
                     Text(
-                        text = "Sign up for BarberBooker",
+                        text = "Log in to BarberBooker",
                         fontWeight = FontWeight.ExtraBold
                     )
                 },
@@ -69,7 +69,7 @@ fun SignUpScreen(navHostController: NavHostController) {
         ) {
             Spacer(modifier = Modifier.weight(7f))
             OutlinedButton(
-                onClick = { navHostController.navigate(staticRoutes[3]) },
+                onClick = { navHostController.navigate(staticRoutes[5]) },
                 border = BorderStroke(1.dp, Color.White),
                 shape = MaterialTheme.shapes.medium,
                 modifier = Modifier
@@ -81,11 +81,11 @@ fun SignUpScreen(navHostController: NavHostController) {
                 )
             ) {
                 Text(
-                    text = "Sign up as client"
+                    text = "Log in as a client"
                 )
             }
             OutlinedButton(
-                onClick = { navHostController.navigate(staticRoutes[4]) },
+                onClick = { navHostController.navigate(staticRoutes[6]) },
                 border = BorderStroke(1.dp, Color.White),
                 shape = MaterialTheme.shapes.medium,
                 modifier = Modifier
@@ -97,7 +97,7 @@ fun SignUpScreen(navHostController: NavHostController) {
                 )
             ) {
                 Text(
-                    text = "Sign up as barber"
+                    text = "Log in as a barber"
                 )
             }
             Spacer(modifier = Modifier.weight(1f))
