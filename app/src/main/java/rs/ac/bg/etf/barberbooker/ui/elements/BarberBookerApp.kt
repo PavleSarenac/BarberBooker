@@ -4,9 +4,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import rs.ac.bg.etf.barberbooker.data.staticRoutes
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.guest.InitialScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.guest.login.LogInAsBarberScreen
@@ -15,6 +17,7 @@ import rs.ac.bg.etf.barberbooker.ui.elements.screens.guest.login.LogInScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.guest.registration.SignUpAsBarberScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.guest.registration.SignUpAsClientScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.guest.registration.SignUpScreen
+import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.client.ClientInitialScreen
 
 @Composable
 fun BarberBookerApp() {
@@ -47,6 +50,17 @@ fun BarberBookerApp() {
             }
             composable(route = staticRoutes[6]) {
                 LogInAsBarberScreen(navHostController)
+            }
+            composable(
+                route = "${staticRoutes[7]}/{clientEmail}",
+                arguments = listOf(
+                    navArgument("clientEmail") {
+                        type = NavType.StringType
+                    }
+                )
+            ) {navBackStackEntry ->
+                val clientEmail = navBackStackEntry.arguments?.getString("clientEmail") ?: ""
+                ClientInitialScreen(clientEmail)
             }
         }
     }

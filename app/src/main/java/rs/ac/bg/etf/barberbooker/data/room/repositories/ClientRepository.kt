@@ -12,7 +12,12 @@ class ClientRepository @Inject constructor(private val clientDao: ClientDao) {
     }
 
     suspend fun isEmailAlreadyTaken(email: String): Boolean {
-        val client = clientDao.getClient(email)
+        val client = clientDao.getClientByEmail(email)
+        return client != null
+    }
+
+    suspend fun areLoginCredentialsValid(email: String, hashedPassword: String): Boolean {
+        val client = clientDao.getClientByEmailAndPassword(email, hashedPassword)
         return client != null
     }
 }

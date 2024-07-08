@@ -67,7 +67,7 @@ fun SignUpScreen(navHostController: NavHostController) {
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.weight(7f))
+            Spacer(modifier = Modifier.weight(1f))
             OutlinedButton(
                 onClick = { navHostController.navigate(staticRoutes[3]) },
                 border = BorderStroke(1.dp, Color.White),

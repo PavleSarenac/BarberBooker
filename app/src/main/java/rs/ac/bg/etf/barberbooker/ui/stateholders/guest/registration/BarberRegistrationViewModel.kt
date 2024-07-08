@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -15,6 +14,7 @@ import rs.ac.bg.etf.barberbooker.data.daysOfTheWeek
 import rs.ac.bg.etf.barberbooker.data.room.entities.Barber
 import rs.ac.bg.etf.barberbooker.data.room.repositories.BarberRepository
 import rs.ac.bg.etf.barberbooker.data.staticRoutes
+import java.security.MessageDigest
 import javax.inject.Inject
 
 data class BarberRegistrationUiState(
@@ -94,7 +94,6 @@ class BarberRegistrationViewModel @Inject constructor(
     }
 
     fun registerBarber(
-        coroutineScope: CoroutineScope,
         snackbarHostState: SnackbarHostState,
         navHostController: NavHostController,
         workingDayStartTime: String,
@@ -106,7 +105,7 @@ class BarberRegistrationViewModel @Inject constructor(
         isFridayChecked: Boolean,
         isSaturdayChecked: Boolean,
         isSundayChecked: Boolean
-    ) {
+    ) = viewModelScope.launch {
         val email = _uiState.value.email
         val password = _uiState.value.password
         val barbershopName = _uiState.value.barbershopName
@@ -126,56 +125,62 @@ class BarberRegistrationViewModel @Inject constructor(
             isSaturdayChecked,
             isSundayChecked,
         )
-        coroutineScope.launch {
-            if (!isDataValid(
-                    email,
-                    password,
-                    barbershopName,
-                    phone,
-                    price,
-                    country,
-                    city,
-                    municipality,
-                    streetName,
-                    streetNumber,
-                    workingDayStartTime,
-                    workingDayEndTime,
-                    selectedWorkingDays
-            )) {
-                snackbarHostState.showSnackbar("Invalid data format!")
-                return@launch
-            }
-            val isEmailAlreadyTaken = isEmailAlreadyTaken(email)
-            if (isEmailAlreadyTaken) {
-                snackbarHostState.showSnackbar("Email already taken!")
-                return@launch
-            }
-            addNewBarber(
+
+        if (!isDataValid(
                 email,
                 password,
                 barbershopName,
-                price,
                 phone,
+                price,
                 country,
                 city,
                 municipality,
-                "$streetName $streetNumber",
-                selectedWorkingDays,
-                "$workingDayStartTime-$workingDayEndTime"
-            )
-            val snackbarResult = snackbarHostState.showSnackbar(
-                message = "Registration successful!",
-                withDismissAction = true,
-                actionLabel = "Log in",
-                duration = SnackbarDuration.Indefinite
-            )
-            if (snackbarResult == SnackbarResult.ActionPerformed) {
-                navHostController.navigate(staticRoutes[1])
-            }
+                streetName,
+                streetNumber,
+                workingDayStartTime,
+                workingDayEndTime,
+                selectedWorkingDays
+        )) {
+            snackbarHostState.showSnackbar("Invalid data format!")
+            return@launch
+        }
+        val isEmailAlreadyTaken = isEmailAlreadyTaken(email)
+        if (isEmailAlreadyTaken) {
+            snackbarHostState.showSnackbar("Email already taken!")
+            return@launch
+        }
+        val md5HashedPassword = getMd5HashedPassword(password)
+        addNewBarber(
+            email,
+            md5HashedPassword,
+            barbershopName,
+            price,
+            phone,
+            country,
+            city,
+            municipality,
+            "$streetName $streetNumber",
+            selectedWorkingDays,
+            "$workingDayStartTime-$workingDayEndTime"
+        )
+        val snackbarResult = snackbarHostState.showSnackbar(
+            message = "Registration successful!",
+            withDismissAction = true,
+            actionLabel = "Log in",
+            duration = SnackbarDuration.Indefinite
+        )
+        if (snackbarResult == SnackbarResult.ActionPerformed) {
+            navHostController.navigate(staticRoutes[6])
         }
     }
 
-    private fun addNewBarber(
+    private fun getMd5HashedPassword(password: String): String {
+        val md5 = MessageDigest.getInstance("MD5")
+        val hashBytes = md5.digest(password.toByteArray())
+        return hashBytes.joinToString("") { "%02x".format(it) }
+    }
+
+    private suspend fun addNewBarber(
         email: String,
         password: String,
         barbershopName: String,
@@ -187,7 +192,7 @@ class BarberRegistrationViewModel @Inject constructor(
         address: String,
         workingDays: String,
         workingHours: String
-    ) = viewModelScope.launch {
+    ) {
         val newBarber = Barber(
             0,
             email,

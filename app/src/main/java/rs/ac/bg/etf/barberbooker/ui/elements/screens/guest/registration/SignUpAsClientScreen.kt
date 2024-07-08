@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
@@ -32,7 +31,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -55,7 +53,6 @@ fun SignUpAsClientScreen(
 ) {
     val uiState by clientRegistrationViewModel.uiState.collectAsState()
     val focusManager = LocalFocusManager.current
-    val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
     Scaffold(
@@ -91,7 +88,7 @@ fun SignUpAsClientScreen(
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.weight(1f))
             OutlinedTextField(
                 value = uiState.email,
                 onValueChange =  { clientRegistrationViewModel.setEmail(it) },
@@ -211,7 +208,6 @@ fun SignUpAsClientScreen(
             OutlinedButton(
                 onClick = {
                     clientRegistrationViewModel.registerClient(
-                        coroutineScope,
                         snackbarHostState,
                         navHostController
                     )
@@ -230,6 +226,7 @@ fun SignUpAsClientScreen(
                     text = "Sign up"
                 )
             }
+            Spacer(modifier = Modifier.weight(1f))
         }
     }
 }

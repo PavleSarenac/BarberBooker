@@ -11,7 +11,7 @@ interface BarberDao {
     @Insert
     suspend fun addNewBarber(barber: Barber)
 
-    @Query("SELECT * FROM barber WHERE email = :email LIMIT 1")
+    @Query("SELECT * FROM barber WHERE email = :email")
     suspend fun getBarber(email: String): Barber?
 
 }

@@ -11,7 +11,10 @@ interface ClientDao {
     @Insert
     suspend fun addNewClient(client: Client)
 
-    @Query("SELECT * FROM client WHERE email = :email LIMIT 1")
-    suspend fun getClient(email: String): Client?
+    @Query("SELECT * FROM client WHERE email = :email")
+    suspend fun getClientByEmail(email: String): Client?
+
+    @Query("SELECT * FROM client WHERE email = :email AND password = :hashedPassword")
+    suspend fun getClientByEmailAndPassword(email: String, hashedPassword: String): Client?
 
 }
