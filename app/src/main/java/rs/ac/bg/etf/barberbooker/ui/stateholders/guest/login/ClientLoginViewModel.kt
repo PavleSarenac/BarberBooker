@@ -39,7 +39,7 @@ class ClientLoginViewModel @Inject constructor(
     ) = viewModelScope.launch {
         val email = _uiState.value.email
         val password = _uiState.value.password
-        val hashedPassword = getMd5HashedPassword(password)
+        val hashedPassword = getSHA256HashedPassword(password)
         if (!clientRepository.areLoginCredentialsValid(email, hashedPassword)) {
             snackbarHostState.showSnackbar("Incorrect credentials!")
             return@launch
@@ -47,9 +47,9 @@ class ClientLoginViewModel @Inject constructor(
         navHostController.navigate("ClientInitialScreen/${email}")
     }
 
-    private fun getMd5HashedPassword(password: String): String {
-        val md5 = MessageDigest.getInstance("MD5")
-        val hashBytes = md5.digest(password.toByteArray())
+    private fun getSHA256HashedPassword(password: String): String {
+        val sha256 = MessageDigest.getInstance("SHA-256")
+        val hashBytes = sha256.digest(password.toByteArray())
         return hashBytes.joinToString("") { "%02x".format(it) }
     }
 

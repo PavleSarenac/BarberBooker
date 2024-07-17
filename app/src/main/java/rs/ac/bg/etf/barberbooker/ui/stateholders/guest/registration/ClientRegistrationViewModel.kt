@@ -78,7 +78,7 @@ class ClientRegistrationViewModel @Inject constructor(
             snackbarHostState.showSnackbar("Email already taken!")
             return@launch
         }
-        val md5HashedPassword = getMd5HashedPassword(password)
+        val md5HashedPassword = getSHA256HashedPassword(password)
         addNewClient(email, md5HashedPassword, name, surname, phone)
         val snackbarResult = snackbarHostState.showSnackbar(
             message = "Registration successful!",
@@ -91,9 +91,9 @@ class ClientRegistrationViewModel @Inject constructor(
         }
     }
 
-    private fun getMd5HashedPassword(password: String): String {
-        val md5 = MessageDigest.getInstance("MD5")
-        val hashBytes = md5.digest(password.toByteArray())
+    private fun getSHA256HashedPassword(password: String): String {
+        val sha256 = MessageDigest.getInstance("SHA-256")
+        val hashBytes = sha256.digest(password.toByteArray())
         return hashBytes.joinToString("") { "%02x".format(it) }
     }
 

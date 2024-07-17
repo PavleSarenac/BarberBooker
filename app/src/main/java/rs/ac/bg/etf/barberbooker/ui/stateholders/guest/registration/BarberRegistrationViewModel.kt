@@ -149,10 +149,10 @@ class BarberRegistrationViewModel @Inject constructor(
             snackbarHostState.showSnackbar("Email already taken!")
             return@launch
         }
-        val md5HashedPassword = getMd5HashedPassword(password)
+        val sha256HashedPassword = getSHA256HashedPassword(password)
         addNewBarber(
             email,
-            md5HashedPassword,
+            sha256HashedPassword,
             barbershopName,
             price,
             phone,
@@ -174,9 +174,9 @@ class BarberRegistrationViewModel @Inject constructor(
         }
     }
 
-    private fun getMd5HashedPassword(password: String): String {
-        val md5 = MessageDigest.getInstance("MD5")
-        val hashBytes = md5.digest(password.toByteArray())
+    private fun getSHA256HashedPassword(password: String): String {
+        val sha256 = MessageDigest.getInstance("SHA-256")
+        val hashBytes = sha256.digest(password.toByteArray())
         return hashBytes.joinToString("") { "%02x".format(it) }
     }
 
