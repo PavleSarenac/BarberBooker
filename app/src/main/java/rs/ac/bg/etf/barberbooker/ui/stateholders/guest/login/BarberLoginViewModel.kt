@@ -8,21 +8,21 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import rs.ac.bg.etf.barberbooker.data.room.repositories.ClientRepository
+import rs.ac.bg.etf.barberbooker.data.room.repositories.BarberRepository
 import java.security.MessageDigest
 import javax.inject.Inject
 
-data class ClientLoginUiState(
+data class BarberLoginUiState(
     var email: String = "",
     var password: String = ""
 )
 
 @HiltViewModel
-class ClientLoginViewModel @Inject constructor(
-    private val clientRepository: ClientRepository
+class BarberLoginViewModel @Inject constructor(
+    private val barberRepository: BarberRepository
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(ClientLoginUiState())
+    private val _uiState = MutableStateFlow(BarberLoginUiState())
     val uiState = _uiState
 
     fun setEmail(email: String) {
@@ -40,11 +40,11 @@ class ClientLoginViewModel @Inject constructor(
         val email = _uiState.value.email
         val password = _uiState.value.password
         val hashedPassword = getMd5HashedPassword(password)
-        if (!clientRepository.areLoginCredentialsValid(email, hashedPassword)) {
+        if (!barberRepository.areLoginCredentialsValid(email, hashedPassword)) {
             snackbarHostState.showSnackbar("Incorrect credentials!")
             return@launch
         }
-        navHostController.navigate("ClientInitialScreen/${email}")
+        navHostController.navigate("BarberInitialScreen/${email}")
     }
 
     private fun getMd5HashedPassword(password: String): String {

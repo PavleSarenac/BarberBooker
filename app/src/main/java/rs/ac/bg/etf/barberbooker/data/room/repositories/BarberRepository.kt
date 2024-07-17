@@ -13,7 +13,12 @@ class BarberRepository @Inject constructor(private val barberDao: BarberDao) {
     }
 
     suspend fun isEmailAlreadyTaken(email: String): Boolean {
-        val barber = barberDao.getBarber(email)
+        val barber = barberDao.getBarberByEmail(email)
+        return barber != null
+    }
+
+    suspend fun areLoginCredentialsValid(email: String, hashedPassword: String): Boolean {
+        val barber = barberDao.getBarberByEmailAndPassword(email, hashedPassword)
         return barber != null
     }
 }

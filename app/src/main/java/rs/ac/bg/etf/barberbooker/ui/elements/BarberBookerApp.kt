@@ -17,6 +17,7 @@ import rs.ac.bg.etf.barberbooker.ui.elements.screens.guest.login.LogInScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.guest.registration.SignUpAsBarberScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.guest.registration.SignUpAsClientScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.guest.registration.SignUpScreen
+import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.barber.BarberInitialScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.client.ClientInitialScreen
 
 @Composable
@@ -61,6 +62,17 @@ fun BarberBookerApp() {
             ) {navBackStackEntry ->
                 val clientEmail = navBackStackEntry.arguments?.getString("clientEmail") ?: ""
                 ClientInitialScreen(clientEmail)
+            }
+            composable(
+                route = "${staticRoutes[8]}/{barberEmail}",
+                arguments = listOf(
+                    navArgument("barberEmail") {
+                        type = NavType.StringType
+                    }
+                )
+            ) {navBackStackEntry ->
+                val barberEmail = navBackStackEntry.arguments?.getString("barberEmail") ?: ""
+                BarberInitialScreen(barberEmail)
             }
         }
     }
