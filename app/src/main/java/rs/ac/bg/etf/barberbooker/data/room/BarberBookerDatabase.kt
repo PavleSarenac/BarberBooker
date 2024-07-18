@@ -28,7 +28,6 @@ abstract class BarberBookerDatabase : RoomDatabase() {
                     .fallbackToDestructiveMigration(true)
                     .build()
                 INSTANCE = instance
-                INSTANCE!!.openHelper.writableDatabase
                 return@synchronized instance
             }
         }
