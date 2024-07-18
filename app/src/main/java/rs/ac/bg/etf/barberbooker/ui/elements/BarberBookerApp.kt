@@ -3,7 +3,6 @@ package rs.ac.bg.etf.barberbooker.ui.elements
 import android.app.Activity
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -13,16 +12,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import rs.ac.bg.etf.barberbooker.data.staticRoutes
+import rs.ac.bg.etf.barberbooker.ui.elements.composables.user.barber.BarberBottomNavigationBar
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.guest.InitialScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.guest.login.LogInAsBarberScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.guest.login.LogInAsClientScreen
@@ -30,6 +30,7 @@ import rs.ac.bg.etf.barberbooker.ui.elements.screens.guest.login.LogInScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.guest.registration.SignUpAsBarberScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.guest.registration.SignUpAsClientScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.guest.registration.SignUpScreen
+import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.barber.BarberAccountScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.barber.BarberInitialScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.client.ClientInitialScreen
 import rs.ac.bg.etf.barberbooker.ui.stateholders.BarberBookerViewModel
@@ -39,6 +40,9 @@ fun BarberBookerApp(
     barberBookerViewModel: BarberBookerViewModel = hiltViewModel()
 ) {
     val navHostController = rememberNavController()
+    val currentBackStackEntry by navHostController.currentBackStackEntryAsState()
+    val currentRoute = currentBackStackEntry?.destination?.route ?: staticRoutes[0]
+
     val context = LocalContext.current
     val barberBookerActivity = context as Activity?
     val uiState by barberBookerViewModel.uiState.collectAsState()
@@ -51,13 +55,17 @@ fun BarberBookerApp(
         Column(
             modifier = Modifier
                 .background(color = MaterialTheme.colorScheme.primary)
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+                .fillMaxSize()
         ) {}
     } else {
-        Scaffold {
-                paddingValues ->
+        Scaffold(
+            bottomBar = {
+                if (currentRoute.contains("Barber") && currentRoute.contains("/")) {
+                    val barberEmail = currentRoute.substring(currentRoute.indexOf("/") + 1)
+                    BarberBottomNavigationBar(barberEmail, navHostController)
+                }
+            }
+        ) { paddingValues ->
             NavHost(
                 navController = navHostController,
                 startDestination = uiState.startDestination,
@@ -96,7 +104,10 @@ fun BarberBookerApp(
                     BackHandler {
                         barberBookerActivity?.finish()
                     }
-                    barberBookerViewModel.updateLoginData(context, true, clientEmail, "client")
+                    val previousRoute = navHostController.previousBackStackEntry?.destination?.route
+                    if (previousRoute == staticRoutes[5]) {
+                        barberBookerViewModel.updateLoginData(context, true, clientEmail, "client")
+                    }
                     ClientInitialScreen(clientEmail)
                 }
                 composable(
@@ -111,8 +122,22 @@ fun BarberBookerApp(
                     BackHandler {
                         barberBookerActivity?.finish()
                     }
-                    barberBookerViewModel.updateLoginData(context, true, barberEmail, "barber")
-                    BarberInitialScreen(barberEmail)
+                    val previousRoute = navHostController.previousBackStackEntry?.destination?.route
+                    if (previousRoute == staticRoutes[6]) {
+                        barberBookerViewModel.updateLoginData(context, true, barberEmail, "barber")
+                    }
+                    BarberInitialScreen(barberEmail, navHostController)
+                }
+                composable(
+                    route = "${staticRoutes[9]}/{barberEmail}",
+                    arguments = listOf(
+                        navArgument("barberEmail") {
+                            type = NavType.StringType
+                        }
+                    )
+                ) {navBackStackEntry ->
+                    val barberEmail = navBackStackEntry.arguments?.getString("barberEmail") ?: ""
+                    BarberAccountScreen(barberEmail, navHostController)
                 }
             }
         }

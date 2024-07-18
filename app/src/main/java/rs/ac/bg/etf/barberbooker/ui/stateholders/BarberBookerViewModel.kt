@@ -55,4 +55,5 @@ class BarberBookerViewModel @Inject constructor() : ViewModel() {
             _uiState.update { it.copy(startDestination = startDestination, isInitialScreenLoading = false) }
         }
     }
+
 }

@@ -4,9 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 
 @Composable
-fun BarberInitialScreen(
+fun BarberAccountScreen(
     barberEmail: String,
     navHostController: NavHostController
 ) {
-
 }
