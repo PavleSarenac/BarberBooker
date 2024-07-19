@@ -122,6 +122,23 @@ fun BarberTopBar(
                         )
                     ) {
                         Text(
+                            text = "View profile"
+                        )
+                    }
+                }
+                Row {
+                    OutlinedButton(
+                        onClick = { /* TODO */ },
+                        border = BorderStroke(1.dp, Color.White),
+                        modifier = Modifier
+                            .padding(vertical = 8.dp)
+                            .fillMaxWidth(),
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            MaterialTheme.colorScheme.primary,
+                            MaterialTheme.colorScheme.onPrimary
+                        )
+                    ) {
+                        Text(
                             text = "Edit profile"
                         )
                     }
