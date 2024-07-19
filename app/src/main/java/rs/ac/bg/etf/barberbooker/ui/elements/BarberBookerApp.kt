@@ -115,9 +115,7 @@ fun BarberBookerScaffold(
         bottomBar = {
             ScaffoldBottomBar(currentRoute, navHostController)
         },
-        snackbarHost = {
-            ScaffoldSnackbarHost(currentRoute, snackbarHostState)
-        }
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) { paddingValues ->
         NavHost(
             navController = navHostController,
@@ -270,24 +268,5 @@ fun ScaffoldBottomBar(currentRoute: String, navHostController: NavHostController
     if (currentRoute.contains("Barber") && currentRoute.contains("/")) {
         val barberEmail = currentRoute.substring(currentRoute.indexOf("/") + 1)
         BarberBottomBar(barberEmail, navHostController)
-    }
-}
-
-@Composable
-fun ScaffoldSnackbarHost(currentRoute: String, snackbarHostState: SnackbarHostState) {
-    when (currentRoute) {
-        staticRoutes[3] -> {
-            SnackbarHost(hostState = snackbarHostState)
-        }
-        staticRoutes[4] -> {
-            SnackbarHost(hostState = snackbarHostState)
-        }
-        staticRoutes[5] -> {
-            SnackbarHost(hostState = snackbarHostState)
-        }
-        staticRoutes[6] -> {
-            SnackbarHost(hostState = snackbarHostState)
-        }
-        else -> {}
     }
 }
