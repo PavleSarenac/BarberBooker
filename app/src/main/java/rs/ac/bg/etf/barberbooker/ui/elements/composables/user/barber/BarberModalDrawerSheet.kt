@@ -6,7 +6,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.HourglassTop
-import androidx.compose.material.icons.filled.Money
 import androidx.compose.material.icons.filled.ReportProblem
 import androidx.compose.material.icons.filled.Reviews
 import androidx.compose.material.icons.filled.Schedule
@@ -20,10 +19,9 @@ import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -38,16 +36,16 @@ fun BarberModalDrawerSheet(drawerState: DrawerState) {
     val screenHeightDp = configuration.screenHeightDp.dp
     val isPortrait = configuration.orientation == android.content.res.Configuration.ORIENTATION_PORTRAIT
 
-    val drawerWidth = if (isPortrait) {
-        screenWidthDp * 0.8f
+    var selectedItem by rememberSaveable { mutableStateOf("Appointments") }
+
+    val drawerModifier = if (isPortrait) {
+        Modifier.width(screenWidthDp * 0.8f)
     } else {
-        screenHeightDp
+        Modifier.width(screenHeightDp)
     }
 
-    var selectedItem by remember { mutableStateOf("Appointments") }
-
     ModalDrawerSheet(
-        modifier = Modifier.width(drawerWidth)
+        modifier = drawerModifier
     ) {
         Text(
             text = "BarberBooker",

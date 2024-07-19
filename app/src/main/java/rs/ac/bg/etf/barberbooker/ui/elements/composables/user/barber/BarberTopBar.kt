@@ -1,19 +1,38 @@
 package rs.ac.bg.etf.barberbooker.ui.elements.composables.user.barber
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -23,6 +42,7 @@ fun BarberTopBar(
     drawerState: DrawerState
 ) {
     val coroutineScope = rememberCoroutineScope()
+    var openAccountDialog by rememberSaveable { mutableStateOf(false) }
 
     CenterAlignedTopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
@@ -50,7 +70,9 @@ fun BarberTopBar(
             }
         },
         actions = {
-            IconButton(onClick = { }) {
+            IconButton(onClick = {
+                openAccountDialog = true
+            }) {
                 Icon(
                     imageVector = Icons.Filled.AccountCircle,
                     contentDescription = "Show account",
@@ -59,4 +81,61 @@ fun BarberTopBar(
             }
         }
     )
+
+    if (openAccountDialog) {
+        AlertDialog(
+            onDismissRequest = { openAccountDialog = false },
+            modifier = Modifier
+                .clip(RoundedCornerShape(16.dp))
+                .background(color = MaterialTheme.colorScheme.secondary)
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Row {
+                    IconButton(onClick = { openAccountDialog = false }) {
+                        Icon(
+                            imageVector = Icons.Filled.Close,
+                            contentDescription = "Close dialog",
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
+                Row {
+                    OutlinedButton(
+                        onClick = { /* TODO */ },
+                        border = BorderStroke(1.dp, Color.White),
+                        modifier = Modifier
+                            .padding(vertical = 8.dp)
+                            .fillMaxWidth(),
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            MaterialTheme.colorScheme.primary,
+                            MaterialTheme.colorScheme.onPrimary
+                        )
+                    ) {
+                        Text(
+                            text = "Edit profile"
+                        )
+                    }
+                }
+                Row {
+                    OutlinedButton(
+                        onClick = { /* TODO */ },
+                        border = BorderStroke(1.dp, Color.White),
+                        modifier = Modifier
+                            .padding(vertical = 8.dp)
+                            .fillMaxWidth(),
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            MaterialTheme.colorScheme.primary,
+                            MaterialTheme.colorScheme.onPrimary
+                        )
+                    ) {
+                        Text(
+                            text = "Log out"
+                        )
+                    }
+                }
+            }
+        }
+    }
 }
