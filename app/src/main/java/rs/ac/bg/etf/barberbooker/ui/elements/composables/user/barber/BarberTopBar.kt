@@ -97,7 +97,7 @@ fun BarberTopBar(
                         Icon(
                             imageVector = Icons.Filled.Close,
                             contentDescription = "Close dialog",
-                            tint = MaterialTheme.colorScheme.primary
+                            tint = MaterialTheme.colorScheme.onPrimary
                         )
                     }
                 }
