@@ -1,4 +1,4 @@
-package rs.ac.bg.etf.barberbooker.ui.elements.composables.guest.topbars
+package rs.ac.bg.etf.barberbooker.ui.elements.composables.guest
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBackIos

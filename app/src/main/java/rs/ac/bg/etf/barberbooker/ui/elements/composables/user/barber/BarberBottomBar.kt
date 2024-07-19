@@ -1,8 +1,9 @@
 package rs.ac.bg.etf.barberbooker.ui.elements.composables.user.barber
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Reviews
 import androidx.compose.material.icons.filled.Schedule
+import androidx.compose.material.icons.filled.WorkHistory
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -14,7 +15,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import rs.ac.bg.etf.barberbooker.data.staticRoutes
 
 @Composable
-fun BarberBottomNavigationBar(barberEmail: String, navHostController: NavHostController) {
+fun BarberBottomBar(barberEmail: String, navHostController: NavHostController) {
     val navBackStackEntry by navHostController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
@@ -37,12 +38,29 @@ fun BarberBottomNavigationBar(barberEmail: String, navHostController: NavHostCon
             }
         )
         NavigationBarItem(
-            icon = { Icon(Icons.Filled.AccountCircle, contentDescription = "Account") },
-            label = { Text(text = "Account") },
-            selected = currentRoute == "${staticRoutes[9]}/${barberEmail}",
+            icon = { Icon(Icons.Filled.WorkHistory, contentDescription = "Done haircuts archive") },
+            label = { Text(text = "Archive") },
+            selected = currentRoute == "${staticRoutes[10]}/${barberEmail}",
             onClick = {
-                if (currentRoute != "${staticRoutes[9]}/${barberEmail}") {
-                    navHostController.navigate("${staticRoutes[9]}/${barberEmail}") {
+                if (currentRoute != "${staticRoutes[10]}/${barberEmail}") {
+                    navHostController.navigate("${staticRoutes[10]}/${barberEmail}") {
+                        launchSingleTop = true
+                        restoreState = true
+                        popUpTo("${staticRoutes[8]}/${barberEmail}") {
+                            saveState = true
+                            inclusive = false
+                        }
+                    }
+                }
+            }
+        )
+        NavigationBarItem(
+            icon = { Icon(Icons.Filled.Reviews, contentDescription = "Reviews that logged in barber has received") },
+            label = { Text(text = "Reviews") },
+            selected = currentRoute == "${staticRoutes[11]}/${barberEmail}",
+            onClick = {
+                if (currentRoute != "${staticRoutes[11]}/${barberEmail}") {
+                    navHostController.navigate("${staticRoutes[11]}/${barberEmail}") {
                         launchSingleTop = true
                         restoreState = true
                         popUpTo("${staticRoutes[8]}/${barberEmail}") {

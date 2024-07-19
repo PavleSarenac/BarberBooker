@@ -15,7 +15,8 @@ import javax.inject.Inject
 
 data class BarberBookerUiState(
     var startDestination: String = staticRoutes[0],
-    var isInitialScreenLoading: Boolean = true
+    var isInitialScreenLoading: Boolean = true,
+    var loggedInUserType: String = ""
 )
 
 @HiltViewModel
@@ -37,6 +38,10 @@ class BarberBookerViewModel @Inject constructor() : ViewModel() {
             putString("user_type", userType)
             apply()
         }
+
+        withContext(Dispatchers.Main) {
+            _uiState.update { it.copy(loggedInUserType = userType) }
+        }
     }
 
     fun updateStartDestination(context: Context) = viewModelScope.launch(Dispatchers.IO) {
@@ -52,7 +57,11 @@ class BarberBookerViewModel @Inject constructor() : ViewModel() {
         }
 
         withContext(Dispatchers.Main) {
-            _uiState.update { it.copy(startDestination = startDestination, isInitialScreenLoading = false) }
+            _uiState.update { it.copy(
+                startDestination = startDestination,
+                isInitialScreenLoading = false,
+                loggedInUserType = userType ?: ""
+            ) }
         }
     }
 
