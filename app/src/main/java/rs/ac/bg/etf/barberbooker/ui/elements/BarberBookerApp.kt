@@ -8,13 +8,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -22,6 +26,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import rs.ac.bg.etf.barberbooker.data.staticRoutes
+import rs.ac.bg.etf.barberbooker.ui.elements.composables.guest.topbars.GuestTopBar
 import rs.ac.bg.etf.barberbooker.ui.elements.composables.user.barber.BarberBottomNavigationBar
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.guest.InitialScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.guest.login.LogInAsBarberScreen
@@ -47,6 +52,8 @@ fun BarberBookerApp(
     val barberBookerActivity = context as Activity?
     val uiState by barberBookerViewModel.uiState.collectAsState()
 
+    val snackbarHostStates = remember { List(4) { SnackbarHostState() } }
+
     LaunchedEffect(Unit) {
         barberBookerViewModel.updateStartDestination(context)
     }
@@ -59,11 +66,14 @@ fun BarberBookerApp(
         ) {}
     } else {
         Scaffold(
+            topBar = {
+                ScaffoldTopBar(currentRoute, navHostController)
+            },
             bottomBar = {
-                if (currentRoute.contains("Barber") && currentRoute.contains("/")) {
-                    val barberEmail = currentRoute.substring(currentRoute.indexOf("/") + 1)
-                    BarberBottomNavigationBar(barberEmail, navHostController)
-                }
+                ScaffoldBottomBar(currentRoute, navHostController)
+            },
+            snackbarHost = {
+                ScaffoldSnackbarHost(currentRoute, snackbarHostStates)
             }
         ) { paddingValues ->
             NavHost(
@@ -75,22 +85,22 @@ fun BarberBookerApp(
                     InitialScreen(navHostController)
                 }
                 composable(route = staticRoutes[1]) {
-                    LogInScreen(navHostController)
+                    LogInScreen(navHostController, paddingValues)
                 }
                 composable(route = staticRoutes[2]) {
-                    SignUpScreen(navHostController)
+                    SignUpScreen(navHostController, paddingValues)
                 }
                 composable(route = staticRoutes[3]) {
-                    SignUpAsClientScreen(navHostController)
+                    SignUpAsClientScreen(navHostController, paddingValues, snackbarHostStates[0])
                 }
                 composable(route = staticRoutes[4]) {
-                    SignUpAsBarberScreen(navHostController)
+                    SignUpAsBarberScreen(navHostController, paddingValues, snackbarHostStates[1])
                 }
                 composable(route = staticRoutes[5]) {
-                    LogInAsClientScreen(navHostController)
+                    LogInAsClientScreen(navHostController, paddingValues, snackbarHostStates[2])
                 }
                 composable(route = staticRoutes[6]) {
-                    LogInAsBarberScreen(navHostController)
+                    LogInAsBarberScreen(navHostController, paddingValues, snackbarHostStates[3])
                 }
                 composable(
                     route = "${staticRoutes[7]}/{clientEmail}",
@@ -141,5 +151,63 @@ fun BarberBookerApp(
                 }
             }
         }
+    }
+}
+
+@Composable
+fun ScaffoldTopBar(currentRoute: String, navHostController: NavHostController) {
+    when (currentRoute) {
+        staticRoutes[1] -> GuestTopBar(
+            topBarTitle = "Log in to BarberBooker",
+            navHostController = navHostController
+        )
+        staticRoutes[2] -> GuestTopBar(
+            topBarTitle = "Sign up for BarberBooker",
+            navHostController = navHostController
+        )
+        staticRoutes[3] -> GuestTopBar(
+            topBarTitle = "Sign up as a client",
+            navHostController = navHostController
+        )
+        staticRoutes[4] -> GuestTopBar(
+            topBarTitle = "Sign up as a barber",
+            navHostController = navHostController
+        )
+        staticRoutes[5] -> GuestTopBar(
+            topBarTitle = "Log in as a client",
+            navHostController = navHostController
+        )
+        staticRoutes[6] -> GuestTopBar(
+            topBarTitle = "Log in as a barber",
+            navHostController = navHostController
+        )
+        else -> {}
+    }
+}
+
+@Composable
+fun ScaffoldBottomBar(currentRoute: String, navHostController: NavHostController) {
+    if (currentRoute.contains("Barber") && currentRoute.contains("/")) {
+        val barberEmail = currentRoute.substring(currentRoute.indexOf("/") + 1)
+        BarberBottomNavigationBar(barberEmail, navHostController)
+    }
+}
+
+@Composable
+fun ScaffoldSnackbarHost(currentRoute: String, snackbarHostStates: List<SnackbarHostState>) {
+    when (currentRoute) {
+        staticRoutes[3] -> {
+            SnackbarHost(hostState = snackbarHostStates[0])
+        }
+        staticRoutes[4] -> {
+            SnackbarHost(hostState = snackbarHostStates[1])
+        }
+        staticRoutes[5] -> {
+            SnackbarHost(hostState = snackbarHostStates[2])
+        }
+        staticRoutes[6] -> {
+            SnackbarHost(hostState = snackbarHostStates[3])
+        }
+        else -> {}
     }
 }
