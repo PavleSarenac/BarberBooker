@@ -1,6 +1,8 @@
 package rs.ac.bg.etf.barberbooker.ui.elements.composables.user.barber
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AttachMoney
+import androidx.compose.material.icons.filled.HourglassTop
 import androidx.compose.material.icons.filled.Reviews
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.WorkHistory
@@ -38,12 +40,12 @@ fun BarberBottomBar(barberEmail: String, navHostController: NavHostController) {
             }
         )
         NavigationBarItem(
-            icon = { Icon(Icons.Filled.WorkHistory, contentDescription = "Done haircuts archive") },
-            label = { Text(text = "Archive") },
-            selected = currentRoute == "${staticRoutes[10]}/${barberEmail}",
+            icon = { Icon(Icons.Filled.HourglassTop, contentDescription = "Pending requests") },
+            label = { Text(text = "Pending") },
+            selected = currentRoute == "${staticRoutes[9]}/${barberEmail}",
             onClick = {
-                if (currentRoute != "${staticRoutes[10]}/${barberEmail}") {
-                    navHostController.navigate("${staticRoutes[10]}/${barberEmail}") {
+                if (currentRoute != "${staticRoutes[9]}/${barberEmail}") {
+                    navHostController.navigate("${staticRoutes[9]}/${barberEmail}") {
                         launchSingleTop = true
                         restoreState = true
                         popUpTo("${staticRoutes[8]}/${barberEmail}") {
@@ -55,12 +57,12 @@ fun BarberBottomBar(barberEmail: String, navHostController: NavHostController) {
             }
         )
         NavigationBarItem(
-            icon = { Icon(Icons.Filled.Reviews, contentDescription = "Reviews that logged in barber has received") },
-            label = { Text(text = "Reviews") },
-            selected = currentRoute == "${staticRoutes[11]}/${barberEmail}",
+            icon = { Icon(Icons.Filled.AttachMoney, contentDescription = "Revenue") },
+            label = { Text(text = "Revenue") },
+            selected = currentRoute == "${staticRoutes[10]}/${barberEmail}",
             onClick = {
-                if (currentRoute != "${staticRoutes[11]}/${barberEmail}") {
-                    navHostController.navigate("${staticRoutes[11]}/${barberEmail}") {
+                if (currentRoute != "${staticRoutes[10]}/${barberEmail}") {
+                    navHostController.navigate("${staticRoutes[10]}/${barberEmail}") {
                         launchSingleTop = true
                         restoreState = true
                         popUpTo("${staticRoutes[8]}/${barberEmail}") {

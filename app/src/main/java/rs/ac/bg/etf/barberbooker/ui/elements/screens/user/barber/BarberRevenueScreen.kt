@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 
 @Composable
-fun BarberReceivedReviewsScreen(
+fun BarberRevenueScreen(
     barberEmail: String,
     navHostController: NavHostController
 ) {

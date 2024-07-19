@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 
 @Composable
-fun BarberDoneHaircutsScreen(
+fun BarberPendingScreen(
     barberEmail: String,
     navHostController: NavHostController
 ) {

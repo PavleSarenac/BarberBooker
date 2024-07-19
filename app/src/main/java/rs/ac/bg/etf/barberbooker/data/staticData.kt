@@ -10,9 +10,8 @@ val staticRoutes = listOf(
     "LogInAsBarberScreen",
     "ClientInitialScreen",
     "BarberInitialScreen",
-    "BarberAccountScreen",
-    "BarberDoneHaircutsScreen",
-    "BarberReceivedReviewsScreen"
+    "BarberPendingScreen",
+    "BarberRevenueScreen"
 )
 
 val daysOfTheWeek = listOf(
