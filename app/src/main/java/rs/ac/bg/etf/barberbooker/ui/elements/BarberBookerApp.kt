@@ -135,7 +135,7 @@ fun BarberBookerScaffold(
 ) {
     Scaffold(
         topBar = {
-            ScaffoldTopBar(currentRoute, navHostController, drawerState)
+            ScaffoldTopBar(currentRoute, navHostController, drawerState, context)
         },
         bottomBar = {
             ScaffoldBottomBar(currentRoute, navHostController)
@@ -148,6 +148,9 @@ fun BarberBookerScaffold(
             modifier = Modifier.padding(paddingValues)
         ) {
             composable(route = staticRoutes[0]) {
+                BackHandler {
+                    barberBookerActivity?.finish()
+                }
                 InitialScreen(navHostController)
             }
             composable(route = staticRoutes[1]) {
@@ -242,7 +245,8 @@ fun BarberBookerScaffold(
 fun ScaffoldTopBar(
     currentRoute: String,
     navHostController: NavHostController,
-    drawerState: DrawerState
+    drawerState: DrawerState,
+    context: Context
 ) {
     when {
         currentRoute == staticRoutes[1] -> GuestTopBar(
@@ -271,15 +275,21 @@ fun ScaffoldTopBar(
         )
         currentRoute.contains(staticRoutes[8]) -> BarberTopBar(
             topBarTitle = "Appointments",
-            drawerState = drawerState
+            drawerState = drawerState,
+            navHostController = navHostController,
+            context = context
         )
         currentRoute.contains(staticRoutes[9]) -> BarberTopBar(
             topBarTitle = "Pending requests",
-            drawerState = drawerState
+            drawerState = drawerState,
+            navHostController = navHostController,
+            context = context
         )
         currentRoute.contains(staticRoutes[10]) -> BarberTopBar(
             topBarTitle = "Revenue",
-            drawerState = drawerState
+            drawerState = drawerState,
+            navHostController = navHostController,
+            context = context
         )
         else -> {}
     }

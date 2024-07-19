@@ -1,5 +1,6 @@
 package rs.ac.bg.etf.barberbooker.ui.elements.composables.user.barber
 
+import android.content.Context
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -33,13 +34,20 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
+import rs.ac.bg.etf.barberbooker.data.staticRoutes
+import rs.ac.bg.etf.barberbooker.ui.stateholders.user.barber.BarberAccountViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BarberTopBar(
     topBarTitle: String,
-    drawerState: DrawerState
+    drawerState: DrawerState,
+    navHostController: NavHostController,
+    context: Context,
+    barberAccountViewModel: BarberAccountViewModel = hiltViewModel()
 ) {
     val coroutineScope = rememberCoroutineScope()
     var openAccountDialog by rememberSaveable { mutableStateOf(false) }
@@ -120,7 +128,13 @@ fun BarberTopBar(
                 }
                 Row {
                     OutlinedButton(
-                        onClick = { /* TODO */ },
+                        onClick = {
+                            coroutineScope.launch {
+                                val job = barberAccountViewModel.logOut(context)
+                                job.join()
+                                navHostController.navigate(staticRoutes[0])
+                            }
+                        },
                         border = BorderStroke(1.dp, Color.White),
                         modifier = Modifier
                             .padding(vertical = 8.dp)
