@@ -5,9 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import rs.ac.bg.etf.barberbooker.data.room.repositories.ClientRepository
 import java.security.MessageDigest
 import javax.inject.Inject
@@ -36,11 +38,17 @@ class ClientLoginViewModel @Inject constructor(
     fun login(
         snackbarHostState: SnackbarHostState,
         navHostController: NavHostController
-    ) = viewModelScope.launch {
+    ) = viewModelScope.launch(Dispatchers.Main) {
         val email = _uiState.value.email
         val password = _uiState.value.password
         val hashedPassword = getSHA256HashedPassword(password)
-        if (!clientRepository.areLoginCredentialsValid(email, hashedPassword)) {
+
+        var areLoginCredentialsValid: Boolean
+        withContext(Dispatchers.IO) {
+            areLoginCredentialsValid = clientRepository.areLoginCredentialsValid(email, hashedPassword)
+        }
+
+        if (!areLoginCredentialsValid) {
             snackbarHostState.showSnackbar("Incorrect credentials!")
             return@launch
         }

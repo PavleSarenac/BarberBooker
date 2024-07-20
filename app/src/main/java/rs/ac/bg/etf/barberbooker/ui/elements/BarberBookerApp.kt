@@ -99,7 +99,10 @@ fun BarberBookerApp(
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
-            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+            Column(
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())
+            ) {
                 if (uiState.loggedInUserType == "client") {
                     /* TODO */
                 }
@@ -315,7 +318,7 @@ fun BarberBookerScaffold(
                 val barberEmail = navBackStackEntry.arguments?.getString("barberEmail") ?: ""
                 LoggedInBarberRegularScreenBackHandler(drawerState, navHostController, barberEmail)
                 if (uiState.loggedInUserEmail != "") {
-                    BarberViewProfileScreen(barberEmail, navHostController)
+                    BarberViewProfileScreen(barberEmail)
                 }
             }
             composable(
@@ -427,7 +430,7 @@ fun ScaffoldTopBar(
             barberBookerViewModel = barberBookerViewModel
         )
         currentRoute.contains(staticRoutes[15]) && uiState.loggedInUserEmail != "" -> BarberTopBar(
-            topBarTitle = "My Profile",
+            topBarTitle = "Profile",
             drawerState = drawerState,
             navHostController = navHostController,
             context = context,

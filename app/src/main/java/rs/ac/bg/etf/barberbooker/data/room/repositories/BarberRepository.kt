@@ -21,4 +21,9 @@ class BarberRepository @Inject constructor(private val barberDao: BarberDao) {
         val barber = barberDao.getBarberByEmailAndPassword(email, hashedPassword)
         return barber != null
     }
+
+    suspend fun getBarberByEmail(email: String): Barber? {
+        return barberDao.getBarberByEmail(email)
+    }
+
 }

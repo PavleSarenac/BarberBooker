@@ -34,7 +34,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
 import rs.ac.bg.etf.barberbooker.data.staticRoutes
@@ -112,7 +111,10 @@ fun BarberTopBar(
                 }
                 Row {
                     OutlinedButton(
-                        onClick = { /* TODO */ },
+                        onClick = {
+                            openAccountDialog = false
+                            navHostController.navigate("${staticRoutes[15]}/${barberEmail}")
+                        },
                         border = BorderStroke(1.dp, Color.White),
                         modifier = Modifier
                             .padding(vertical = 8.dp)

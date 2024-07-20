@@ -7,9 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import rs.ac.bg.etf.barberbooker.data.daysOfTheWeek
 import rs.ac.bg.etf.barberbooker.data.room.entities.Barber
 import rs.ac.bg.etf.barberbooker.data.room.repositories.BarberRepository
@@ -105,7 +107,7 @@ class BarberRegistrationViewModel @Inject constructor(
         isFridayChecked: Boolean,
         isSaturdayChecked: Boolean,
         isSundayChecked: Boolean
-    ) = viewModelScope.launch {
+    ) = viewModelScope.launch(Dispatchers.Main) {
         val email = _uiState.value.email
         val password = _uiState.value.password
         val barbershopName = _uiState.value.barbershopName
@@ -150,19 +152,24 @@ class BarberRegistrationViewModel @Inject constructor(
             return@launch
         }
         val sha256HashedPassword = getSHA256HashedPassword(password)
-        addNewBarber(
-            email,
-            sha256HashedPassword,
-            barbershopName,
-            price,
-            phone,
-            country,
-            city,
-            municipality,
-            "$streetName $streetNumber",
-            selectedWorkingDays,
-            "$workingDayStartTime-$workingDayEndTime"
-        )
+
+        withContext(Dispatchers.IO) {
+            addNewBarber(
+                email,
+                sha256HashedPassword,
+                barbershopName,
+                price,
+                phone,
+                country,
+                city,
+                municipality,
+                "$streetName $streetNumber",
+                selectedWorkingDays,
+                "$workingDayStartTime - $workingDayEndTime"
+            )
+        }
+
+        _uiState.update { BarberRegistrationUiState() }
         val snackbarResult = snackbarHostState.showSnackbar(
             message = "Registration successful!",
             withDismissAction = true,
@@ -208,7 +215,6 @@ class BarberRegistrationViewModel @Inject constructor(
             workingHours
         )
         barberRepository.addNewBarber(newBarber)
-        _uiState.update { BarberRegistrationUiState() }
     }
 
     private fun isDataValid(
@@ -252,13 +258,57 @@ class BarberRegistrationViewModel @Inject constructor(
         isSundayChecked: Boolean
     ): String {
         var selectedWorkingDays = ""
-        if (isMondayChecked) selectedWorkingDays += "${daysOfTheWeek[0]};"
-        if (isTuesdayChecked) selectedWorkingDays += "${daysOfTheWeek[1]};"
-        if (isWednesdayChecked) selectedWorkingDays += "${daysOfTheWeek[2]};"
-        if (isThursdayChecked) selectedWorkingDays += "${daysOfTheWeek[3]};"
-        if (isFridayChecked) selectedWorkingDays += "${daysOfTheWeek[4]};"
-        if (isSaturdayChecked) selectedWorkingDays += "${daysOfTheWeek[5]};"
-        if (isSundayChecked) selectedWorkingDays += "${daysOfTheWeek[6]};"
+        if (isMondayChecked) {
+            selectedWorkingDays += daysOfTheWeek[0]
+        }
+        if (isTuesdayChecked) {
+            selectedWorkingDays += if (selectedWorkingDays == "") {
+                daysOfTheWeek[1]
+            }
+            else {
+                ", ${daysOfTheWeek[1]}"
+            }
+        }
+        if (isWednesdayChecked) {
+            selectedWorkingDays += if (selectedWorkingDays == "") {
+                daysOfTheWeek[2]
+            }
+            else {
+                ", ${daysOfTheWeek[2]}"
+            }
+        }
+        if (isThursdayChecked) {
+            selectedWorkingDays += if (selectedWorkingDays == "") {
+                daysOfTheWeek[3]
+            }
+            else {
+                ", ${daysOfTheWeek[3]}"
+            }
+        }
+        if (isFridayChecked) {
+            selectedWorkingDays += if (selectedWorkingDays == "") {
+                daysOfTheWeek[4]
+            }
+            else {
+                ", ${daysOfTheWeek[4]}"
+            }
+        }
+        if (isSaturdayChecked) {
+            selectedWorkingDays += if (selectedWorkingDays == "") {
+                daysOfTheWeek[5]
+            }
+            else {
+                ", ${daysOfTheWeek[5]}"
+            }
+        }
+        if (isSundayChecked) {
+            selectedWorkingDays += if (selectedWorkingDays == "") {
+                daysOfTheWeek[6]
+            }
+            else {
+                ", ${daysOfTheWeek[6]}"
+            }
+        }
         return selectedWorkingDays
     }
 

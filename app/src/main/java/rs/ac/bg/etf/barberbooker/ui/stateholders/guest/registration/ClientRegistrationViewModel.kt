@@ -7,9 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import rs.ac.bg.etf.barberbooker.data.room.entities.Client
 import rs.ac.bg.etf.barberbooker.data.room.repositories.ClientRepository
 import rs.ac.bg.etf.barberbooker.data.staticRoutes
@@ -62,7 +64,7 @@ class ClientRegistrationViewModel @Inject constructor(
     fun registerClient(
         snackbarHostState: SnackbarHostState,
         navHostController: NavHostController
-    ) = viewModelScope.launch {
+    ) = viewModelScope.launch(Dispatchers.Main) {
         val email = _uiState.value.email
         val password = _uiState.value.password
         val name = _uiState.value.name
@@ -79,7 +81,12 @@ class ClientRegistrationViewModel @Inject constructor(
             return@launch
         }
         val md5HashedPassword = getSHA256HashedPassword(password)
-        addNewClient(email, md5HashedPassword, name, surname, phone)
+
+        withContext(Dispatchers.IO) {
+            addNewClient(email, md5HashedPassword, name, surname, phone)
+        }
+
+        _uiState.update { ClientRegistrationUiState() }
         val snackbarResult = snackbarHostState.showSnackbar(
             message = "Registration successful!",
             withDismissAction = true,
@@ -112,7 +119,6 @@ class ClientRegistrationViewModel @Inject constructor(
     ) {
         val newClient = Client(0, email, password, name, surname, phone)
         clientRepository.addNewClient(newClient)
-        _uiState.update { ClientRegistrationUiState() }
     }
 
     private fun isDataValid(
