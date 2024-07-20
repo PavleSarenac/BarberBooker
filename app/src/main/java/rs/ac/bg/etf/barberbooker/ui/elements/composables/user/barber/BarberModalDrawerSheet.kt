@@ -19,22 +19,18 @@ import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import kotlinx.coroutines.launch
 import rs.ac.bg.etf.barberbooker.data.staticRoutes
-import rs.ac.bg.etf.barberbooker.ui.stateholders.BarberBookerUiState
 import rs.ac.bg.etf.barberbooker.ui.stateholders.BarberBookerViewModel
 
 @Composable
@@ -53,7 +49,8 @@ fun BarberModalDrawerSheet(
     val screenHeightDp = configuration.screenHeightDp.dp
     val isPortrait = configuration.orientation == android.content.res.Configuration.ORIENTATION_PORTRAIT
 
-    var selectedItem by rememberSaveable { mutableStateOf("Appointments") }
+    val navBackStackEntry by navHostController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
 
     val drawerModifier = if (isPortrait) {
         Modifier.width(screenWidthDp * 0.8f)
@@ -74,9 +71,8 @@ fun BarberModalDrawerSheet(
         NavigationDrawerItem(
             label = { Text(text = "Appointments") },
             icon = { Icon(Icons.Filled.Schedule, contentDescription = "Appointments") },
-            selected = selectedItem == "Appointments",
+            selected = currentRoute?.contains("${staticRoutes[8]}/") ?: false,
             onClick = {
-                selectedItem = "Appointments"
                 navHostController.navigate("${staticRoutes[8]}/${uiState.loggedInUserEmail}")
                 coroutineScope.launch {
                     drawerState.close()
@@ -92,9 +88,8 @@ fun BarberModalDrawerSheet(
         NavigationDrawerItem(
             label = { Text(text = "Pending") },
             icon = { Icon(Icons.Filled.HourglassTop, contentDescription = "Pending") },
-            selected = selectedItem == "Pending",
+            selected = currentRoute?.contains("${staticRoutes[9]}/") ?: false,
             onClick = {
-                selectedItem = "Pending"
                 navHostController.navigate("${staticRoutes[9]}/${uiState.loggedInUserEmail}")
                 coroutineScope.launch {
                     drawerState.close()
@@ -111,9 +106,8 @@ fun BarberModalDrawerSheet(
         NavigationDrawerItem(
             label = { Text(text = "Revenue") },
             icon = { Icon(Icons.Filled.AttachMoney, contentDescription = "Revenue") },
-            selected = selectedItem == "Revenue",
+            selected = currentRoute?.contains("${staticRoutes[10]}/") ?: false,
             onClick = {
-                selectedItem = "Revenue"
                 navHostController.navigate("${staticRoutes[10]}/${uiState.loggedInUserEmail}")
                 coroutineScope.launch {
                     drawerState.close()
@@ -130,9 +124,8 @@ fun BarberModalDrawerSheet(
         NavigationDrawerItem(
             label = { Text(text = "Reviews") },
             icon = { Icon(Icons.Filled.Reviews, contentDescription = "Reviews that logged in barber has received") },
-            selected = selectedItem == "Reviews",
+            selected = currentRoute?.contains("${staticRoutes[11]}/") ?: false,
             onClick = {
-                selectedItem = "Reviews"
                 navHostController.navigate("${staticRoutes[11]}/${uiState.loggedInUserEmail}")
                 coroutineScope.launch {
                     drawerState.close()
@@ -149,9 +142,8 @@ fun BarberModalDrawerSheet(
         NavigationDrawerItem(
             label = { Text(text = "Archive") },
             icon = { Icon(Icons.Filled.WorkHistory, contentDescription = "Done haircuts archive") },
-            selected = selectedItem == "Archive",
+            selected = currentRoute?.contains("${staticRoutes[12]}/") ?: false,
             onClick = {
-                selectedItem = "Archive"
                 navHostController.navigate("${staticRoutes[12]}/${uiState.loggedInUserEmail}")
                 coroutineScope.launch {
                     drawerState.close()
@@ -168,9 +160,8 @@ fun BarberModalDrawerSheet(
         NavigationDrawerItem(
             label = { Text(text = "Rejections") },
             icon = { Icon(Icons.Filled.ReportProblem, contentDescription = "Rejected reservation requests") },
-            selected = selectedItem == "Rejections",
+            selected = currentRoute?.contains("${staticRoutes[13]}/") ?: false,
             onClick = {
-                selectedItem = "Rejections"
                 navHostController.navigate("${staticRoutes[13]}/${uiState.loggedInUserEmail}")
                 coroutineScope.launch {
                     drawerState.close()
@@ -187,9 +178,8 @@ fun BarberModalDrawerSheet(
         NavigationDrawerItem(
             label = { Text(text = "Cancellations") },
             icon = { Icon(Icons.Filled.Cancel, contentDescription = "Cancelled reservation requests") },
-            selected = selectedItem == "Cancellations",
+            selected = currentRoute?.contains("${staticRoutes[14]}/") ?: false,
             onClick = {
-                selectedItem = "Cancellations"
                 navHostController.navigate("${staticRoutes[14]}/${uiState.loggedInUserEmail}")
                 coroutineScope.launch {
                     drawerState.close()

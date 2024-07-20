@@ -19,7 +19,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -139,10 +138,10 @@ fun BarberBookerScaffold(
 ) {
     Scaffold(
         topBar = {
-            ScaffoldTopBar(currentRoute, navHostController, drawerState, context, uiState)
+            ScaffoldTopBar(currentRoute, navHostController, drawerState, context, uiState, barberBookerViewModel)
         },
         bottomBar = {
-            ScaffoldBottomBar(currentRoute, navHostController)
+            ScaffoldBottomBar(navHostController, uiState)
         },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) { paddingValues ->
@@ -183,20 +182,15 @@ fun BarberBookerScaffold(
                     }
                 )
             ) {navBackStackEntry ->
-                val clientEmail = navBackStackEntry.arguments?.getString("clientEmail") ?: ""
+                val clientEmail = navBackStackEntry.arguments?.getString("clientEmail") ?: uiState.loggedInUserEmail
                 BackHandler {
                     barberBookerActivity?.finish()
                 }
                 val previousRoute = navHostController.previousBackStackEntry?.destination?.route
-                val isClientLoginDataLoaded = rememberSaveable { mutableStateOf(false) }
                 if (previousRoute == staticRoutes[5]) {
-                    LaunchedEffect(Unit) {
-                        val job = barberBookerViewModel.updateLoginData(context, true, clientEmail, "client")
-                        job.join()
-                        isClientLoginDataLoaded.value = true
-                    }
+                    barberBookerViewModel.updateLoginData(context, true, clientEmail, "client")
                 }
-                if (isClientLoginDataLoaded.value) {
+                if (clientEmail != "") {
                     ClientInitialScreen(clientEmail)
                 }
             }
@@ -208,7 +202,7 @@ fun BarberBookerScaffold(
                     }
                 )
             ) {navBackStackEntry ->
-                val barberEmail = navBackStackEntry.arguments?.getString("barberEmail") ?: ""
+                val barberEmail = navBackStackEntry.arguments?.getString("barberEmail") ?: uiState.loggedInUserEmail
                 BackHandler {
                     if (drawerState.isOpen) {
                         coroutineScope.launch {
@@ -219,15 +213,10 @@ fun BarberBookerScaffold(
                     }
                 }
                 val previousRoute = navHostController.previousBackStackEntry?.destination?.route
-                val isBarberLoginDataLoaded = rememberSaveable { mutableStateOf(false) }
                 if (previousRoute == staticRoutes[6]) {
-                    LaunchedEffect(Unit) {
-                        val job = barberBookerViewModel.updateLoginData(context, true, barberEmail, "barber")
-                        job.join()
-                        isBarberLoginDataLoaded.value = true
-                    }
+                    barberBookerViewModel.updateLoginData(context, true, barberEmail, "barber")
                 }
-                if (isBarberLoginDataLoaded.value) {
+                if (barberEmail != "") {
                     BarberInitialScreen(barberEmail, navHostController)
                 }
             }
@@ -337,7 +326,8 @@ fun ScaffoldTopBar(
     navHostController: NavHostController,
     drawerState: DrawerState,
     context: Context,
-    uiState: BarberBookerUiState
+    uiState: BarberBookerUiState,
+    barberBookerViewModel: BarberBookerViewModel
 ) {
     when {
         currentRoute == staticRoutes[1] -> GuestTopBar(
@@ -368,43 +358,73 @@ fun ScaffoldTopBar(
             topBarTitle = "Appointments",
             drawerState = drawerState,
             navHostController = navHostController,
-            context = context
+            context = context,
+            barberEmail = uiState.loggedInUserEmail,
+            barberBookerViewModel = barberBookerViewModel
         )
         currentRoute.contains(staticRoutes[9]) && uiState.loggedInUserEmail != "" -> BarberTopBar(
             topBarTitle = "Pending requests",
             drawerState = drawerState,
             navHostController = navHostController,
-            context = context
+            context = context,
+            barberEmail = uiState.loggedInUserEmail,
+            barberBookerViewModel = barberBookerViewModel
         )
         currentRoute.contains(staticRoutes[10]) && uiState.loggedInUserEmail != "" -> BarberTopBar(
             topBarTitle = "Revenue",
             drawerState = drawerState,
             navHostController = navHostController,
-            context = context
+            context = context,
+            barberEmail = uiState.loggedInUserEmail,
+            barberBookerViewModel = barberBookerViewModel
         )
         currentRoute.contains(staticRoutes[11]) && uiState.loggedInUserEmail != "" -> BarberTopBar(
             topBarTitle = "Reviews",
             drawerState = drawerState,
             navHostController = navHostController,
-            context = context
+            context = context,
+            barberEmail = uiState.loggedInUserEmail,
+            barberBookerViewModel = barberBookerViewModel
         )
         currentRoute.contains(staticRoutes[12]) && uiState.loggedInUserEmail != "" -> BarberTopBar(
             topBarTitle = "Archive",
             drawerState = drawerState,
             navHostController = navHostController,
-            context = context
+            context = context,
+            barberEmail = uiState.loggedInUserEmail,
+            barberBookerViewModel = barberBookerViewModel
         )
         currentRoute.contains(staticRoutes[13]) && uiState.loggedInUserEmail != "" -> BarberTopBar(
             topBarTitle = "Rejections",
             drawerState = drawerState,
             navHostController = navHostController,
-            context = context
+            context = context,
+            barberEmail = uiState.loggedInUserEmail,
+            barberBookerViewModel = barberBookerViewModel
         )
         currentRoute.contains(staticRoutes[14]) && uiState.loggedInUserEmail != "" -> BarberTopBar(
             topBarTitle = "Cancellations",
             drawerState = drawerState,
             navHostController = navHostController,
-            context = context
+            context = context,
+            barberEmail = uiState.loggedInUserEmail,
+            barberBookerViewModel = barberBookerViewModel
+        )
+        currentRoute.contains(staticRoutes[15]) && uiState.loggedInUserEmail != "" -> BarberTopBar(
+            topBarTitle = "My Profile",
+            drawerState = drawerState,
+            navHostController = navHostController,
+            context = context,
+            barberEmail = uiState.loggedInUserEmail,
+            barberBookerViewModel = barberBookerViewModel
+        )
+        currentRoute.contains(staticRoutes[16]) && uiState.loggedInUserEmail != "" -> BarberTopBar(
+            topBarTitle = "Edit Profile",
+            drawerState = drawerState,
+            navHostController = navHostController,
+            context = context,
+            barberEmail = uiState.loggedInUserEmail,
+            barberBookerViewModel = barberBookerViewModel
         )
         else -> {}
     }
@@ -412,12 +432,11 @@ fun ScaffoldTopBar(
 
 @Composable
 fun ScaffoldBottomBar(
-    currentRoute: String,
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    uiState: BarberBookerUiState
 ) {
-    if (currentRoute.contains("Barber") && currentRoute.contains("/")) {
-        val barberEmail = currentRoute.substring(currentRoute.indexOf("/") + 1)
-        BarberBottomBar(barberEmail, navHostController)
+    if (uiState.loggedInUserEmail != "") {
+        BarberBottomBar(uiState.loggedInUserEmail, navHostController)
     }
 }
 

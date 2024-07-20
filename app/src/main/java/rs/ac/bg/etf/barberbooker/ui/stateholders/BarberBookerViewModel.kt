@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavHostController
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -57,11 +58,33 @@ class BarberBookerViewModel @Inject constructor() : ViewModel() {
         }
 
         withContext(Dispatchers.Main) {
-            _uiState.update { it.copy(
-                startDestination = startDestination,
-                loggedInUserType = userType ?: "",
-                loggedInUserEmail = userEmail ?: ""
-            ) }
+            _uiState.update {
+                it.copy(
+                    startDestination = startDestination,
+                    loggedInUserType = userType ?: "",
+                    loggedInUserEmail = userEmail ?: ""
+                )
+            }
+        }
+    }
+
+    fun logOut(context: Context, navHostController: NavHostController) = viewModelScope.launch(Dispatchers.IO) {
+        val sharedPreferences: SharedPreferences = context.getSharedPreferences("login_data", Context.MODE_PRIVATE)
+        with(sharedPreferences.edit()) {
+            putBoolean("is_logged_in", false)
+            putString("user_email", "")
+            putString("user_type", "")
+            apply()
+        }
+
+        withContext(Dispatchers.Main) {
+            _uiState.update {
+                it.copy(
+                    loggedInUserType = "",
+                    loggedInUserEmail = ""
+                )
+            }
+            navHostController.navigate(staticRoutes[0])
         }
     }
 

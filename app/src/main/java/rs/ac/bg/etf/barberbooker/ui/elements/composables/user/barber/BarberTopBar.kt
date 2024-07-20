@@ -38,7 +38,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
 import rs.ac.bg.etf.barberbooker.data.staticRoutes
-import rs.ac.bg.etf.barberbooker.ui.stateholders.user.barber.BarberProfileViewModel
+import rs.ac.bg.etf.barberbooker.ui.stateholders.BarberBookerViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,7 +47,8 @@ fun BarberTopBar(
     drawerState: DrawerState,
     navHostController: NavHostController,
     context: Context,
-    barberProfileViewModel: BarberProfileViewModel = hiltViewModel()
+    barberEmail: String,
+    barberBookerViewModel: BarberBookerViewModel
 ) {
     val coroutineScope = rememberCoroutineScope()
     var openAccountDialog by rememberSaveable { mutableStateOf(false) }
@@ -147,9 +148,7 @@ fun BarberTopBar(
                     OutlinedButton(
                         onClick = {
                             coroutineScope.launch {
-                                val job = barberProfileViewModel.logOut(context)
-                                job.join()
-                                navHostController.navigate(staticRoutes[0])
+                                barberBookerViewModel.logOut(context, navHostController)
                             }
                         },
                         border = BorderStroke(1.dp, Color.White),

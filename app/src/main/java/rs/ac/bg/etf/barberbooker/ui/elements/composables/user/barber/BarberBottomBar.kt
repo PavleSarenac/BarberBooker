@@ -23,31 +23,34 @@ fun BarberBottomBar(barberEmail: String, navHostController: NavHostController) {
         NavigationBarItem(
             icon = { Icon(Icons.Filled.Schedule, contentDescription = "Appointments") },
             label = { Text(text = "Appointments") },
-            selected = currentRoute == "${staticRoutes[8]}/${barberEmail}",
+            selected = currentRoute?.contains("${staticRoutes[8]}/") ?: false,
             onClick = {
-                if (currentRoute != "${staticRoutes[8]}/${barberEmail}") {
-                    navHostController.navigate("${staticRoutes[8]}/${barberEmail}")
+                if (currentRoute?.contains("${staticRoutes[8]}/") == true) {
+                    return@NavigationBarItem
                 }
+                navHostController.navigate("${staticRoutes[8]}/${barberEmail}")
             }
         )
         NavigationBarItem(
             icon = { Icon(Icons.Filled.HourglassTop, contentDescription = "Pending requests") },
             label = { Text(text = "Pending") },
-            selected = currentRoute == "${staticRoutes[9]}/${barberEmail}",
+            selected = currentRoute?.contains("${staticRoutes[9]}/") ?: false,
             onClick = {
-                if (currentRoute != "${staticRoutes[9]}/${barberEmail}") {
-                    navHostController.navigate("${staticRoutes[9]}/${barberEmail}")
+                if (currentRoute?.contains("${staticRoutes[9]}/") == true) {
+                    return@NavigationBarItem
                 }
+                navHostController.navigate("${staticRoutes[9]}/${barberEmail}")
             }
         )
         NavigationBarItem(
             icon = { Icon(Icons.Filled.AttachMoney, contentDescription = "Revenue") },
             label = { Text(text = "Revenue") },
-            selected = currentRoute == "${staticRoutes[10]}/${barberEmail}",
+            selected = currentRoute?.contains("${staticRoutes[10]}/") ?: false,
             onClick = {
-                if (currentRoute != "${staticRoutes[10]}/${barberEmail}") {
-                    navHostController.navigate("${staticRoutes[10]}/${barberEmail}")
+                if (currentRoute?.contains("${staticRoutes[10]}/") == true) {
+                    return@NavigationBarItem
                 }
+                navHostController.navigate("${staticRoutes[10]}/${barberEmail}")
             }
         )
     }
