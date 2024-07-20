@@ -68,24 +68,23 @@ class BarberBookerViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    fun logOut(context: Context, navHostController: NavHostController) = viewModelScope.launch(Dispatchers.IO) {
-        val sharedPreferences: SharedPreferences = context.getSharedPreferences("login_data", Context.MODE_PRIVATE)
-        with(sharedPreferences.edit()) {
-            putBoolean("is_logged_in", false)
-            putString("user_email", "")
-            putString("user_type", "")
-            apply()
-        }
-
-        withContext(Dispatchers.Main) {
-            _uiState.update {
-                it.copy(
-                    loggedInUserType = "",
-                    loggedInUserEmail = ""
-                )
+    fun logOut(context: Context, navHostController: NavHostController) = viewModelScope.launch(Dispatchers.Main) {
+        withContext(Dispatchers.IO) {
+            val sharedPreferences: SharedPreferences = context.getSharedPreferences("login_data", Context.MODE_PRIVATE)
+            with(sharedPreferences.edit()) {
+                putBoolean("is_logged_in", false)
+                putString("user_email", "")
+                putString("user_type", "")
+                apply()
             }
-            navHostController.navigate(staticRoutes[0])
         }
+        _uiState.update {
+            it.copy(
+                loggedInUserType = "",
+                loggedInUserEmail = ""
+            )
+        }
+        navHostController.navigate(staticRoutes[0])
     }
 
 }
