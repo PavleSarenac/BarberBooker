@@ -5,9 +5,7 @@ import android.content.Context
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -21,14 +19,15 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -52,9 +51,15 @@ import rs.ac.bg.etf.barberbooker.ui.elements.screens.guest.login.LogInScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.guest.registration.SignUpAsBarberScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.guest.registration.SignUpAsClientScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.guest.registration.SignUpScreen
+import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.barber.BarberArchiveScreen
+import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.barber.BarberCancellationsScreen
+import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.barber.BarberEditProfileScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.barber.BarberInitialScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.barber.BarberPendingScreen
+import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.barber.BarberRejectionsScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.barber.BarberRevenueScreen
+import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.barber.BarberReviewsScreen
+import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.barber.BarberViewProfileScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.client.ClientInitialScreen
 import rs.ac.bg.etf.barberbooker.ui.stateholders.BarberBookerUiState
 import rs.ac.bg.etf.barberbooker.ui.stateholders.BarberBookerViewModel
@@ -75,10 +80,7 @@ fun BarberBookerApp(
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
 
-    val configuration = LocalConfiguration.current
-    val isPortrait = configuration.orientation == android.content.res.Configuration.ORIENTATION_PORTRAIT
-
-    var isStartDestinationLoaded by remember { mutableStateOf(false) }
+    var isStartDestinationLoaded by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         val job = barberBookerViewModel.updateStartDestination(context)
@@ -96,9 +98,6 @@ fun BarberBookerApp(
     }
 
     ModalNavigationDrawer(
-        modifier = Modifier.then(
-            if (isPortrait) Modifier.fillMaxHeight() else Modifier.fillMaxWidth()
-        ),
         drawerState = drawerState,
         drawerContent = {
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
@@ -106,7 +105,7 @@ fun BarberBookerApp(
                     /* TODO */
                 }
                 else if (uiState.loggedInUserType == "barber") {
-                    BarberModalDrawerSheet(drawerState)
+                    BarberModalDrawerSheet(drawerState, navHostController, barberBookerViewModel)
                 }
             }
         }
@@ -140,7 +139,7 @@ fun BarberBookerScaffold(
 ) {
     Scaffold(
         topBar = {
-            ScaffoldTopBar(currentRoute, navHostController, drawerState, context)
+            ScaffoldTopBar(currentRoute, navHostController, drawerState, context, uiState)
         },
         bottomBar = {
             ScaffoldBottomBar(currentRoute, navHostController)
@@ -189,10 +188,17 @@ fun BarberBookerScaffold(
                     barberBookerActivity?.finish()
                 }
                 val previousRoute = navHostController.previousBackStackEntry?.destination?.route
+                val isClientLoginDataLoaded = rememberSaveable { mutableStateOf(false) }
                 if (previousRoute == staticRoutes[5]) {
-                    barberBookerViewModel.updateLoginData(context, true, clientEmail, "client")
+                    LaunchedEffect(Unit) {
+                        val job = barberBookerViewModel.updateLoginData(context, true, clientEmail, "client")
+                        job.join()
+                        isClientLoginDataLoaded.value = true
+                    }
                 }
-                ClientInitialScreen(clientEmail)
+                if (isClientLoginDataLoaded.value) {
+                    ClientInitialScreen(clientEmail)
+                }
             }
             composable(
                 route = "${staticRoutes[8]}/{barberEmail}",
@@ -213,10 +219,17 @@ fun BarberBookerScaffold(
                     }
                 }
                 val previousRoute = navHostController.previousBackStackEntry?.destination?.route
+                val isBarberLoginDataLoaded = rememberSaveable { mutableStateOf(false) }
                 if (previousRoute == staticRoutes[6]) {
-                    barberBookerViewModel.updateLoginData(context, true, barberEmail, "barber")
+                    LaunchedEffect(Unit) {
+                        val job = barberBookerViewModel.updateLoginData(context, true, barberEmail, "barber")
+                        job.join()
+                        isBarberLoginDataLoaded.value = true
+                    }
                 }
-                BarberInitialScreen(barberEmail, navHostController)
+                if (isBarberLoginDataLoaded.value) {
+                    BarberInitialScreen(barberEmail, navHostController)
+                }
             }
             composable(
                 route = "${staticRoutes[9]}/{barberEmail}",
@@ -227,7 +240,7 @@ fun BarberBookerScaffold(
                 )
             ) {navBackStackEntry ->
                 val barberEmail = navBackStackEntry.arguments?.getString("barberEmail") ?: ""
-                LoggedInUserRegularScreenBackHandler(drawerState, navHostController)
+                LoggedInBarberRegularScreenBackHandler(drawerState, navHostController, barberEmail)
                 BarberPendingScreen(barberEmail, navHostController)
             }
             composable(
@@ -239,8 +252,80 @@ fun BarberBookerScaffold(
                 )
             ) {navBackStackEntry ->
                 val barberEmail = navBackStackEntry.arguments?.getString("barberEmail") ?: ""
-                LoggedInUserRegularScreenBackHandler(drawerState, navHostController)
+                LoggedInBarberRegularScreenBackHandler(drawerState, navHostController, barberEmail)
                 BarberRevenueScreen(barberEmail, navHostController)
+            }
+            composable(
+                route = "${staticRoutes[11]}/{barberEmail}",
+                arguments = listOf(
+                    navArgument("barberEmail") {
+                        type = NavType.StringType
+                    }
+                )
+            ) {navBackStackEntry ->
+                val barberEmail = navBackStackEntry.arguments?.getString("barberEmail") ?: ""
+                LoggedInBarberRegularScreenBackHandler(drawerState, navHostController, barberEmail)
+                BarberReviewsScreen(barberEmail, navHostController)
+            }
+            composable(
+                route = "${staticRoutes[12]}/{barberEmail}",
+                arguments = listOf(
+                    navArgument("barberEmail") {
+                        type = NavType.StringType
+                    }
+                )
+            ) {navBackStackEntry ->
+                val barberEmail = navBackStackEntry.arguments?.getString("barberEmail") ?: ""
+                LoggedInBarberRegularScreenBackHandler(drawerState, navHostController, barberEmail)
+                BarberArchiveScreen(barberEmail, navHostController)
+            }
+            composable(
+                route = "${staticRoutes[13]}/{barberEmail}",
+                arguments = listOf(
+                    navArgument("barberEmail") {
+                        type = NavType.StringType
+                    }
+                )
+            ) {navBackStackEntry ->
+                val barberEmail = navBackStackEntry.arguments?.getString("barberEmail") ?: ""
+                LoggedInBarberRegularScreenBackHandler(drawerState, navHostController, barberEmail)
+                BarberRejectionsScreen(barberEmail, navHostController)
+            }
+            composable(
+                route = "${staticRoutes[14]}/{barberEmail}",
+                arguments = listOf(
+                    navArgument("barberEmail") {
+                        type = NavType.StringType
+                    }
+                )
+            ) {navBackStackEntry ->
+                val barberEmail = navBackStackEntry.arguments?.getString("barberEmail") ?: ""
+                LoggedInBarberRegularScreenBackHandler(drawerState, navHostController, barberEmail)
+                BarberCancellationsScreen(barberEmail, navHostController)
+            }
+            composable(
+                route = "${staticRoutes[15]}/{barberEmail}",
+                arguments = listOf(
+                    navArgument("barberEmail") {
+                        type = NavType.StringType
+                    }
+                )
+            ) {navBackStackEntry ->
+                val barberEmail = navBackStackEntry.arguments?.getString("barberEmail") ?: ""
+                LoggedInBarberRegularScreenBackHandler(drawerState, navHostController, barberEmail)
+                BarberViewProfileScreen(barberEmail, navHostController)
+            }
+            composable(
+                route = "${staticRoutes[16]}/{barberEmail}",
+                arguments = listOf(
+                    navArgument("barberEmail") {
+                        type = NavType.StringType
+                    }
+                )
+            ) {navBackStackEntry ->
+                val barberEmail = navBackStackEntry.arguments?.getString("barberEmail") ?: ""
+                LoggedInBarberRegularScreenBackHandler(drawerState, navHostController, barberEmail)
+                BarberEditProfileScreen(barberEmail, navHostController)
             }
         }
     }
@@ -251,7 +336,8 @@ fun ScaffoldTopBar(
     currentRoute: String,
     navHostController: NavHostController,
     drawerState: DrawerState,
-    context: Context
+    context: Context,
+    uiState: BarberBookerUiState
 ) {
     when {
         currentRoute == staticRoutes[1] -> GuestTopBar(
@@ -278,20 +364,44 @@ fun ScaffoldTopBar(
             topBarTitle = "Log in as a barber",
             navHostController = navHostController
         )
-        currentRoute.contains(staticRoutes[8]) -> BarberTopBar(
+        currentRoute.contains(staticRoutes[8]) && uiState.loggedInUserEmail != "" -> BarberTopBar(
             topBarTitle = "Appointments",
             drawerState = drawerState,
             navHostController = navHostController,
             context = context
         )
-        currentRoute.contains(staticRoutes[9]) -> BarberTopBar(
+        currentRoute.contains(staticRoutes[9]) && uiState.loggedInUserEmail != "" -> BarberTopBar(
             topBarTitle = "Pending requests",
             drawerState = drawerState,
             navHostController = navHostController,
             context = context
         )
-        currentRoute.contains(staticRoutes[10]) -> BarberTopBar(
+        currentRoute.contains(staticRoutes[10]) && uiState.loggedInUserEmail != "" -> BarberTopBar(
             topBarTitle = "Revenue",
+            drawerState = drawerState,
+            navHostController = navHostController,
+            context = context
+        )
+        currentRoute.contains(staticRoutes[11]) && uiState.loggedInUserEmail != "" -> BarberTopBar(
+            topBarTitle = "Reviews",
+            drawerState = drawerState,
+            navHostController = navHostController,
+            context = context
+        )
+        currentRoute.contains(staticRoutes[12]) && uiState.loggedInUserEmail != "" -> BarberTopBar(
+            topBarTitle = "Archive",
+            drawerState = drawerState,
+            navHostController = navHostController,
+            context = context
+        )
+        currentRoute.contains(staticRoutes[13]) && uiState.loggedInUserEmail != "" -> BarberTopBar(
+            topBarTitle = "Rejections",
+            drawerState = drawerState,
+            navHostController = navHostController,
+            context = context
+        )
+        currentRoute.contains(staticRoutes[14]) && uiState.loggedInUserEmail != "" -> BarberTopBar(
+            topBarTitle = "Cancellations",
             drawerState = drawerState,
             navHostController = navHostController,
             context = context
@@ -301,7 +411,10 @@ fun ScaffoldTopBar(
 }
 
 @Composable
-fun ScaffoldBottomBar(currentRoute: String, navHostController: NavHostController) {
+fun ScaffoldBottomBar(
+    currentRoute: String,
+    navHostController: NavHostController
+) {
     if (currentRoute.contains("Barber") && currentRoute.contains("/")) {
         val barberEmail = currentRoute.substring(currentRoute.indexOf("/") + 1)
         BarberBottomBar(barberEmail, navHostController)
@@ -309,9 +422,10 @@ fun ScaffoldBottomBar(currentRoute: String, navHostController: NavHostController
 }
 
 @Composable
-fun LoggedInUserRegularScreenBackHandler(
+fun LoggedInBarberRegularScreenBackHandler(
     drawerState: DrawerState,
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    barberEmail: String
 ) {
     val coroutineScope = rememberCoroutineScope()
     BackHandler {
@@ -320,7 +434,7 @@ fun LoggedInUserRegularScreenBackHandler(
                 drawerState.close()
             }
         } else {
-            navHostController.popBackStack()
+            navHostController.navigate("${staticRoutes[8]}/${barberEmail}")
         }
     }
 }

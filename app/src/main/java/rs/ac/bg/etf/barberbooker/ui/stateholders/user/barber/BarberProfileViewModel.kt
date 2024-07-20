@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class BarberAccountViewModel @Inject constructor() : ViewModel() {
+class BarberProfileViewModel @Inject constructor() : ViewModel() {
     fun logOut(context: Context) = viewModelScope.launch(Dispatchers.IO) {
         val sharedPreferences: SharedPreferences = context.getSharedPreferences("login_data", Context.MODE_PRIVATE)
         with(sharedPreferences.edit()) {

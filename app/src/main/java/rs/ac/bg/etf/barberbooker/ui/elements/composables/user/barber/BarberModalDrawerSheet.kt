@@ -19,8 +19,11 @@ import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -28,9 +31,23 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import kotlinx.coroutines.launch
+import rs.ac.bg.etf.barberbooker.data.staticRoutes
+import rs.ac.bg.etf.barberbooker.ui.stateholders.BarberBookerUiState
+import rs.ac.bg.etf.barberbooker.ui.stateholders.BarberBookerViewModel
 
 @Composable
-fun BarberModalDrawerSheet(drawerState: DrawerState) {
+fun BarberModalDrawerSheet(
+    drawerState: DrawerState,
+    navHostController: NavHostController,
+    barberBookerViewModel: BarberBookerViewModel
+) {
+    val uiState by barberBookerViewModel.uiState.collectAsState()
+    if (uiState.loggedInUserEmail == "") return
+
+    val coroutineScope = rememberCoroutineScope()
+
     val configuration = LocalConfiguration.current
     val screenWidthDp = configuration.screenWidthDp.dp
     val screenHeightDp = configuration.screenHeightDp.dp
@@ -60,6 +77,10 @@ fun BarberModalDrawerSheet(drawerState: DrawerState) {
             selected = selectedItem == "Appointments",
             onClick = {
                 selectedItem = "Appointments"
+                navHostController.navigate("${staticRoutes[8]}/${uiState.loggedInUserEmail}")
+                coroutineScope.launch {
+                    drawerState.close()
+                }
             },
             colors = NavigationDrawerItemDefaults.colors(
                 selectedTextColor = MaterialTheme.colorScheme.onPrimary,
@@ -74,6 +95,10 @@ fun BarberModalDrawerSheet(drawerState: DrawerState) {
             selected = selectedItem == "Pending",
             onClick = {
                 selectedItem = "Pending"
+                navHostController.navigate("${staticRoutes[9]}/${uiState.loggedInUserEmail}")
+                coroutineScope.launch {
+                    drawerState.close()
+                }
             },
             colors = NavigationDrawerItemDefaults.colors(
                 selectedTextColor = MaterialTheme.colorScheme.onPrimary,
@@ -89,6 +114,10 @@ fun BarberModalDrawerSheet(drawerState: DrawerState) {
             selected = selectedItem == "Revenue",
             onClick = {
                 selectedItem = "Revenue"
+                navHostController.navigate("${staticRoutes[10]}/${uiState.loggedInUserEmail}")
+                coroutineScope.launch {
+                    drawerState.close()
+                }
             },
             colors = NavigationDrawerItemDefaults.colors(
                 selectedTextColor = MaterialTheme.colorScheme.onPrimary,
@@ -104,6 +133,10 @@ fun BarberModalDrawerSheet(drawerState: DrawerState) {
             selected = selectedItem == "Reviews",
             onClick = {
                 selectedItem = "Reviews"
+                navHostController.navigate("${staticRoutes[11]}/${uiState.loggedInUserEmail}")
+                coroutineScope.launch {
+                    drawerState.close()
+                }
             },
             colors = NavigationDrawerItemDefaults.colors(
                 selectedTextColor = MaterialTheme.colorScheme.onPrimary,
@@ -119,6 +152,10 @@ fun BarberModalDrawerSheet(drawerState: DrawerState) {
             selected = selectedItem == "Archive",
             onClick = {
                 selectedItem = "Archive"
+                navHostController.navigate("${staticRoutes[12]}/${uiState.loggedInUserEmail}")
+                coroutineScope.launch {
+                    drawerState.close()
+                }
             },
             colors = NavigationDrawerItemDefaults.colors(
                 selectedTextColor = MaterialTheme.colorScheme.onPrimary,
@@ -134,6 +171,10 @@ fun BarberModalDrawerSheet(drawerState: DrawerState) {
             selected = selectedItem == "Rejections",
             onClick = {
                 selectedItem = "Rejections"
+                navHostController.navigate("${staticRoutes[13]}/${uiState.loggedInUserEmail}")
+                coroutineScope.launch {
+                    drawerState.close()
+                }
             },
             colors = NavigationDrawerItemDefaults.colors(
                 selectedTextColor = MaterialTheme.colorScheme.onPrimary,
@@ -149,6 +190,10 @@ fun BarberModalDrawerSheet(drawerState: DrawerState) {
             selected = selectedItem == "Cancellations",
             onClick = {
                 selectedItem = "Cancellations"
+                navHostController.navigate("${staticRoutes[14]}/${uiState.loggedInUserEmail}")
+                coroutineScope.launch {
+                    drawerState.close()
+                }
             },
             colors = NavigationDrawerItemDefaults.colors(
                 selectedTextColor = MaterialTheme.colorScheme.onPrimary,

@@ -15,7 +15,8 @@ import javax.inject.Inject
 
 data class BarberBookerUiState(
     var startDestination: String = staticRoutes[0],
-    var loggedInUserType: String = ""
+    var loggedInUserType: String = "",
+    var loggedInUserEmail: String = ""
 )
 
 @HiltViewModel
@@ -39,7 +40,7 @@ class BarberBookerViewModel @Inject constructor() : ViewModel() {
         }
 
         withContext(Dispatchers.Main) {
-            _uiState.update { it.copy(loggedInUserType = userType) }
+            _uiState.update { it.copy(loggedInUserType = userType, loggedInUserEmail = userEmail) }
         }
     }
 
@@ -58,7 +59,8 @@ class BarberBookerViewModel @Inject constructor() : ViewModel() {
         withContext(Dispatchers.Main) {
             _uiState.update { it.copy(
                 startDestination = startDestination,
-                loggedInUserType = userType ?: ""
+                loggedInUserType = userType ?: "",
+                loggedInUserEmail = userEmail ?: ""
             ) }
         }
     }
