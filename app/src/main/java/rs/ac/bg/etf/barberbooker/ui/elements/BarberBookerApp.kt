@@ -23,8 +23,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -76,12 +78,15 @@ fun BarberBookerApp(
     val configuration = LocalConfiguration.current
     val isPortrait = configuration.orientation == android.content.res.Configuration.ORIENTATION_PORTRAIT
 
+    var isStartDestinationLoaded by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        barberBookerViewModel.updateStartDestination(context)
+        val job = barberBookerViewModel.updateStartDestination(context)
+        job.join()
+        isStartDestinationLoaded = true
     }
 
-    if (uiState.isInitialScreenLoading) {
+    if (!isStartDestinationLoaded) {
         Column(
             modifier = Modifier
                 .background(color = MaterialTheme.colorScheme.primary)

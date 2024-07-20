@@ -15,7 +15,6 @@ import javax.inject.Inject
 
 data class BarberBookerUiState(
     var startDestination: String = staticRoutes[0],
-    var isInitialScreenLoading: Boolean = true,
     var loggedInUserType: String = ""
 )
 
@@ -59,7 +58,6 @@ class BarberBookerViewModel @Inject constructor() : ViewModel() {
         withContext(Dispatchers.Main) {
             _uiState.update { it.copy(
                 startDestination = startDestination,
-                isInitialScreenLoading = false,
                 loggedInUserType = userType ?: ""
             ) }
         }
