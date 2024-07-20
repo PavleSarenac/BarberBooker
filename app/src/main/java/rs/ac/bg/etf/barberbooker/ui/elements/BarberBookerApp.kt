@@ -190,7 +190,7 @@ fun BarberBookerScaffold(
                 if (previousRoute == staticRoutes[5]) {
                     barberBookerViewModel.updateLoginData(context, true, clientEmail, "client")
                 }
-                if (clientEmail != "") {
+                if (uiState.loggedInUserEmail != "") {
                     ClientInitialScreen(clientEmail)
                 }
             }
@@ -216,7 +216,7 @@ fun BarberBookerScaffold(
                 if (previousRoute == staticRoutes[6]) {
                     barberBookerViewModel.updateLoginData(context, true, barberEmail, "barber")
                 }
-                if (barberEmail != "") {
+                if (uiState.loggedInUserEmail != "") {
                     BarberInitialScreen(barberEmail, navHostController)
                 }
             }
