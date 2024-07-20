@@ -39,7 +39,6 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import rs.ac.bg.etf.barberbooker.ui.stateholders.user.barber.BarberViewProfileViewModel
 
 @Composable
@@ -78,6 +77,27 @@ fun BarberViewProfileScreen(
             Row(
                 modifier = Modifier.padding(8.dp)
             ) {
+                Icon(imageVector = Icons.Filled.CalendarMonth, contentDescription = "Working days")
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(text = uiState.workingDays)
+            }
+            Row(
+                modifier = Modifier.padding(8.dp)
+            ) {
+                Icon(imageVector = Icons.Filled.AccessTime, contentDescription = "Working hours")
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(text = uiState.workingHours)
+            }
+            Row(
+                modifier = Modifier.padding(8.dp)
+            ) {
+                Icon(imageVector = Icons.Filled.AttachMoney, contentDescription = "Price")
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(text = "${uiState.price} RSD")
+            }
+            Row(
+                modifier = Modifier.padding(8.dp)
+            ) {
                 Icon(imageVector = Icons.Filled.Flag, contentDescription = "Country")
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(text = uiState.country)
@@ -104,9 +124,9 @@ fun BarberViewProfileScreen(
                             .replace(" ", "%20")
                             .replace(",", "%2C")
                         val googleMapsLocation = "${uiState.country}%2C%20" +
-                                    "${uiState.city}%2C%20" +
-                                    "${uiState.municipality}%2C%20" +
-                                    googleMapsAddress
+                                "${uiState.city}%2C%20" +
+                                "${uiState.municipality}%2C%20" +
+                                googleMapsAddress
                         val intent = Intent().apply {
                             action = Intent.ACTION_VIEW
                             data = Uri.parse("geo:0,0?q=${googleMapsLocation}")
@@ -125,13 +145,6 @@ fun BarberViewProfileScreen(
             Row(
                 modifier = Modifier.padding(8.dp)
             ) {
-                Icon(imageVector = Icons.Filled.AttachMoney, contentDescription = "Price")
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(text = "${uiState.price} RSD")
-            }
-            Row(
-                modifier = Modifier.padding(8.dp)
-            ) {
                 Icon(imageVector = Icons.Filled.Email, contentDescription = "Email address")
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(text = uiState.email)
@@ -142,20 +155,6 @@ fun BarberViewProfileScreen(
                 Icon(imageVector = Icons.Filled.Phone, contentDescription = "Phone number")
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(text = uiState.phone)
-            }
-            Row(
-                modifier = Modifier.padding(8.dp)
-            ) {
-                Icon(imageVector = Icons.Filled.CalendarMonth, contentDescription = "Working days")
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(text = uiState.workingDays)
-            }
-            Row(
-                modifier = Modifier.padding(8.dp)
-            ) {
-                Icon(imageVector = Icons.Filled.AccessTime, contentDescription = "Working hours")
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(text = uiState.workingHours)
             }
         }
     }
