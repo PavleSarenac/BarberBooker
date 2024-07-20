@@ -230,7 +230,9 @@ fun BarberBookerScaffold(
             ) {navBackStackEntry ->
                 val barberEmail = navBackStackEntry.arguments?.getString("barberEmail") ?: ""
                 LoggedInBarberRegularScreenBackHandler(drawerState, navHostController, barberEmail)
-                BarberPendingScreen(barberEmail, navHostController)
+                if (uiState.loggedInUserEmail != "") {
+                    BarberPendingScreen(barberEmail, navHostController)
+                }
             }
             composable(
                 route = "${staticRoutes[10]}/{barberEmail}",
@@ -242,7 +244,9 @@ fun BarberBookerScaffold(
             ) {navBackStackEntry ->
                 val barberEmail = navBackStackEntry.arguments?.getString("barberEmail") ?: ""
                 LoggedInBarberRegularScreenBackHandler(drawerState, navHostController, barberEmail)
-                BarberRevenueScreen(barberEmail, navHostController)
+                if (uiState.loggedInUserEmail != "") {
+                    BarberRevenueScreen(barberEmail, navHostController)
+                }
             }
             composable(
                 route = "${staticRoutes[11]}/{barberEmail}",
@@ -254,7 +258,9 @@ fun BarberBookerScaffold(
             ) {navBackStackEntry ->
                 val barberEmail = navBackStackEntry.arguments?.getString("barberEmail") ?: ""
                 LoggedInBarberRegularScreenBackHandler(drawerState, navHostController, barberEmail)
-                BarberReviewsScreen(barberEmail, navHostController)
+                if (uiState.loggedInUserEmail != "") {
+                    BarberReviewsScreen(barberEmail, navHostController)
+                }
             }
             composable(
                 route = "${staticRoutes[12]}/{barberEmail}",
@@ -266,7 +272,9 @@ fun BarberBookerScaffold(
             ) {navBackStackEntry ->
                 val barberEmail = navBackStackEntry.arguments?.getString("barberEmail") ?: ""
                 LoggedInBarberRegularScreenBackHandler(drawerState, navHostController, barberEmail)
-                BarberArchiveScreen(barberEmail, navHostController)
+                if (uiState.loggedInUserEmail != "") {
+                    BarberArchiveScreen(barberEmail, navHostController)
+                }
             }
             composable(
                 route = "${staticRoutes[13]}/{barberEmail}",
@@ -278,7 +286,9 @@ fun BarberBookerScaffold(
             ) {navBackStackEntry ->
                 val barberEmail = navBackStackEntry.arguments?.getString("barberEmail") ?: ""
                 LoggedInBarberRegularScreenBackHandler(drawerState, navHostController, barberEmail)
-                BarberRejectionsScreen(barberEmail, navHostController)
+                if (uiState.loggedInUserEmail != "") {
+                    BarberRejectionsScreen(barberEmail, navHostController)
+                }
             }
             composable(
                 route = "${staticRoutes[14]}/{barberEmail}",
@@ -290,7 +300,9 @@ fun BarberBookerScaffold(
             ) {navBackStackEntry ->
                 val barberEmail = navBackStackEntry.arguments?.getString("barberEmail") ?: ""
                 LoggedInBarberRegularScreenBackHandler(drawerState, navHostController, barberEmail)
-                BarberCancellationsScreen(barberEmail, navHostController)
+                if (uiState.loggedInUserEmail != "") {
+                    BarberCancellationsScreen(barberEmail, navHostController)
+                }
             }
             composable(
                 route = "${staticRoutes[15]}/{barberEmail}",
@@ -302,7 +314,9 @@ fun BarberBookerScaffold(
             ) {navBackStackEntry ->
                 val barberEmail = navBackStackEntry.arguments?.getString("barberEmail") ?: ""
                 LoggedInBarberRegularScreenBackHandler(drawerState, navHostController, barberEmail)
-                BarberViewProfileScreen(barberEmail, navHostController)
+                if (uiState.loggedInUserEmail != "") {
+                    BarberViewProfileScreen(barberEmail, navHostController)
+                }
             }
             composable(
                 route = "${staticRoutes[16]}/{barberEmail}",
@@ -314,7 +328,9 @@ fun BarberBookerScaffold(
             ) {navBackStackEntry ->
                 val barberEmail = navBackStackEntry.arguments?.getString("barberEmail") ?: ""
                 LoggedInBarberRegularScreenBackHandler(drawerState, navHostController, barberEmail)
-                BarberEditProfileScreen(barberEmail, navHostController)
+                if (uiState.loggedInUserEmail != "") {
+                    BarberEditProfileScreen(barberEmail, navHostController)
+                }
             }
         }
     }
