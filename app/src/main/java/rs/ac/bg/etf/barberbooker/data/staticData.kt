@@ -11,11 +11,9 @@ val staticRoutes = listOf(
     "ClientInitialScreen",
     "BarberInitialScreen",
     "BarberPendingScreen",
-    "BarberRevenueScreen",
     "BarberReviewsScreen",
     "BarberArchiveScreen",
     "BarberRejectionsScreen",
-    "BarberCancellationsScreen",
     "BarberViewProfileScreen",
     "BarberEditProfileScreen"
 )

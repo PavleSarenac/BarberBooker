@@ -1,8 +1,8 @@
 package rs.ac.bg.etf.barberbooker.ui.elements.composables.user.barber
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material.icons.filled.HourglassTop
+import androidx.compose.material.icons.filled.Reviews
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -43,8 +43,8 @@ fun BarberBottomBar(barberEmail: String, navHostController: NavHostController) {
             }
         )
         NavigationBarItem(
-            icon = { Icon(Icons.Filled.AttachMoney, contentDescription = "Revenue") },
-            label = { Text(text = "Revenue") },
+            icon = { Icon(Icons.Filled.Reviews, contentDescription = "Reviews") },
+            label = { Text(text = "Reviews") },
             selected = currentRoute?.contains("${staticRoutes[10]}/") ?: false,
             onClick = {
                 if (currentRoute?.contains("${staticRoutes[10]}/") == true) {

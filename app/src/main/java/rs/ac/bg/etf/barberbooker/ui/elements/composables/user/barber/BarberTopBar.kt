@@ -113,7 +113,7 @@ fun BarberTopBar(
                     OutlinedButton(
                         onClick = {
                             openAccountDialog = false
-                            navHostController.navigate("${staticRoutes[15]}/${barberEmail}")
+                            navHostController.navigate("${staticRoutes[13]}/${barberEmail}")
                         },
                         border = BorderStroke(1.dp, Color.White),
                         modifier = Modifier
@@ -133,7 +133,7 @@ fun BarberTopBar(
                     OutlinedButton(
                         onClick = {
                             openAccountDialog = false
-                            navHostController.navigate("${staticRoutes[16]}/${barberEmail}")
+                            navHostController.navigate("${staticRoutes[14]}/${barberEmail}")
                         },
                         border = BorderStroke(1.dp, Color.White),
                         modifier = Modifier

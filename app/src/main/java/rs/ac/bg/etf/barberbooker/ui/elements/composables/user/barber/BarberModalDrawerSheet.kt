@@ -3,8 +3,6 @@ package rs.ac.bg.etf.barberbooker.ui.elements.composables.user.barber
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AttachMoney
-import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.HourglassTop
 import androidx.compose.material.icons.filled.ReportProblem
 import androidx.compose.material.icons.filled.Reviews
@@ -104,8 +102,8 @@ fun BarberModalDrawerSheet(
             badge = { Text(text = "21") }
         )
         NavigationDrawerItem(
-            label = { Text(text = "Revenue") },
-            icon = { Icon(Icons.Filled.AttachMoney, contentDescription = "Revenue") },
+            label = { Text(text = "Reviews") },
+            icon = { Icon(Icons.Filled.Reviews, contentDescription = "Reviews that logged in barber has received") },
             selected = currentRoute?.contains("${staticRoutes[10]}/") ?: false,
             onClick = {
                 navHostController.navigate("${staticRoutes[10]}/${uiState.loggedInUserEmail}")
@@ -118,33 +116,16 @@ fun BarberModalDrawerSheet(
                 unselectedTextColor = MaterialTheme.colorScheme.onPrimary,
                 selectedContainerColor = MaterialTheme.colorScheme.secondary
 
-            )
-        )
-        Divider(modifier = Modifier.padding(vertical = 8.dp))
-        NavigationDrawerItem(
-            label = { Text(text = "Reviews") },
-            icon = { Icon(Icons.Filled.Reviews, contentDescription = "Reviews that logged in barber has received") },
-            selected = currentRoute?.contains("${staticRoutes[11]}/") ?: false,
-            onClick = {
-                navHostController.navigate("${staticRoutes[11]}/${uiState.loggedInUserEmail}")
-                coroutineScope.launch {
-                    drawerState.close()
-                }
-            },
-            colors = NavigationDrawerItemDefaults.colors(
-                selectedTextColor = MaterialTheme.colorScheme.onPrimary,
-                unselectedTextColor = MaterialTheme.colorScheme.onPrimary,
-                selectedContainerColor = MaterialTheme.colorScheme.secondary
-
             ),
             badge = { Text(text = "30") }
         )
+        Divider(modifier = Modifier.padding(vertical = 8.dp))
         NavigationDrawerItem(
             label = { Text(text = "Archive") },
             icon = { Icon(Icons.Filled.WorkHistory, contentDescription = "Done haircuts archive") },
-            selected = currentRoute?.contains("${staticRoutes[12]}/") ?: false,
+            selected = currentRoute?.contains("${staticRoutes[11]}/") ?: false,
             onClick = {
-                navHostController.navigate("${staticRoutes[12]}/${uiState.loggedInUserEmail}")
+                navHostController.navigate("${staticRoutes[11]}/${uiState.loggedInUserEmail}")
                 coroutineScope.launch {
                     drawerState.close()
                 }
@@ -160,9 +141,9 @@ fun BarberModalDrawerSheet(
         NavigationDrawerItem(
             label = { Text(text = "Rejections") },
             icon = { Icon(Icons.Filled.ReportProblem, contentDescription = "Rejected reservation requests") },
-            selected = currentRoute?.contains("${staticRoutes[13]}/") ?: false,
+            selected = currentRoute?.contains("${staticRoutes[12]}/") ?: false,
             onClick = {
-                navHostController.navigate("${staticRoutes[13]}/${uiState.loggedInUserEmail}")
+                navHostController.navigate("${staticRoutes[12]}/${uiState.loggedInUserEmail}")
                 coroutineScope.launch {
                     drawerState.close()
                 }
@@ -174,24 +155,6 @@ fun BarberModalDrawerSheet(
 
             ),
             badge = { Text(text = "15") }
-        )
-        NavigationDrawerItem(
-            label = { Text(text = "Cancellations") },
-            icon = { Icon(Icons.Filled.Cancel, contentDescription = "Cancelled reservation requests") },
-            selected = currentRoute?.contains("${staticRoutes[14]}/") ?: false,
-            onClick = {
-                navHostController.navigate("${staticRoutes[14]}/${uiState.loggedInUserEmail}")
-                coroutineScope.launch {
-                    drawerState.close()
-                }
-            },
-            colors = NavigationDrawerItemDefaults.colors(
-                selectedTextColor = MaterialTheme.colorScheme.onPrimary,
-                unselectedTextColor = MaterialTheme.colorScheme.onPrimary,
-                selectedContainerColor = MaterialTheme.colorScheme.secondary
-
-            ),
-            badge = { Text(text = "3") }
         )
     }
 }

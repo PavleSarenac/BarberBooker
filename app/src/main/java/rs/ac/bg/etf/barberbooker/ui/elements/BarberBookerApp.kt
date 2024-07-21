@@ -51,12 +51,10 @@ import rs.ac.bg.etf.barberbooker.ui.elements.screens.guest.registration.SignUpAs
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.guest.registration.SignUpAsClientScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.guest.registration.SignUpScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.barber.BarberArchiveScreen
-import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.barber.BarberCancellationsScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.barber.BarberEditProfileScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.barber.BarberInitialScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.barber.BarberPendingScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.barber.BarberRejectionsScreen
-import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.barber.BarberRevenueScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.barber.BarberReviewsScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.barber.BarberViewProfileScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.client.ClientInitialScreen
@@ -249,7 +247,7 @@ fun BarberBookerScaffold(
                 val barberEmail = navBackStackEntry.arguments?.getString("barberEmail") ?: ""
                 LoggedInBarberRegularScreenBackHandler(drawerState, navHostController, barberEmail)
                 if (uiState.loggedInUserEmail != "") {
-                    BarberRevenueScreen(barberEmail, navHostController)
+                    BarberReviewsScreen(barberEmail, navHostController)
                 }
             }
             composable(
@@ -263,7 +261,7 @@ fun BarberBookerScaffold(
                 val barberEmail = navBackStackEntry.arguments?.getString("barberEmail") ?: ""
                 LoggedInBarberRegularScreenBackHandler(drawerState, navHostController, barberEmail)
                 if (uiState.loggedInUserEmail != "") {
-                    BarberReviewsScreen(barberEmail, navHostController)
+                    BarberArchiveScreen(barberEmail, navHostController)
                 }
             }
             composable(
@@ -277,7 +275,7 @@ fun BarberBookerScaffold(
                 val barberEmail = navBackStackEntry.arguments?.getString("barberEmail") ?: ""
                 LoggedInBarberRegularScreenBackHandler(drawerState, navHostController, barberEmail)
                 if (uiState.loggedInUserEmail != "") {
-                    BarberArchiveScreen(barberEmail, navHostController)
+                    BarberRejectionsScreen(barberEmail, navHostController)
                 }
             }
             composable(
@@ -291,39 +289,11 @@ fun BarberBookerScaffold(
                 val barberEmail = navBackStackEntry.arguments?.getString("barberEmail") ?: ""
                 LoggedInBarberRegularScreenBackHandler(drawerState, navHostController, barberEmail)
                 if (uiState.loggedInUserEmail != "") {
-                    BarberRejectionsScreen(barberEmail, navHostController)
-                }
-            }
-            composable(
-                route = "${staticRoutes[14]}/{barberEmail}",
-                arguments = listOf(
-                    navArgument("barberEmail") {
-                        type = NavType.StringType
-                    }
-                )
-            ) {navBackStackEntry ->
-                val barberEmail = navBackStackEntry.arguments?.getString("barberEmail") ?: ""
-                LoggedInBarberRegularScreenBackHandler(drawerState, navHostController, barberEmail)
-                if (uiState.loggedInUserEmail != "") {
-                    BarberCancellationsScreen(barberEmail, navHostController)
-                }
-            }
-            composable(
-                route = "${staticRoutes[15]}/{barberEmail}",
-                arguments = listOf(
-                    navArgument("barberEmail") {
-                        type = NavType.StringType
-                    }
-                )
-            ) {navBackStackEntry ->
-                val barberEmail = navBackStackEntry.arguments?.getString("barberEmail") ?: ""
-                LoggedInBarberRegularScreenBackHandler(drawerState, navHostController, barberEmail)
-                if (uiState.loggedInUserEmail != "") {
                     BarberViewProfileScreen(barberEmail)
                 }
             }
             composable(
-                route = "${staticRoutes[16]}/{barberEmail}",
+                route = "${staticRoutes[14]}/{barberEmail}",
                 arguments = listOf(
                     navArgument("barberEmail") {
                         type = NavType.StringType
@@ -391,14 +361,6 @@ fun ScaffoldTopBar(
             barberBookerViewModel = barberBookerViewModel
         )
         currentRoute.contains(staticRoutes[10]) && uiState.loggedInUserEmail != "" -> BarberTopBar(
-            topBarTitle = "Revenue",
-            drawerState = drawerState,
-            navHostController = navHostController,
-            context = context,
-            barberEmail = uiState.loggedInUserEmail,
-            barberBookerViewModel = barberBookerViewModel
-        )
-        currentRoute.contains(staticRoutes[11]) && uiState.loggedInUserEmail != "" -> BarberTopBar(
             topBarTitle = "Reviews",
             drawerState = drawerState,
             navHostController = navHostController,
@@ -406,7 +368,7 @@ fun ScaffoldTopBar(
             barberEmail = uiState.loggedInUserEmail,
             barberBookerViewModel = barberBookerViewModel
         )
-        currentRoute.contains(staticRoutes[12]) && uiState.loggedInUserEmail != "" -> BarberTopBar(
+        currentRoute.contains(staticRoutes[11]) && uiState.loggedInUserEmail != "" -> BarberTopBar(
             topBarTitle = "Archive",
             drawerState = drawerState,
             navHostController = navHostController,
@@ -414,7 +376,7 @@ fun ScaffoldTopBar(
             barberEmail = uiState.loggedInUserEmail,
             barberBookerViewModel = barberBookerViewModel
         )
-        currentRoute.contains(staticRoutes[13]) && uiState.loggedInUserEmail != "" -> BarberTopBar(
+        currentRoute.contains(staticRoutes[12]) && uiState.loggedInUserEmail != "" -> BarberTopBar(
             topBarTitle = "Rejections",
             drawerState = drawerState,
             navHostController = navHostController,
@@ -422,15 +384,7 @@ fun ScaffoldTopBar(
             barberEmail = uiState.loggedInUserEmail,
             barberBookerViewModel = barberBookerViewModel
         )
-        currentRoute.contains(staticRoutes[14]) && uiState.loggedInUserEmail != "" -> BarberTopBar(
-            topBarTitle = "Cancellations",
-            drawerState = drawerState,
-            navHostController = navHostController,
-            context = context,
-            barberEmail = uiState.loggedInUserEmail,
-            barberBookerViewModel = barberBookerViewModel
-        )
-        currentRoute.contains(staticRoutes[15]) && uiState.loggedInUserEmail != "" -> BarberTopBar(
+        currentRoute.contains(staticRoutes[13]) && uiState.loggedInUserEmail != "" -> BarberTopBar(
             topBarTitle = "Profile",
             drawerState = drawerState,
             navHostController = navHostController,
@@ -438,7 +392,7 @@ fun ScaffoldTopBar(
             barberEmail = uiState.loggedInUserEmail,
             barberBookerViewModel = barberBookerViewModel
         )
-        currentRoute.contains(staticRoutes[16]) && uiState.loggedInUserEmail != "" -> BarberTopBar(
+        currentRoute.contains(staticRoutes[14]) && uiState.loggedInUserEmail != "" -> BarberTopBar(
             topBarTitle = "Edit Profile",
             drawerState = drawerState,
             navHostController = navHostController,
