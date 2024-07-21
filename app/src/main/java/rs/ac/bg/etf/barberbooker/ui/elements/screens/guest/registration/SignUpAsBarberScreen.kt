@@ -149,28 +149,147 @@ fun SignUpAsBarberScreen(
             isError = !uiState.isBarbershopNameValid,
             placeholder = { Text("e.g., Cut&Go") }
         )
-        OutlinedTextField(
-            value = uiState.phone,
-            onValueChange =  { barberRegistrationViewModel.setPhone(it) },
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = MaterialTheme.colorScheme.onPrimary,
-                unfocusedBorderColor = MaterialTheme.colorScheme.onPrimary,
-                cursorColor = MaterialTheme.colorScheme.onPrimary,
-                focusedLabelColor = MaterialTheme.colorScheme.onPrimary,
-                unfocusedLabelColor = MaterialTheme.colorScheme.onPrimary
-            ),
-            label = { Text(text = "Phone") },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Phone,
-                imeAction = ImeAction.Next,
-            ),
-            keyboardActions = KeyboardActions(onNext = {
-                focusManager.moveFocus(FocusDirection.Down)
-            }),
+        Text(
+            text = "Working days:",
             modifier = Modifier.padding(horizontal = 48.dp, vertical = 8.dp),
-            isError = !uiState.isPhoneValid,
-            placeholder = { Text("e.g., 063/222-3333") },
+            fontSize = 24.sp
+        )
+        Row(
+            modifier = Modifier
+                .padding(horizontal = 48.dp, vertical = 8.dp)
+                .toggleable(
+                    value = mondayCheckedState,
+                    onValueChange = { onMondayStateChange(!mondayCheckedState) },
+                    role = Role.Checkbox
+                )
+        ) {
+            Checkbox(
+                checked = mondayCheckedState,
+                onCheckedChange = null
+            )
+            Text(
+                text = "Monday"
+            )
+        }
+        Row(
+            modifier = Modifier
+                .padding(horizontal = 48.dp, vertical = 8.dp)
+                .toggleable(
+                    value = tuesdayCheckedState,
+                    onValueChange = { onTuesdayStateChange(!tuesdayCheckedState) },
+                    role = Role.Checkbox
+                )
+        ) {
+            Checkbox(
+                checked = tuesdayCheckedState,
+                onCheckedChange = null
+            )
+            Text(
+                text = "Tuesday"
+            )
+        }
+        Row(
+            modifier = Modifier
+                .padding(horizontal = 48.dp, vertical = 8.dp)
+                .toggleable(
+                    value = wednesdayCheckedState,
+                    onValueChange = { onWednesdayStateChange(!wednesdayCheckedState) },
+                    role = Role.Checkbox
+                )
+        ) {
+            Checkbox(
+                checked = wednesdayCheckedState,
+                onCheckedChange = null
+            )
+            Text(
+                text = "Wednesday"
+            )
+        }
+        Row(
+            modifier = Modifier
+                .padding(horizontal = 48.dp, vertical = 8.dp)
+                .toggleable(
+                    value = thursdayCheckedState,
+                    onValueChange = { onThursdayStateChange(!thursdayCheckedState) },
+                    role = Role.Checkbox
+                )
+        ) {
+            Checkbox(
+                checked = thursdayCheckedState,
+                onCheckedChange = null
+            )
+            Text(
+                text = "Thursday"
+            )
+        }
+        Row(
+            modifier = Modifier
+                .padding(horizontal = 48.dp, vertical = 8.dp)
+                .toggleable(
+                    value = fridayCheckedState,
+                    onValueChange = { onFridayStateChange(!fridayCheckedState) },
+                    role = Role.Checkbox
+                )
+        ) {
+            Checkbox(
+                checked = fridayCheckedState,
+                onCheckedChange = null
+            )
+            Text(
+                text = "Friday"
+            )
+        }
+        Row(
+            modifier = Modifier
+                .padding(horizontal = 48.dp, vertical = 8.dp)
+                .toggleable(
+                    value = saturdayCheckedState,
+                    onValueChange = { onSaturdayStateChange(!saturdayCheckedState) },
+                    role = Role.Checkbox
+                )
+        ) {
+            Checkbox(
+                checked = saturdayCheckedState,
+                onCheckedChange = null
+            )
+            Text(
+                text = "Saturday"
+            )
+        }
+        Row(
+            modifier = Modifier
+                .padding(horizontal = 48.dp, vertical = 8.dp)
+                .toggleable(
+                    value = sundayCheckedState,
+                    onValueChange = { onSundayStateChange(!sundayCheckedState) },
+                    role = Role.Checkbox
+                )
+        ) {
+            Checkbox(
+                checked = sundayCheckedState,
+                onCheckedChange = null
+            )
+            Text(
+                text = "Sunday"
+            )
+        }
+        Text(
+            text = "Working day start time:",
+            modifier = Modifier.padding(horizontal = 48.dp, vertical = 8.dp),
+            fontSize = 24.sp
+        )
+        TimePicker(
+            state = workingDayStartTimeState,
+            modifier = Modifier.padding(vertical = 8.dp)
+        )
+        Text(
+            text = "Working day end time:",
+            modifier = Modifier.padding(horizontal = 48.dp, vertical = 8.dp),
+            fontSize = 24.sp
+        )
+        TimePicker(
+            state = workingDayEndTimeState,
+            modifier = Modifier.padding(vertical = 8.dp)
         )
         OutlinedTextField(
             value = uiState.price,
@@ -310,148 +429,29 @@ fun SignUpAsBarberScreen(
             isError = !uiState.isStreetNumberValid,
             placeholder = { Text("e.g., 66") },
         )
-        Text(
-            text = "Working day start time:",
+        OutlinedTextField(
+            value = uiState.phone,
+            onValueChange =  { barberRegistrationViewModel.setPhone(it) },
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = MaterialTheme.colorScheme.onPrimary,
+                unfocusedBorderColor = MaterialTheme.colorScheme.onPrimary,
+                cursorColor = MaterialTheme.colorScheme.onPrimary,
+                focusedLabelColor = MaterialTheme.colorScheme.onPrimary,
+                unfocusedLabelColor = MaterialTheme.colorScheme.onPrimary
+            ),
+            label = { Text(text = "Phone") },
+            singleLine = true,
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Phone,
+                imeAction = ImeAction.Next,
+            ),
+            keyboardActions = KeyboardActions(onNext = {
+                focusManager.moveFocus(FocusDirection.Down)
+            }),
             modifier = Modifier.padding(horizontal = 48.dp, vertical = 8.dp),
-            fontSize = 24.sp
+            isError = !uiState.isPhoneValid,
+            placeholder = { Text("e.g., 063/222-3333") },
         )
-        TimePicker(
-            state = workingDayStartTimeState,
-            modifier = Modifier.padding(vertical = 8.dp)
-        )
-        Text(
-            text = "Working day end time:",
-            modifier = Modifier.padding(horizontal = 48.dp, vertical = 8.dp),
-            fontSize = 24.sp
-        )
-        TimePicker(
-            state = workingDayEndTimeState,
-            modifier = Modifier.padding(vertical = 8.dp)
-        )
-        Text(
-            text = "Working days:",
-            modifier = Modifier.padding(horizontal = 48.dp, vertical = 8.dp),
-            fontSize = 24.sp
-        )
-        Row(
-            modifier = Modifier
-                .padding(horizontal = 48.dp, vertical = 8.dp)
-                .toggleable(
-                    value = mondayCheckedState,
-                    onValueChange = { onMondayStateChange(!mondayCheckedState) },
-                    role = Role.Checkbox
-                )
-        ) {
-            Checkbox(
-                checked = mondayCheckedState,
-                onCheckedChange = null
-            )
-            Text(
-                text = "Monday"
-            )
-        }
-        Row(
-            modifier = Modifier
-                .padding(horizontal = 48.dp, vertical = 8.dp)
-                .toggleable(
-                    value = tuesdayCheckedState,
-                    onValueChange = { onTuesdayStateChange(!tuesdayCheckedState) },
-                    role = Role.Checkbox
-                )
-        ) {
-            Checkbox(
-                checked = tuesdayCheckedState,
-                onCheckedChange = null
-            )
-            Text(
-                text = "Tuesday"
-            )
-        }
-        Row(
-            modifier = Modifier
-                .padding(horizontal = 48.dp, vertical = 8.dp)
-                .toggleable(
-                    value = wednesdayCheckedState,
-                    onValueChange = { onWednesdayStateChange(!wednesdayCheckedState) },
-                    role = Role.Checkbox
-                )
-        ) {
-            Checkbox(
-                checked = wednesdayCheckedState,
-                onCheckedChange = null
-            )
-            Text(
-                text = "Wednesday"
-            )
-        }
-        Row(
-            modifier = Modifier
-                .padding(horizontal = 48.dp, vertical = 8.dp)
-                .toggleable(
-                    value = thursdayCheckedState,
-                    onValueChange = { onThursdayStateChange(!thursdayCheckedState) },
-                    role = Role.Checkbox
-                )
-        ) {
-            Checkbox(
-                checked = thursdayCheckedState,
-                onCheckedChange = null
-            )
-            Text(
-                text = "Thursday"
-            )
-        }
-        Row(
-            modifier = Modifier
-                .padding(horizontal = 48.dp, vertical = 8.dp)
-                .toggleable(
-                    value = fridayCheckedState,
-                    onValueChange = { onFridayStateChange(!fridayCheckedState) },
-                    role = Role.Checkbox
-                )
-        ) {
-            Checkbox(
-                checked = fridayCheckedState,
-                onCheckedChange = null
-            )
-            Text(
-                text = "Friday"
-            )
-        }
-        Row(
-            modifier = Modifier
-                .padding(horizontal = 48.dp, vertical = 8.dp)
-                .toggleable(
-                    value = saturdayCheckedState,
-                    onValueChange = { onSaturdayStateChange(!saturdayCheckedState) },
-                    role = Role.Checkbox
-                )
-        ) {
-            Checkbox(
-                checked = saturdayCheckedState,
-                onCheckedChange = null
-            )
-            Text(
-                text = "Saturday"
-            )
-        }
-        Row(
-            modifier = Modifier
-                .padding(horizontal = 48.dp, vertical = 8.dp)
-                .toggleable(
-                    value = sundayCheckedState,
-                    onValueChange = { onSundayStateChange(!sundayCheckedState) },
-                    role = Role.Checkbox
-                )
-        ) {
-            Checkbox(
-                checked = sundayCheckedState,
-                onCheckedChange = null
-            )
-            Text(
-                text = "Sunday"
-            )
-        }
         OutlinedButton(
             onClick = {
                barberRegistrationViewModel.registerBarber(

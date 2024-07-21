@@ -111,7 +111,7 @@ fun BarberBookerApp(
                 }
             }
         },
-        gesturesEnabled = false
+        gesturesEnabled = uiState.loggedInUserEmail != ""
     ) {
         BarberBookerScaffold(
             navHostController,
