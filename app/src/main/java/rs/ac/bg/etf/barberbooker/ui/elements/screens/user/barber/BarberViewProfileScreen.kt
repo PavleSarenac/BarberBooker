@@ -31,6 +31,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -39,19 +42,24 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
-import rs.ac.bg.etf.barberbooker.ui.stateholders.user.barber.BarberViewProfileViewModel
+import rs.ac.bg.etf.barberbooker.ui.stateholders.user.barber.BarberProfileViewModel
 
 @Composable
 fun BarberViewProfileScreen(
     barberEmail: String,
-    barberViewProfileViewModel: BarberViewProfileViewModel = hiltViewModel()
+    barberProfileViewModel: BarberProfileViewModel = hiltViewModel()
 ) {
-    val uiState by barberViewProfileViewModel.uiState.collectAsState()
+    val uiState by barberProfileViewModel.uiState.collectAsState()
     val context = LocalContext.current
+    var isBarberDataFetched by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        barberViewProfileViewModel.fetchBarberData(barberEmail)
+        val job = barberProfileViewModel.fetchBarberData(barberEmail)
+        job.join()
+        isBarberDataFetched = true
     }
+
+    if (!isBarberDataFetched) return
 
     Column(
         modifier = Modifier

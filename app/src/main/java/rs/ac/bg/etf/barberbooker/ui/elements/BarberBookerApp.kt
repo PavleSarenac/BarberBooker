@@ -332,7 +332,7 @@ fun BarberBookerScaffold(
                 val barberEmail = navBackStackEntry.arguments?.getString("barberEmail") ?: ""
                 LoggedInBarberRegularScreenBackHandler(drawerState, navHostController, barberEmail)
                 if (uiState.loggedInUserEmail != "") {
-                    BarberEditProfileScreen(barberEmail, navHostController)
+                    BarberEditProfileScreen(barberEmail, snackbarHostState)
                 }
             }
         }

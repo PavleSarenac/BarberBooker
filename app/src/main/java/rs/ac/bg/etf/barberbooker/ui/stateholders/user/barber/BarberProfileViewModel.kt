@@ -1,11 +1,8 @@
-package rs.ac.bg.etf.barberbooker.ui.stateholders.guest.registration
+package rs.ac.bg.etf.barberbooker.ui.stateholders.user.barber
 
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavHostController
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,55 +10,40 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import rs.ac.bg.etf.barberbooker.data.daysOfTheWeek
-import rs.ac.bg.etf.barberbooker.data.room.entities.Barber
 import rs.ac.bg.etf.barberbooker.data.room.repositories.BarberRepository
-import rs.ac.bg.etf.barberbooker.data.staticRoutes
-import java.security.MessageDigest
+import java.text.DecimalFormat
 import javax.inject.Inject
 
-data class BarberRegistrationUiState(
+data class BarberViewProfileUiState(
     var email: String = "",
-    var password: String = "",
     var barbershopName: String = "",
-    var surname: String = "",
-    var phone: String = "",
-
     var price: String = "",
+    var phone: String = "",
     var country: String = "",
     var city: String = "",
     var municipality: String = "",
-    var streetName: String = "",
-    var streetNumber: String = "",
+    var address: String = "",
+    var workingDays: String = "",
+    var workingHours: String = "",
 
-    var isEmailValid: Boolean = true,
-    var isEmailAlreadyTaken: Boolean = false,
-    var isPasswordValid: Boolean = true,
     var isBarbershopNameValid: Boolean = true,
     var isPhoneValid: Boolean = true,
-
     var isPriceValid: Boolean = true,
     var isCountryValid: Boolean = true,
     var isCityValid: Boolean = true,
     var isMunicipalityValid: Boolean = true,
-    var isStreetNameValid: Boolean = true,
-    var isStreetNumberValid: Boolean = true
+    var isAddressValid: Boolean = true
 )
 
 @HiltViewModel
-class BarberRegistrationViewModel @Inject constructor(
+class BarberProfileViewModel @Inject constructor(
     private val barberRepository: BarberRepository
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(BarberRegistrationUiState())
+    private val _uiState = MutableStateFlow(BarberViewProfileUiState())
     val uiState = _uiState
 
-    fun setEmail(email: String) {
-        _uiState.update { it.copy(email = email) }
-    }
-
-    fun setPassword(password: String) {
-        _uiState.update { it.copy(password = password) }
-    }
+    private val decimalFormat = DecimalFormat("#.00")
 
     fun setBarbershopName(barbershopName: String) {
         _uiState.update { it.copy(barbershopName = barbershopName) }
@@ -87,17 +69,32 @@ class BarberRegistrationViewModel @Inject constructor(
         _uiState.update { it.copy(municipality = municipality) }
     }
 
-    fun setStreetName(streetName: String) {
-        _uiState.update { it.copy(streetName = streetName) }
+    fun setAddress(address: String) {
+        _uiState.update { it.copy(address = address) }
     }
 
-    fun setStreetNumber(streetNumber: String) {
-        _uiState.update { it.copy(streetNumber = streetNumber) }
+    fun fetchBarberData(barberEmail: String) = viewModelScope.launch(Dispatchers.IO) {
+        val barber = barberRepository.getBarberByEmail(barberEmail)
+        if (barber != null) {
+            withContext(Dispatchers.Main) {
+                _uiState.update { it.copy(
+                    email = barber.email,
+                    barbershopName = barber.barbershopName,
+                    price = decimalFormat.format(barber.price),
+                    phone = barber.phone,
+                    country = barber.country,
+                    city = barber.city,
+                    municipality = barber.municipality,
+                    address = barber.address,
+                    workingDays = barber.workingDays,
+                    workingHours = barber.workingHours
+                ) }
+            }
+        }
     }
 
-    fun registerBarber(
+    fun updateProfile(
         snackbarHostState: SnackbarHostState,
-        navHostController: NavHostController,
         workingDayStartTime: String,
         workingDayEndTime: String,
         isMondayChecked: Boolean,
@@ -109,15 +106,13 @@ class BarberRegistrationViewModel @Inject constructor(
         isSundayChecked: Boolean
     ) = viewModelScope.launch(Dispatchers.Main) {
         val email = _uiState.value.email
-        val password = _uiState.value.password
         val barbershopName = _uiState.value.barbershopName
         val phone = _uiState.value.phone
         val price = _uiState.value.price
         val country = _uiState.value.country
         val city = _uiState.value.city
         val municipality = _uiState.value.municipality
-        val streetName = _uiState.value.streetName
-        val streetNumber = _uiState.value.streetNumber
+        val address = _uiState.value.address
         val selectedWorkingDays = getSelectedWorkingDays(
             isMondayChecked,
             isTuesdayChecked,
@@ -129,126 +124,65 @@ class BarberRegistrationViewModel @Inject constructor(
         )
 
         if (!isDataValid(
-                email,
-                password,
                 barbershopName,
                 phone,
                 price,
                 country,
                 city,
                 municipality,
-                streetName,
-                streetNumber,
+                address,
                 workingDayStartTime,
                 workingDayEndTime,
                 selectedWorkingDays
-        )) {
+            )) {
             snackbarHostState.showSnackbar(
                 message = "Invalid data format!",
                 withDismissAction = true
             )
             return@launch
         }
-        val isEmailAlreadyTaken = isEmailAlreadyTaken(email)
-        if (isEmailAlreadyTaken) {
-            snackbarHostState.showSnackbar(
-                message = "Email already taken!",
-                withDismissAction = true
-            )
-            return@launch
-        }
-        val sha256HashedPassword = getSHA256HashedPassword(password)
 
         withContext(Dispatchers.IO) {
-            addNewBarber(
+            barberRepository.updateBarberProfile(
                 email,
-                sha256HashedPassword,
                 barbershopName,
-                price,
+                price.toDouble(),
                 phone,
                 country,
                 city,
                 municipality,
-                "$streetName $streetNumber",
+                address,
                 selectedWorkingDays,
                 "$workingDayStartTime - $workingDayEndTime"
             )
         }
 
-        _uiState.update { BarberRegistrationUiState() }
-        val snackbarResult = snackbarHostState.showSnackbar(
-            message = "Registration successful!",
-            withDismissAction = true,
-            actionLabel = "Log in",
-            duration = SnackbarDuration.Indefinite
+        snackbarHostState.showSnackbar(
+            message = "Profile updated!",
+            withDismissAction = true
         )
-        if (snackbarResult == SnackbarResult.ActionPerformed) {
-            navHostController.navigate(staticRoutes[6])
-        }
     }
 
-    private fun getSHA256HashedPassword(password: String): String {
-        val sha256 = MessageDigest.getInstance("SHA-256")
-        val hashBytes = sha256.digest(password.toByteArray())
-        return hashBytes.joinToString("") { "%02x".format(it) }
-    }
-
-    private suspend fun addNewBarber(
-        email: String,
-        password: String,
+    private fun isDataValid(
         barbershopName: String,
-        price: String,
         phone: String,
+        price: String,
         country: String,
         city: String,
         municipality: String,
         address: String,
-        workingDays: String,
-        workingHours: String
-    ) {
-        val newBarber = Barber(
-            0,
-            email,
-            password,
-            barbershopName,
-            price.toDouble(),
-            phone,
-            country,
-            city,
-            municipality,
-            address,
-            workingDays,
-            workingHours
-        )
-        barberRepository.addNewBarber(newBarber)
-    }
-
-    private fun isDataValid(
-        email: String,
-        password: String,
-        barbershopName: String,
-        phone: String,
-        price: String,
-        country: String,
-        city: String,
-        municipality: String,
-        streetName: String,
-        streetNumber: String,
         workingDayStartTime: String,
         workingDayEndTime: String,
         selectedWorkingDays: String
     ): Boolean {
         var isDataValid = true
-        if (!isEmailValid(email)) isDataValid = false
-        if (!isPasswordValid(password)) isDataValid = false
         if (!isBarbershopNameValid(barbershopName)) isDataValid = false
         if (!isPhoneValid(phone)) isDataValid = false
         if (!isPriceValid(price)) isDataValid = false
         if (!isCountryValid(country)) isDataValid = false
         if (!isCityValid(city)) isDataValid = false
         if (!isMunicipalityValid(municipality)) isDataValid = false
-        if (!isStreetNameValid(streetName)) isDataValid = false
-        if (!isStreetNumberValid(streetNumber)) isDataValid = false
+        if (!isAddressValid(address)) isDataValid = false
         if (!areWorkingHoursValid(workingDayStartTime, workingDayEndTime)) isDataValid = false
         if (!areSelectedWorkingDaysValid(selectedWorkingDays)) isDataValid = false
         return isDataValid
@@ -318,28 +252,6 @@ class BarberRegistrationViewModel @Inject constructor(
         return selectedWorkingDays
     }
 
-    private suspend fun isEmailAlreadyTaken(email: String): Boolean {
-        val isEmailAlreadyTaken = barberRepository.isEmailAlreadyTaken(email)
-        _uiState.update { it.copy(isEmailAlreadyTaken = isEmailAlreadyTaken) }
-        return isEmailAlreadyTaken
-    }
-
-    private fun isEmailValid(email: String): Boolean {
-        val emailRegex = Regex("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$", RegexOption.IGNORE_CASE)
-        val isEmailValid = emailRegex.matches(email)
-        if (!isEmailValid) _uiState.update { it.copy(isEmailValid = false) }
-        else _uiState.update { it.copy(isEmailValid = true) }
-        return isEmailValid
-    }
-
-    private fun isPasswordValid(password: String): Boolean {
-        val passwordRegex = Regex("^(?=[a-zA-Z])(?=.*[0-9])(?=.*[!@#\$%^&*])(?=.*[A-Z])(?=.*[a-z].*[a-z].*[a-z]).{6,10}$")
-        val isPasswordValid = passwordRegex.matches(password)
-        if (!isPasswordValid) _uiState.update { it.copy(isPasswordValid = false) }
-        else _uiState.update { it.copy(isPasswordValid = true) }
-        return isPasswordValid
-    }
-
     private fun isBarbershopNameValid(barbershopName: String): Boolean {
         val isBarbershopNameValid = barbershopName.isNotEmpty()
         if (!isBarbershopNameValid) _uiState.update { it.copy(isBarbershopNameValid = false) }
@@ -383,18 +295,11 @@ class BarberRegistrationViewModel @Inject constructor(
         return isMunicipalityValid
     }
 
-    private fun isStreetNameValid(streetName: String): Boolean {
-        val isStreetNameValid = streetName.isNotEmpty()
-        if (!isStreetNameValid) _uiState.update { it.copy(isStreetNameValid = false) }
-        else _uiState.update { it.copy(isStreetNameValid = true) }
-        return isStreetNameValid
-    }
-
-    private fun isStreetNumberValid(streetNumber: String): Boolean {
-        val isStreetNumberValid = streetNumber.toIntOrNull() != null
-        if (!isStreetNumberValid) _uiState.update { it.copy(isStreetNumberValid = false) }
-        else _uiState.update { it.copy(isStreetNumberValid = true) }
-        return isStreetNumberValid
+    private fun isAddressValid(address: String): Boolean {
+        val isAddressValid = address.isNotEmpty()
+        if (!isAddressValid) _uiState.update { it.copy(isAddressValid = false) }
+        else _uiState.update { it.copy(isAddressValid = true) }
+        return isAddressValid
     }
 
     private fun areWorkingHoursValid(
@@ -402,8 +307,8 @@ class BarberRegistrationViewModel @Inject constructor(
         workingDayEndTime: String
     ): Boolean {
         return ((workingDayEndTime > workingDayStartTime) || (workingDayStartTime == workingDayEndTime && workingDayStartTime == "00:00"))
-                        && (workingDayEndTime.substring(3, 5) == "00" || workingDayEndTime.substring(3, 5) == "30")
-                        && (workingDayStartTime.substring(3, 5) == "00" || workingDayStartTime.substring(3, 5) == "30")
+                && (workingDayEndTime.substring(3, 5) == "00" || workingDayEndTime.substring(3, 5) == "30")
+                && (workingDayStartTime.substring(3, 5) == "00" || workingDayStartTime.substring(3, 5) == "30")
     }
 
     private fun areSelectedWorkingDaysValid(selectedWorkingDays: String): Boolean {

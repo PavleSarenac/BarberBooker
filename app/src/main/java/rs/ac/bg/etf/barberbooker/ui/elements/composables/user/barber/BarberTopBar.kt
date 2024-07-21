@@ -131,7 +131,10 @@ fun BarberTopBar(
                 }
                 Row {
                     OutlinedButton(
-                        onClick = { /* TODO */ },
+                        onClick = {
+                            openAccountDialog = false
+                            navHostController.navigate("${staticRoutes[16]}/${barberEmail}")
+                        },
                         border = BorderStroke(1.dp, Color.White),
                         modifier = Modifier
                             .padding(vertical = 8.dp)

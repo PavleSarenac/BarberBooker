@@ -26,4 +26,30 @@ class BarberRepository @Inject constructor(private val barberDao: BarberDao) {
         return barberDao.getBarberByEmail(email)
     }
 
+    suspend fun updateBarberProfile(
+        email: String,
+        barbershopName: String,
+        price: Double,
+        phone: String,
+        country: String,
+        city: String,
+        municipality: String,
+        address: String,
+        workingDays: String,
+        workingHours: String
+    ) {
+        barberDao.updateBarberProfile(
+            email,
+            barbershopName,
+            price,
+            phone,
+            country,
+            city,
+            municipality,
+            address,
+            workingDays,
+            workingHours
+        )
+    }
+
 }

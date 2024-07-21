@@ -72,12 +72,18 @@ class ClientRegistrationViewModel @Inject constructor(
         val phone = _uiState.value.phone
 
         if (!isDataValid(email, password, name, surname, phone)) {
-            snackbarHostState.showSnackbar("Invalid data format!")
+            snackbarHostState.showSnackbar(
+                message = "Invalid data format!",
+                withDismissAction = true
+            )
             return@launch
         }
         val isEmailAlreadyTaken = isEmailAlreadyTaken(email)
         if (isEmailAlreadyTaken) {
-            snackbarHostState.showSnackbar("Email already taken!")
+            snackbarHostState.showSnackbar(
+                message = "Email already taken!",
+                withDismissAction = true
+            )
             return@launch
         }
         val md5HashedPassword = getSHA256HashedPassword(password)

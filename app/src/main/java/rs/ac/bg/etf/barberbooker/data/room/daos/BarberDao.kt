@@ -17,4 +17,30 @@ interface BarberDao {
     @Query("SELECT * FROM barber WHERE email = :email AND password = :hashedPassword")
     suspend fun getBarberByEmailAndPassword(email: String, hashedPassword: String): Barber?
 
+    @Query("""
+        UPDATE barber 
+        SET barbershopName = :barbershopName, 
+            price = :price, 
+            phone = :phone, 
+            country = :country, 
+            city = :city, 
+            municipality = :municipality, 
+            address = :address, 
+            workingDays = :workingDays, 
+            workingHours = :workingHours
+        WHERE email = :email
+    """)
+    suspend fun updateBarberProfile(
+        email: String,
+        barbershopName: String,
+        price: Double,
+        phone: String,
+        country: String,
+        city: String,
+        municipality: String,
+        address: String,
+        workingDays: String,
+        workingHours: String
+    )
+
 }
