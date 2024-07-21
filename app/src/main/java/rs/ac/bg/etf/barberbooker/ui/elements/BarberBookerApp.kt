@@ -110,7 +110,8 @@ fun BarberBookerApp(
                     BarberModalDrawerSheet(drawerState, navHostController, barberBookerViewModel)
                 }
             }
-        }
+        },
+        gesturesEnabled = false
     ) {
         BarberBookerScaffold(
             navHostController,
