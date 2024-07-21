@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -106,7 +107,8 @@ class BarberRegistrationViewModel @Inject constructor(
         isThursdayChecked: Boolean,
         isFridayChecked: Boolean,
         isSaturdayChecked: Boolean,
-        isSundayChecked: Boolean
+        isSundayChecked: Boolean,
+        snackbarCoroutineScope: CoroutineScope
     ) = viewModelScope.launch(Dispatchers.Main) {
         val email = _uiState.value.email
         val password = _uiState.value.password
@@ -143,18 +145,22 @@ class BarberRegistrationViewModel @Inject constructor(
                 workingDayEndTime,
                 selectedWorkingDays
         )) {
-            snackbarHostState.showSnackbar(
-                message = "Invalid data format!",
-                withDismissAction = true
-            )
+            snackbarCoroutineScope.launch {
+                snackbarHostState.showSnackbar(
+                    message = "Invalid data format!",
+                    withDismissAction = true
+                )
+            }
             return@launch
         }
         val isEmailAlreadyTaken = isEmailAlreadyTaken(email)
         if (isEmailAlreadyTaken) {
-            snackbarHostState.showSnackbar(
-                message = "Email already taken!",
-                withDismissAction = true
-            )
+            snackbarCoroutineScope.launch {
+                snackbarHostState.showSnackbar(
+                    message = "Email already taken!",
+                    withDismissAction = true
+                )
+            }
             return@launch
         }
         val sha256HashedPassword = getSHA256HashedPassword(password)
@@ -176,14 +182,16 @@ class BarberRegistrationViewModel @Inject constructor(
         }
 
         _uiState.update { BarberRegistrationUiState() }
-        val snackbarResult = snackbarHostState.showSnackbar(
-            message = "Registration successful!",
-            withDismissAction = true,
-            actionLabel = "Log in",
-            duration = SnackbarDuration.Indefinite
-        )
-        if (snackbarResult == SnackbarResult.ActionPerformed) {
-            navHostController.navigate(staticRoutes[6])
+        snackbarCoroutineScope.launch {
+            val snackbarResult = snackbarHostState.showSnackbar(
+                message = "Registration successful!",
+                withDismissAction = true,
+                actionLabel = "Log in",
+                duration = SnackbarDuration.Indefinite
+            )
+            if (snackbarResult == SnackbarResult.ActionPerformed) {
+                navHostController.navigate(staticRoutes[6])
+            }
         }
     }
 

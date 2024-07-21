@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -37,7 +38,8 @@ class BarberLoginViewModel @Inject constructor(
 
     fun login(
         snackbarHostState: SnackbarHostState,
-        navHostController: NavHostController
+        navHostController: NavHostController,
+        snackbarCoroutineScope: CoroutineScope
     ) = viewModelScope.launch(Dispatchers.Main) {
         val email = _uiState.value.email
         val password = _uiState.value.password
@@ -49,7 +51,12 @@ class BarberLoginViewModel @Inject constructor(
         }
 
         if (!areLoginCredentialsValid) {
-            snackbarHostState.showSnackbar("Incorrect credentials!")
+            snackbarCoroutineScope.launch {
+                snackbarHostState.showSnackbar(
+                    message = "Incorrect credentials!",
+                    withDismissAction = true
+                )
+            }
             return@launch
         }
         navHostController.navigate("BarberInitialScreen/${email}")

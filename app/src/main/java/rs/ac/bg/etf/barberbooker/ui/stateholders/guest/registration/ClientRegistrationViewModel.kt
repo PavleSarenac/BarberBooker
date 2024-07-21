@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -23,14 +24,12 @@ data class ClientRegistrationUiState(
     var password: String = "",
     var name: String = "",
     var surname: String = "",
-    var phone: String = "",
 
     var isEmailValid: Boolean = true,
     var isEmailAlreadyTaken: Boolean = false,
     var isPasswordValid: Boolean = true,
     var isNameValid: Boolean = true,
-    var isSurnameValid: Boolean = true,
-    var isPhoneValid: Boolean = true
+    var isSurnameValid: Boolean = true
 )
 
 @HiltViewModel
@@ -57,50 +56,52 @@ class ClientRegistrationViewModel @Inject constructor(
         _uiState.update { it.copy(surname = surname) }
     }
 
-    fun setPhone(phone: String) {
-        _uiState.update { it.copy(phone = phone) }
-    }
-
     fun registerClient(
         snackbarHostState: SnackbarHostState,
-        navHostController: NavHostController
+        navHostController: NavHostController,
+        snackbarCoroutineScope: CoroutineScope
     ) = viewModelScope.launch(Dispatchers.Main) {
         val email = _uiState.value.email
         val password = _uiState.value.password
         val name = _uiState.value.name
         val surname = _uiState.value.surname
-        val phone = _uiState.value.phone
 
-        if (!isDataValid(email, password, name, surname, phone)) {
-            snackbarHostState.showSnackbar(
-                message = "Invalid data format!",
-                withDismissAction = true
-            )
+        if (!isDataValid(email, password, name, surname)) {
+            snackbarCoroutineScope.launch {
+                snackbarHostState.showSnackbar(
+                    message = "Invalid data format!",
+                    withDismissAction = true
+                )
+            }
             return@launch
         }
         val isEmailAlreadyTaken = isEmailAlreadyTaken(email)
         if (isEmailAlreadyTaken) {
-            snackbarHostState.showSnackbar(
-                message = "Email already taken!",
-                withDismissAction = true
-            )
+            snackbarCoroutineScope.launch {
+                snackbarHostState.showSnackbar(
+                    message = "Email already taken!",
+                    withDismissAction = true
+                )
+            }
             return@launch
         }
         val md5HashedPassword = getSHA256HashedPassword(password)
 
         withContext(Dispatchers.IO) {
-            addNewClient(email, md5HashedPassword, name, surname, phone)
+            addNewClient(email, md5HashedPassword, name, surname)
         }
 
         _uiState.update { ClientRegistrationUiState() }
-        val snackbarResult = snackbarHostState.showSnackbar(
-            message = "Registration successful!",
-            withDismissAction = true,
-            actionLabel = "Log in",
-            duration = SnackbarDuration.Indefinite
-        )
-        if (snackbarResult == SnackbarResult.ActionPerformed) {
-            navHostController.navigate(staticRoutes[5])
+        snackbarCoroutineScope.launch {
+            val snackbarResult = snackbarHostState.showSnackbar(
+                message = "Registration successful!",
+                withDismissAction = true,
+                actionLabel = "Log in",
+                duration = SnackbarDuration.Indefinite
+            )
+            if (snackbarResult == SnackbarResult.ActionPerformed) {
+                navHostController.navigate(staticRoutes[5])
+            }
         }
     }
 
@@ -120,10 +121,9 @@ class ClientRegistrationViewModel @Inject constructor(
         email: String,
         password: String,
         name: String,
-        surname: String,
-        phone: String
+        surname: String
     ) {
-        val newClient = Client(0, email, password, name, surname, phone)
+        val newClient = Client(0, email, password, name, surname)
         clientRepository.addNewClient(newClient)
     }
 
@@ -131,15 +131,13 @@ class ClientRegistrationViewModel @Inject constructor(
         email: String,
         password: String,
         name: String,
-        surname: String,
-        phone: String
+        surname: String
     ): Boolean {
         var isDataValid = true
         if (!isEmailValid(email)) isDataValid = false
         if (!isPasswordValid(password)) isDataValid = false
         if (!isNameValid(name)) isDataValid = false
         if (!isSurnameValid(surname)) isDataValid = false
-        if (!isPhoneValid(phone)) isDataValid = false
         return isDataValid
     }
 
@@ -171,14 +169,6 @@ class ClientRegistrationViewModel @Inject constructor(
         if (!isSurnameValid) _uiState.update { it.copy(isSurnameValid = false) }
         else _uiState.update { it.copy(isSurnameValid = true) }
         return isSurnameValid
-    }
-
-    private fun isPhoneValid(phone: String): Boolean {
-        val phoneRegex = Regex("^06[0-6]/[0-9]{3}-[0-9]{3,4}$")
-        val isPhoneValid = phoneRegex.matches(phone)
-        if (!isPhoneValid) _uiState.update { it.copy(isPhoneValid = false) }
-        else _uiState.update { it.copy(isPhoneValid = true) }
-        return isPhoneValid
     }
 
 }

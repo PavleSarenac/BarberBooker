@@ -31,6 +31,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -54,6 +55,7 @@ fun BarberEditProfileScreen(
     snackbarHostState: SnackbarHostState,
     barberProfileViewModel: BarberProfileViewModel = hiltViewModel()
 ) {
+    val snackbarCoroutineScope = rememberCoroutineScope()
     var isBarberDataFetched by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
@@ -103,6 +105,7 @@ fun BarberEditProfileScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .padding(vertical = 24.dp)
             .background(color = MaterialTheme.colorScheme.primary)
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -422,7 +425,8 @@ fun BarberEditProfileScreen(
                     thursdayCheckedState,
                     fridayCheckedState,
                     saturdayCheckedState,
-                    sundayCheckedState
+                    sundayCheckedState,
+                    snackbarCoroutineScope
                 )
             },
             border = BorderStroke(1.dp, Color.White),

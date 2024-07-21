@@ -22,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -42,6 +43,8 @@ fun LogInAsBarberScreen(
     snackbarHostState: SnackbarHostState,
     barberLoginViewModel: BarberLoginViewModel = hiltViewModel()
 ) {
+    val snackbarCoroutineScope = rememberCoroutineScope()
+
     val uiState by barberLoginViewModel.uiState.collectAsState()
     val focusManager = LocalFocusManager.current
 
@@ -101,7 +104,8 @@ fun LogInAsBarberScreen(
             onClick = {
                 barberLoginViewModel.login(
                     snackbarHostState,
-                    navHostController
+                    navHostController,
+                    snackbarCoroutineScope
                 )
             },
             border = BorderStroke(1.dp, Color.White),

@@ -4,6 +4,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -103,7 +104,8 @@ class BarberProfileViewModel @Inject constructor(
         isThursdayChecked: Boolean,
         isFridayChecked: Boolean,
         isSaturdayChecked: Boolean,
-        isSundayChecked: Boolean
+        isSundayChecked: Boolean,
+        snackbarCoroutineScope: CoroutineScope
     ) = viewModelScope.launch(Dispatchers.Main) {
         val email = _uiState.value.email
         val barbershopName = _uiState.value.barbershopName
@@ -135,10 +137,12 @@ class BarberProfileViewModel @Inject constructor(
                 workingDayEndTime,
                 selectedWorkingDays
             )) {
-            snackbarHostState.showSnackbar(
-                message = "Invalid data format!",
-                withDismissAction = true
-            )
+            snackbarCoroutineScope.launch {
+                snackbarHostState.showSnackbar(
+                    message = "Invalid data format!",
+                    withDismissAction = true
+                )
+            }
             return@launch
         }
 
@@ -157,10 +161,12 @@ class BarberProfileViewModel @Inject constructor(
             )
         }
 
-        snackbarHostState.showSnackbar(
-            message = "Profile updated!",
-            withDismissAction = true
-        )
+        snackbarCoroutineScope.launch {
+            snackbarHostState.showSnackbar(
+                message = "Profile updated!",
+                withDismissAction = true
+            )
+        }
     }
 
     private fun isDataValid(

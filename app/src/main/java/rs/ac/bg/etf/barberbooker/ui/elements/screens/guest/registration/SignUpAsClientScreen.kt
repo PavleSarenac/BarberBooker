@@ -22,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -42,6 +43,8 @@ fun SignUpAsClientScreen(
     snackbarHostState: SnackbarHostState,
     clientRegistrationViewModel: ClientRegistrationViewModel = hiltViewModel()
 ) {
+    val snackbarCoroutineScope = rememberCoroutineScope()
+
     val uiState by clientRegistrationViewModel.uiState.collectAsState()
     val focusManager = LocalFocusManager.current
 
@@ -138,43 +141,21 @@ fun SignUpAsClientScreen(
             singleLine = true,
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Next,
-            ),
-            keyboardActions = KeyboardActions(onNext = {
-                focusManager.moveFocus(FocusDirection.Down)
-            }),
-            modifier = Modifier.padding(horizontal = 48.dp, vertical = 8.dp),
-            isError = !uiState.isSurnameValid,
-            placeholder = { Text("e.g., Milosevic") }
-        )
-        OutlinedTextField(
-            value = uiState.phone,
-            onValueChange =  { clientRegistrationViewModel.setPhone(it) },
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = MaterialTheme.colorScheme.onPrimary,
-                unfocusedBorderColor = MaterialTheme.colorScheme.onPrimary,
-                cursorColor = MaterialTheme.colorScheme.onPrimary,
-                focusedLabelColor = MaterialTheme.colorScheme.onPrimary,
-                unfocusedLabelColor = MaterialTheme.colorScheme.onPrimary
-            ),
-            label = { Text(text = "Phone") },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Phone,
                 imeAction = ImeAction.Done,
             ),
             keyboardActions = KeyboardActions(onDone = {
                 focusManager.clearFocus()
             }),
             modifier = Modifier.padding(horizontal = 48.dp, vertical = 8.dp),
-            isError = !uiState.isPhoneValid,
-            placeholder = { Text("e.g., 063/222-3333") },
+            isError = !uiState.isSurnameValid,
+            placeholder = { Text("e.g., Milosevic") }
         )
         OutlinedButton(
             onClick = {
                 clientRegistrationViewModel.registerClient(
                     snackbarHostState,
-                    navHostController
+                    navHostController,
+                    snackbarCoroutineScope
                 )
                       },
             border = BorderStroke(1.dp, Color.White),

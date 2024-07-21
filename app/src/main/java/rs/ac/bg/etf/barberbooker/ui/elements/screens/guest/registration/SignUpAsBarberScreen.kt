@@ -31,6 +31,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -54,6 +55,8 @@ fun SignUpAsBarberScreen(
     snackbarHostState: SnackbarHostState,
     barberRegistrationViewModel: BarberRegistrationViewModel = hiltViewModel()
 ) {
+    val snackbarCoroutineScope = rememberCoroutineScope()
+
     val uiState by barberRegistrationViewModel.uiState.collectAsState()
     val focusManager = LocalFocusManager.current
 
@@ -462,7 +465,8 @@ fun SignUpAsBarberScreen(
                    thursdayCheckedState,
                    fridayCheckedState,
                    saturdayCheckedState,
-                   sundayCheckedState
+                   sundayCheckedState,
+                   snackbarCoroutineScope
                )
             },
             border = BorderStroke(1.dp, Color.White),
