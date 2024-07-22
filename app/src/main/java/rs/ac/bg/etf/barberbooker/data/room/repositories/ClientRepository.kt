@@ -7,6 +7,7 @@ import javax.inject.Singleton
 
 @Singleton
 class ClientRepository @Inject constructor(private val clientDao: ClientDao) {
+
     suspend fun addNewClient(client: Client) {
         clientDao.addNewClient(client)
     }
@@ -20,4 +21,9 @@ class ClientRepository @Inject constructor(private val clientDao: ClientDao) {
         val client = clientDao.getClientByEmailAndPassword(email, hashedPassword)
         return client != null
     }
+
+    suspend fun getClientByEmail(email: String): Client? {
+        return clientDao.getClientByEmail(email)
+    }
+
 }

@@ -15,7 +15,7 @@ import rs.ac.bg.etf.barberbooker.data.room.repositories.BarberRepository
 import java.text.DecimalFormat
 import javax.inject.Inject
 
-data class BarberViewProfileUiState(
+data class BarberProfileUiState(
     var email: String = "",
     var barbershopName: String = "",
     var price: String = "",
@@ -41,7 +41,7 @@ class BarberProfileViewModel @Inject constructor(
     private val barberRepository: BarberRepository
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(BarberViewProfileUiState())
+    private val _uiState = MutableStateFlow(BarberProfileUiState())
     val uiState = _uiState
 
     private val decimalFormat = DecimalFormat("#.00")
