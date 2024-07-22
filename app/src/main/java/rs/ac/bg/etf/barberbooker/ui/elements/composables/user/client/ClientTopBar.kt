@@ -1,4 +1,4 @@
-package rs.ac.bg.etf.barberbooker.ui.elements.composables.user.barber
+package rs.ac.bg.etf.barberbooker.ui.elements.composables.user.client
 
 import android.content.Context
 import androidx.compose.foundation.BorderStroke
@@ -41,12 +41,12 @@ import rs.ac.bg.etf.barberbooker.ui.stateholders.BarberBookerViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BarberTopBar(
+fun ClientTopBar(
     topBarTitle: String,
     drawerState: DrawerState,
     navHostController: NavHostController,
     context: Context,
-    barberEmail: String,
+    clientEmail: String,
     barberBookerViewModel: BarberBookerViewModel
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -113,7 +113,7 @@ fun BarberTopBar(
                     OutlinedButton(
                         onClick = {
                             openAccountDialog = false
-                            navHostController.navigate("${staticRoutes[13]}/${barberEmail}")
+                            navHostController.navigate("${staticRoutes[18]}/${clientEmail}")
                         },
                         border = BorderStroke(1.dp, Color.White),
                         modifier = Modifier
@@ -133,7 +133,7 @@ fun BarberTopBar(
                     OutlinedButton(
                         onClick = {
                             openAccountDialog = false
-                            navHostController.navigate("${staticRoutes[14]}/${barberEmail}")
+                            navHostController.navigate("${staticRoutes[19]}/${clientEmail}")
                         },
                         border = BorderStroke(1.dp, Color.White),
                         modifier = Modifier

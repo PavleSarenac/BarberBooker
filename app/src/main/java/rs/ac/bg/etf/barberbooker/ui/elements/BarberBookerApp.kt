@@ -43,6 +43,9 @@ import rs.ac.bg.etf.barberbooker.ui.elements.composables.guest.GuestTopBar
 import rs.ac.bg.etf.barberbooker.ui.elements.composables.user.barber.BarberBottomBar
 import rs.ac.bg.etf.barberbooker.ui.elements.composables.user.barber.BarberModalDrawerSheet
 import rs.ac.bg.etf.barberbooker.ui.elements.composables.user.barber.BarberTopBar
+import rs.ac.bg.etf.barberbooker.ui.elements.composables.user.client.ClientBottomBar
+import rs.ac.bg.etf.barberbooker.ui.elements.composables.user.client.ClientModalDrawerSheet
+import rs.ac.bg.etf.barberbooker.ui.elements.composables.user.client.ClientTopBar
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.guest.InitialScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.guest.login.LogInAsBarberScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.guest.login.LogInAsClientScreen
@@ -57,7 +60,12 @@ import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.barber.BarberPendingSc
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.barber.BarberRejectionsScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.barber.BarberReviewsScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.barber.BarberViewProfileScreen
+import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.client.ClientArchiveScreen
+import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.client.ClientEditProfileScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.client.ClientInitialScreen
+import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.client.ClientReviewsScreen
+import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.client.ClientSearchBarbersScreen
+import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.client.ClientViewProfileScreen
 import rs.ac.bg.etf.barberbooker.ui.stateholders.BarberBookerUiState
 import rs.ac.bg.etf.barberbooker.ui.stateholders.BarberBookerViewModel
 
@@ -102,7 +110,7 @@ fun BarberBookerApp(
                     .verticalScroll(rememberScrollState())
             ) {
                 if (uiState.loggedInUserType == "client") {
-                    /* TODO */
+                    ClientModalDrawerSheet(drawerState, navHostController, barberBookerViewModel)
                 }
                 else if (uiState.loggedInUserType == "barber") {
                     BarberModalDrawerSheet(drawerState, navHostController, barberBookerViewModel)
@@ -306,6 +314,76 @@ fun BarberBookerScaffold(
                     BarberEditProfileScreen(barberEmail, snackbarHostState)
                 }
             }
+            composable(
+                route = "${staticRoutes[15]}/{clientEmail}",
+                arguments = listOf(
+                    navArgument("clientEmail") {
+                        type = NavType.StringType
+                    }
+                )
+            ) {navBackStackEntry ->
+                val clientEmail = navBackStackEntry.arguments?.getString("clientEmail") ?: ""
+                LoggedInClientRegularScreenBackHandler(drawerState, navHostController, clientEmail)
+                if (uiState.loggedInUserEmail != "") {
+                    ClientSearchBarbersScreen(clientEmail)
+                }
+            }
+            composable(
+                route = "${staticRoutes[16]}/{clientEmail}",
+                arguments = listOf(
+                    navArgument("clientEmail") {
+                        type = NavType.StringType
+                    }
+                )
+            ) {navBackStackEntry ->
+                val clientEmail = navBackStackEntry.arguments?.getString("clientEmail") ?: ""
+                LoggedInClientRegularScreenBackHandler(drawerState, navHostController, clientEmail)
+                if (uiState.loggedInUserEmail != "") {
+                    ClientArchiveScreen(clientEmail)
+                }
+            }
+            composable(
+                route = "${staticRoutes[17]}/{clientEmail}",
+                arguments = listOf(
+                    navArgument("clientEmail") {
+                        type = NavType.StringType
+                    }
+                )
+            ) {navBackStackEntry ->
+                val clientEmail = navBackStackEntry.arguments?.getString("clientEmail") ?: ""
+                LoggedInClientRegularScreenBackHandler(drawerState, navHostController, clientEmail)
+                if (uiState.loggedInUserEmail != "") {
+                    ClientReviewsScreen(clientEmail)
+                }
+            }
+            composable(
+                route = "${staticRoutes[18]}/{clientEmail}",
+                arguments = listOf(
+                    navArgument("clientEmail") {
+                        type = NavType.StringType
+                    }
+                )
+            ) {navBackStackEntry ->
+                val clientEmail = navBackStackEntry.arguments?.getString("clientEmail") ?: ""
+                LoggedInClientRegularScreenBackHandler(drawerState, navHostController, clientEmail)
+                if (uiState.loggedInUserEmail != "") {
+                    ClientViewProfileScreen(clientEmail)
+                }
+            }
+            composable(
+                route = "${staticRoutes[19]}/{clientEmail}",
+                arguments = listOf(
+                    navArgument("clientEmail") {
+                        type = NavType.StringType
+                    }
+                )
+            ) {navBackStackEntry ->
+                val clientEmail = navBackStackEntry.arguments?.getString("clientEmail") ?: ""
+                LoggedInClientRegularScreenBackHandler(drawerState, navHostController, clientEmail)
+                if (uiState.loggedInUserEmail != "") {
+                    ClientEditProfileScreen(clientEmail)
+                }
+            }
         }
     }
 }
@@ -343,6 +421,14 @@ fun ScaffoldTopBar(
         currentRoute == staticRoutes[6] -> GuestTopBar(
             topBarTitle = "Log in as a barber",
             navHostController = navHostController
+        )
+        currentRoute.contains(staticRoutes[7]) && uiState.loggedInUserEmail != "" -> ClientTopBar(
+            topBarTitle = "Appointments",
+            drawerState = drawerState,
+            navHostController = navHostController,
+            context = context,
+            clientEmail = uiState.loggedInUserEmail,
+            barberBookerViewModel = barberBookerViewModel
         )
         currentRoute.contains(staticRoutes[8]) && uiState.loggedInUserEmail != "" -> BarberTopBar(
             topBarTitle = "Appointments",
@@ -400,6 +486,46 @@ fun ScaffoldTopBar(
             barberEmail = uiState.loggedInUserEmail,
             barberBookerViewModel = barberBookerViewModel
         )
+        currentRoute.contains(staticRoutes[15]) && uiState.loggedInUserEmail != "" -> ClientTopBar(
+            topBarTitle = "Search",
+            drawerState = drawerState,
+            navHostController = navHostController,
+            context = context,
+            clientEmail = uiState.loggedInUserEmail,
+            barberBookerViewModel = barberBookerViewModel
+        )
+        currentRoute.contains(staticRoutes[16]) && uiState.loggedInUserEmail != "" -> ClientTopBar(
+            topBarTitle = "Archive",
+            drawerState = drawerState,
+            navHostController = navHostController,
+            context = context,
+            clientEmail = uiState.loggedInUserEmail,
+            barberBookerViewModel = barberBookerViewModel
+        )
+        currentRoute.contains(staticRoutes[17]) && uiState.loggedInUserEmail != "" -> ClientTopBar(
+            topBarTitle = "My reviews",
+            drawerState = drawerState,
+            navHostController = navHostController,
+            context = context,
+            clientEmail = uiState.loggedInUserEmail,
+            barberBookerViewModel = barberBookerViewModel
+        )
+        currentRoute.contains(staticRoutes[18]) && uiState.loggedInUserEmail != "" -> ClientTopBar(
+            topBarTitle = "Profile",
+            drawerState = drawerState,
+            navHostController = navHostController,
+            context = context,
+            clientEmail = uiState.loggedInUserEmail,
+            barberBookerViewModel = barberBookerViewModel
+        )
+        currentRoute.contains(staticRoutes[19]) && uiState.loggedInUserEmail != "" -> ClientTopBar(
+            topBarTitle = "Edit profile",
+            drawerState = drawerState,
+            navHostController = navHostController,
+            context = context,
+            clientEmail = uiState.loggedInUserEmail,
+            barberBookerViewModel = barberBookerViewModel
+        )
         else -> {}
     }
 }
@@ -409,8 +535,11 @@ fun ScaffoldBottomBar(
     navHostController: NavHostController,
     uiState: BarberBookerUiState
 ) {
-    if (uiState.loggedInUserEmail != "") {
+    if (uiState.loggedInUserEmail != "" && uiState.loggedInUserType == "barber") {
         BarberBottomBar(uiState.loggedInUserEmail, navHostController)
+    }
+    if (uiState.loggedInUserEmail != "" && uiState.loggedInUserType == "client") {
+        ClientBottomBar(uiState.loggedInUserEmail, navHostController)
     }
 }
 
@@ -428,6 +557,24 @@ fun LoggedInBarberRegularScreenBackHandler(
             }
         } else {
             navHostController.navigate("${staticRoutes[8]}/${barberEmail}")
+        }
+    }
+}
+
+@Composable
+fun LoggedInClientRegularScreenBackHandler(
+    drawerState: DrawerState,
+    navHostController: NavHostController,
+    clientEmail: String
+) {
+    val coroutineScope = rememberCoroutineScope()
+    BackHandler {
+        if (drawerState.isOpen) {
+            coroutineScope.launch {
+                drawerState.close()
+            }
+        } else {
+            navHostController.navigate("${staticRoutes[7]}/${clientEmail}")
         }
     }
 }
