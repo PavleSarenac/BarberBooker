@@ -1,8 +1,10 @@
 package rs.ac.bg.etf.barberbooker.ui.stateholders.user.client
 
+import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -47,6 +49,50 @@ class ClientProfileViewModel @Inject constructor(
                 ) }
             }
         }
+    }
+
+    fun updateProfile(
+        clientEmail: String,
+        snackbarHostState: SnackbarHostState,
+        snackbarCoroutineScope: CoroutineScope
+    ) = viewModelScope.launch(Dispatchers.Main) {
+        val name = _uiState.value.name
+        val surname = _uiState.value.surname
+
+        if (!isNameValid(name) || !isSurnameValid(surname)) {
+            snackbarCoroutineScope.launch {
+                snackbarHostState.showSnackbar(
+                    message = "Invalid data format!",
+                    withDismissAction = true
+                )
+            }
+            return@launch
+        }
+
+        withContext(Dispatchers.IO) {
+            clientRepository.updateClientProfile(clientEmail, name, surname)
+        }
+
+        snackbarCoroutineScope.launch {
+            snackbarHostState.showSnackbar(
+                message = "Profile updated!",
+                withDismissAction = true
+            )
+        }
+    }
+
+    private fun isNameValid(name: String): Boolean {
+        val isNameValid = name.isNotEmpty()
+        if (!isNameValid) _uiState.update { it.copy(isNameValid = false) }
+        else _uiState.update { it.copy(isNameValid = true) }
+        return isNameValid
+    }
+
+    private fun isSurnameValid(surname: String): Boolean {
+        val isSurnameValid = surname.isNotEmpty()
+        if (!isSurnameValid) _uiState.update { it.copy(isSurnameValid = false) }
+        else _uiState.update { it.copy(isSurnameValid = true) }
+        return isSurnameValid
     }
 
 }

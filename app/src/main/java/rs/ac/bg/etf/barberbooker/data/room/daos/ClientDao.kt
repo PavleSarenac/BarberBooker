@@ -17,4 +17,7 @@ interface ClientDao {
     @Query("SELECT * FROM client WHERE email = :email AND password = :hashedPassword")
     suspend fun getClientByEmailAndPassword(email: String, hashedPassword: String): Client?
 
+    @Query("UPDATE client SET name = :name, surname = :surname WHERE email = :email")
+    suspend fun updateClientProfile(email: String, name: String, surname: String)
+
 }

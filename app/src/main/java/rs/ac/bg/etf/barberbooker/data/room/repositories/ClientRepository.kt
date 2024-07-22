@@ -26,4 +26,8 @@ class ClientRepository @Inject constructor(private val clientDao: ClientDao) {
         return clientDao.getClientByEmail(email)
     }
 
+    suspend fun updateClientProfile(email: String, name: String, surname: String) {
+        clientDao.updateClientProfile(email, name, surname)
+    }
+
 }

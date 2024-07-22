@@ -66,16 +66,16 @@ fun ClientViewProfileScreen(
             Row(
                 modifier = Modifier.padding(8.dp)
             ) {
-                Icon(imageVector = Icons.Filled.Email, contentDescription = "Email address")
+                Icon(imageVector = Icons.Filled.Person, contentDescription = "Name and surname")
                 Spacer(modifier = Modifier.width(8.dp))
-                Text(text = uiState.email)
+                Text(text = "${uiState.name} ${uiState.surname}")
             }
             Row(
                 modifier = Modifier.padding(8.dp)
             ) {
-                Icon(imageVector = Icons.Filled.Person, contentDescription = "Name and surname")
+                Icon(imageVector = Icons.Filled.Email, contentDescription = "Email address")
                 Spacer(modifier = Modifier.width(8.dp))
-                Text(text = "${uiState.name} ${uiState.surname}")
+                Text(text = uiState.email)
             }
         }
     }
