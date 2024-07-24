@@ -420,10 +420,10 @@ fun SignUpAsBarberScreen(
             singleLine = true,
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Number,
-                imeAction = ImeAction.Done,
+                imeAction = ImeAction.Next,
             ),
-            keyboardActions = KeyboardActions(onDone = {
-                focusManager.clearFocus()
+            keyboardActions = KeyboardActions(onNext = {
+                focusManager.moveFocus(FocusDirection.Down)
             }),
             modifier = Modifier.padding(horizontal = 48.dp, vertical = 8.dp),
             isError = !uiState.isStreetNumberValid,
@@ -443,10 +443,10 @@ fun SignUpAsBarberScreen(
             singleLine = true,
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Phone,
-                imeAction = ImeAction.Next,
+                imeAction = ImeAction.Done,
             ),
-            keyboardActions = KeyboardActions(onNext = {
-                focusManager.moveFocus(FocusDirection.Down)
+            keyboardActions = KeyboardActions(onDone = {
+                focusManager.clearFocus()
             }),
             modifier = Modifier.padding(horizontal = 48.dp, vertical = 8.dp),
             isError = !uiState.isPhoneValid,

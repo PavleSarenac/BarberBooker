@@ -43,4 +43,14 @@ interface BarberDao {
         workingHours: String
     )
 
+    @Query("""
+        SELECT * FROM barber 
+        WHERE LOWER(barbershopName) LIKE LOWER(:queryParameter)
+        OR LOWER(country) LIKE LOWER(:queryParameter)
+        OR LOWER(city) LIKE LOWER(:queryParameter)
+        OR LOWER(municipality) LIKE LOWER(:queryParameter)
+        OR LOWER(address) LIKE LOWER(:queryParameter)
+    """)
+    suspend fun getSearchResults(queryParameter: String): List<Barber>
+
 }

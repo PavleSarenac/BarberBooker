@@ -52,4 +52,15 @@ class BarberRepository @Inject constructor(private val barberDao: BarberDao) {
         )
     }
 
+    suspend fun getSearchResults(query: String): List<Barber> {
+        val queryParameters = query.split(" ")
+        val searchResults = mutableListOf<Barber>()
+
+        queryParameters.forEach {
+            searchResults.addAll(barberDao.getSearchResults("%$it%"))
+        }
+
+        return searchResults.distinct()
+    }
+
 }
