@@ -53,13 +53,16 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
+import rs.ac.bg.etf.barberbooker.data.staticRoutes
 import rs.ac.bg.etf.barberbooker.ui.stateholders.user.client.ClientSearchBarbersViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ClientSearchBarbersScreen(
     clientEmail: String,
+    navHostController: NavHostController,
     clientSearchBarbersViewModel: ClientSearchBarbersViewModel = hiltViewModel()
 ) {
     val uiState by clientSearchBarbersViewModel.uiState.collectAsState()
@@ -220,6 +223,11 @@ fun ClientSearchBarbersScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp, vertical = 4.dp)
+                            .clickable {
+                                navHostController.navigate(
+                                    "${staticRoutes[20]}/${currentBarbershop.email}/${clientEmail}"
+                                )
+                            }
                     )
                     Divider(
                         color = MaterialTheme.colorScheme.onPrimary

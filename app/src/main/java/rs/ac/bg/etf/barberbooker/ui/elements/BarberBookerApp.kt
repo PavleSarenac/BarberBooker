@@ -65,6 +65,7 @@ import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.client.ClientEditProfi
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.client.ClientInitialScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.client.ClientReviewsScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.client.ClientSearchBarbersScreen
+import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.client.ClientViewBarberProfileScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.client.ClientViewProfileScreen
 import rs.ac.bg.etf.barberbooker.ui.stateholders.BarberBookerUiState
 import rs.ac.bg.etf.barberbooker.ui.stateholders.BarberBookerViewModel
@@ -325,7 +326,7 @@ fun BarberBookerScaffold(
                 val clientEmail = navBackStackEntry.arguments?.getString("clientEmail") ?: ""
                 LoggedInClientRegularScreenBackHandler(drawerState, navHostController, clientEmail)
                 if (uiState.loggedInUserEmail != "") {
-                    ClientSearchBarbersScreen(clientEmail)
+                    ClientSearchBarbersScreen(clientEmail, navHostController)
                 }
             }
             composable(
@@ -382,6 +383,32 @@ fun BarberBookerScaffold(
                 LoggedInClientRegularScreenBackHandler(drawerState, navHostController, clientEmail)
                 if (uiState.loggedInUserEmail != "") {
                     ClientEditProfileScreen(clientEmail, snackbarHostState)
+                }
+            }
+            composable(
+                route = "${staticRoutes[20]}/{barberEmail}/{clientEmail}",
+                arguments = listOf(
+                    navArgument("barberEmail") {
+                        type = NavType.StringType
+                    },
+                    navArgument("clientEmail") {
+                        type = NavType.StringType
+                    }
+                )
+            ) {navBackStackEntry ->
+                val barberEmail = navBackStackEntry.arguments?.getString("barberEmail") ?: ""
+                val clientEmail = navBackStackEntry.arguments?.getString("clientEmail") ?: ""
+                BackHandler {
+                    if (drawerState.isOpen) {
+                        coroutineScope.launch {
+                            drawerState.close()
+                        }
+                    } else {
+                        navHostController.popBackStack()
+                    }
+                }
+                if (uiState.loggedInUserEmail != "") {
+                    ClientViewBarberProfileScreen(barberEmail, clientEmail)
                 }
             }
         }
@@ -471,7 +498,7 @@ fun ScaffoldTopBar(
             barberBookerViewModel = barberBookerViewModel
         )
         currentRoute.contains(staticRoutes[13]) && uiState.loggedInUserEmail != "" -> BarberTopBar(
-            topBarTitle = "Profile",
+            topBarTitle = "My profile",
             drawerState = drawerState,
             navHostController = navHostController,
             context = context,
@@ -511,7 +538,7 @@ fun ScaffoldTopBar(
             barberBookerViewModel = barberBookerViewModel
         )
         currentRoute.contains(staticRoutes[18]) && uiState.loggedInUserEmail != "" -> ClientTopBar(
-            topBarTitle = "Profile",
+            topBarTitle = "My profile",
             drawerState = drawerState,
             navHostController = navHostController,
             context = context,
@@ -520,6 +547,14 @@ fun ScaffoldTopBar(
         )
         currentRoute.contains(staticRoutes[19]) && uiState.loggedInUserEmail != "" -> ClientTopBar(
             topBarTitle = "Edit profile",
+            drawerState = drawerState,
+            navHostController = navHostController,
+            context = context,
+            clientEmail = uiState.loggedInUserEmail,
+            barberBookerViewModel = barberBookerViewModel
+        )
+        currentRoute.contains(staticRoutes[20]) && uiState.loggedInUserEmail != "" -> ClientTopBar(
+            topBarTitle = "Profile",
             drawerState = drawerState,
             navHostController = navHostController,
             context = context,
