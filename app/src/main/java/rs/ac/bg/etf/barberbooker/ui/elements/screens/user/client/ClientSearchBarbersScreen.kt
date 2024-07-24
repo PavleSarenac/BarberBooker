@@ -12,7 +12,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.Cancel
+import androidx.compose.material.icons.filled.ContentCut
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -82,6 +84,25 @@ fun ClientSearchBarbersScreen(
                     disabledPlaceholderColor = MaterialTheme.colorScheme.onSecondary
                 )
             ),
+            leadingIcon = {
+                if (!expanded) {
+                    Icon(
+                        imageVector = Icons.Filled.ContentCut,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSecondary
+                    )
+                } else {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBackIosNew,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSecondary,
+                        modifier = Modifier.clickable {
+                            clientSearchBarbersViewModel.setQuery("")
+                            expanded = false
+                        }
+                    )
+                }
+            },
             trailingIcon = {
                 if (expanded && uiState.query != "") {
                     Icon(
