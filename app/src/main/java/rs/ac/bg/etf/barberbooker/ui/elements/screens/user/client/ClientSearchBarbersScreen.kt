@@ -28,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -38,6 +39,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import kotlinx.coroutines.launch
 import rs.ac.bg.etf.barberbooker.ui.stateholders.user.client.ClientSearchBarbersViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,6 +51,9 @@ fun ClientSearchBarbersScreen(
     val uiState by clientSearchBarbersViewModel.uiState.collectAsState()
     var text by rememberSaveable { mutableStateOf("") }
     var expanded by rememberSaveable { mutableStateOf(false) }
+    var areSearchResultsFetched by rememberSaveable { mutableStateOf(false) }
+
+    val coroutineScope = rememberCoroutineScope()
 
     Box(
         Modifier
@@ -59,8 +64,12 @@ fun ClientSearchBarbersScreen(
             query = uiState.query,
             onQueryChange = { clientSearchBarbersViewModel.setQuery(it) },
             onSearch = {
-                clientSearchBarbersViewModel.getSearchResults()
-                expanded = false
+                coroutineScope.launch {
+                    val job = clientSearchBarbersViewModel.getSearchResults()
+                    job.join()
+                    expanded = false
+                    areSearchResultsFetched = true
+                }
                        },
             active = expanded,
             onActiveChange = { expanded = it },
@@ -123,34 +132,43 @@ fun ClientSearchBarbersScreen(
             }
         }
 
-        LazyColumn(
-            contentPadding = PaddingValues(start = 16.dp, top = 72.dp, end = 16.dp, bottom = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.semantics { traversalIndex = 1f },
-        ) {
-            items(count = uiState.searchResults.size) {
-                val currentBarbershop = uiState.searchResults[it]
-                ListItem(
-                    headlineContent = {
-                        Text(currentBarbershop.barbershopName)
-                                      },
-                    supportingContent = {
-                        Text(
-                            text = "${clientSearchBarbersViewModel.decimalFormat.format(currentBarbershop.price)} RSD",
-                            color = MaterialTheme.colorScheme.secondary
-                        )
+        if (!areSearchResultsFetched) return@Box
 
-                    },
-                    colors = ListItemDefaults.colors(containerColor = Color.Transparent),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 4.dp)
-                )
-                Divider(
-                    color = MaterialTheme.colorScheme.onPrimary
-                )
+        if (uiState.searchResults.isEmpty()) {
+            Text(
+                text = "No results found on BarberBooker",
+                modifier = Modifier
+                    .padding(start = 16.dp, top = 80.dp, end = 16.dp, bottom = 16.dp)
+            )
+        } else {
+            LazyColumn(
+                contentPadding = PaddingValues(start = 16.dp, top = 72.dp, end = 16.dp, bottom = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.semantics { traversalIndex = 1f },
+            ) {
+                items(count = uiState.searchResults.size) {
+                    val currentBarbershop = uiState.searchResults[it]
+                    ListItem(
+                        headlineContent = {
+                            Text(currentBarbershop.barbershopName)
+                        },
+                        supportingContent = {
+                            Text(
+                                text = "${clientSearchBarbersViewModel.decimalFormat.format(currentBarbershop.price)} RSD",
+                                color = MaterialTheme.colorScheme.secondary
+                            )
+
+                        },
+                        colors = ListItemDefaults.colors(containerColor = Color.Transparent),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 4.dp)
+                    )
+                    Divider(
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
             }
         }
     }
-
 }
