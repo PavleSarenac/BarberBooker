@@ -40,4 +40,35 @@ class ClientSearchBarbersViewModel @Inject constructor(
         }
     }
 
+    fun getSortedSearchResults(
+        sortingByNameState: Boolean,
+        sortingByNameAscendingState: Boolean,
+        sortingByNameDescendingState: Boolean,
+        sortingByPriceState: Boolean,
+        sortingByPriceAscendingState: Boolean,
+        sortingByPriceDescendingState: Boolean
+    ): List<Barber> {
+        var sortedSearchResults = _uiState.value.searchResults
+
+        if (sortingByNameState) {
+            if (sortingByNameAscendingState) {
+                sortedSearchResults = sortedSearchResults.sortedBy { it.barbershopName }
+            }
+            if (sortingByNameDescendingState) {
+                sortedSearchResults = sortedSearchResults.sortedByDescending { it.barbershopName }
+            }
+        }
+
+        if (sortingByPriceState) {
+            if (sortingByPriceAscendingState) {
+                sortedSearchResults = sortedSearchResults.sortedBy { it.price }
+            }
+            if (sortingByPriceDescendingState) {
+                sortedSearchResults = sortedSearchResults.sortedByDescending { it.price }
+            }
+        }
+
+        return sortedSearchResults
+    }
+
 }
