@@ -26,4 +26,9 @@ object DatabaseModule {
     @Singleton
     fun providesClientDao(database: BarberBookerDatabase) =
         database.clientDao()
+
+    @Provides
+    @Singleton
+    fun providesReservationDao(database: BarberBookerDatabase) =
+        database.reservationDao()
 }

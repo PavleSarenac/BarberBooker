@@ -11,7 +11,10 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import rs.ac.bg.etf.barberbooker.data.daysOfTheWeek
+import rs.ac.bg.etf.barberbooker.data.reservationStatuses
+import rs.ac.bg.etf.barberbooker.data.room.entities.Reservation
 import rs.ac.bg.etf.barberbooker.data.room.repositories.BarberRepository
+import rs.ac.bg.etf.barberbooker.data.room.repositories.ReservationRepository
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -42,7 +45,8 @@ data class BarberProfileUiState(
 
 @HiltViewModel
 class BarberProfileViewModel @Inject constructor(
-    private val barberRepository: BarberRepository
+    private val barberRepository: BarberRepository,
+    private val reservationRepository: ReservationRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(BarberProfileUiState())
@@ -112,15 +116,95 @@ class BarberProfileViewModel @Inject constructor(
         _uiState.update { it.copy(address = address) }
     }
 
-    fun clientCreateReservationRequest(
-        date: String,
-        time: String
-    ) {
-        println(isReservationDateTimeValid(date, time))
+    fun updateReservationStatuses() = viewModelScope.launch(Dispatchers.IO) {
+        val currentDateTimeInMillis = System.currentTimeMillis()
+        val currentDateString = convertDateMillisToString(currentDateTimeInMillis)
+        val currentTimeString = convertTimeMillisToString(currentDateTimeInMillis)
+        reservationRepository.updateReservationStatuses(currentDateString, currentTimeString)
+    }
 
+    fun clientCreateReservationRequest(
+        barberEmail: String,
+        clientEmail: String,
+        date: String,
+        time: String,
+        snackbarHostState: SnackbarHostState,
+        snackbarCoroutineScope: CoroutineScope
+    ) = viewModelScope.launch(Dispatchers.IO) {
         if (!isReservationDateTimeValid(date, time)) {
-            return
+            snackbarCoroutineScope.launch(Dispatchers.Main) {
+                snackbarHostState.showSnackbar(
+                    message = "Invalid reservation time!",
+                    withDismissAction = true
+                )
+            }
+            return@launch
         }
+
+        if (!isClientAvailable(clientEmail, date, time)) {
+            snackbarCoroutineScope.launch(Dispatchers.Main) {
+                snackbarHostState.showSnackbar(
+                    message = "You are unavailable at the selected time!",
+                    withDismissAction = true
+                )
+            }
+            return@launch
+        }
+
+        if (!isBarberAvailable(barberEmail, date, time)) {
+            snackbarCoroutineScope.launch(Dispatchers.Main) {
+                snackbarHostState.showSnackbar(
+                    message = "Barber is unavailable at the selected time!",
+                    withDismissAction = true
+                )
+            }
+            return@launch
+        }
+
+        reservationRepository.addNewReservation(
+            Reservation(
+                id = 0,
+                clientEmail = clientEmail,
+                barberEmail = barberEmail,
+                date = date,
+                startTime = time,
+                endTime = getReservationEndTime(time),
+                status = reservationStatuses[0]
+            )
+        )
+
+        snackbarCoroutineScope.launch(Dispatchers.Main) {
+            snackbarHostState.showSnackbar(
+                message = "Reservation request submitted!",
+                withDismissAction = true
+            )
+        }
+
+    }
+
+    private fun getReservationEndTime(startTime: String): String {
+        val startHourInt = startTime.substring(0, 2).toInt()
+        val startMinuteInt = startTime.substring(3).toInt()
+
+        return if (startMinuteInt == 30) {
+            val endHourInt = (startHourInt + 1) % 24
+            val endMinuteInt = 0
+            String.format("%02d:%02d", endHourInt, endMinuteInt)
+        } else {
+            val endMinuteInt = 30
+            String.format("%02d:%02d", startHourInt, endMinuteInt)
+        }
+    }
+
+    private suspend fun isClientAvailable(clientEmail: String, date: String, time: String): Boolean {
+        println(clientEmail)
+        println(date)
+        println(time)
+        return reservationRepository.getClientReservationByDateTime(clientEmail, date, time) == null
+    }
+
+    private suspend fun isBarberAvailable(barberEmail: String, date: String, time: String): Boolean {
+        return reservationRepository.getBarberReservationByDateTime(barberEmail, date, time) == null
     }
 
     private fun isReservationDateTimeValid(
@@ -131,17 +215,24 @@ class BarberProfileViewModel @Inject constructor(
         var barberEndWorkTime = _uiState.value.workingHours.substring(8)
         if (barberEndWorkTime == "00:00") barberEndWorkTime = "24:00"
 
-        if (date < convertDateMillisToString(System.currentTimeMillis())) return false
+        val currentDateTimeInMillis = System.currentTimeMillis()
+        if (date < convertDateMillisToString(currentDateTimeInMillis)) return false
 
+        if (time < convertTimeMillisToString(currentDateTimeInMillis)) return false
         if (time < barberStartWorkTime || time >= barberEndWorkTime) return false
         if (time.substring(3, 5) != "00" && time.substring(3, 5) != "30") return false
 
         return true
     }
 
-    fun convertDateMillisToString(dateInMillis: Long): String {
+    fun convertDateMillisToString(dateTimeInMillis: Long): String {
         val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        return dateFormat.format(Date(dateInMillis))
+        return dateFormat.format(Date(dateTimeInMillis))
+    }
+
+    private fun convertTimeMillisToString(dateTimeInMillis: Long): String {
+        val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+        return timeFormat.format(Date(dateTimeInMillis))
     }
 
     fun fetchBarberData(barberEmail: String) = viewModelScope.launch(Dispatchers.IO) {

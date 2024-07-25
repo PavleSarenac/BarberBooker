@@ -9,5 +9,7 @@ data class Reservation(
     var clientEmail: String,
     var barberEmail: String,
     var date: String,
-    var time: String
+    var startTime: String,
+    var endTime: String,
+    var status: String
 )

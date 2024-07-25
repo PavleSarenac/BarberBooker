@@ -33,3 +33,10 @@ val daysOfTheWeek = listOf(
     "SAT",
     "SUN"
 )
+
+val reservationStatuses = listOf(
+    "PENDING",
+    "ACCEPTED",
+    "REJECTED",
+    "DONE"
+)

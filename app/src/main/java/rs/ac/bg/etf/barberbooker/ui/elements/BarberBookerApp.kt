@@ -408,7 +408,7 @@ fun BarberBookerScaffold(
                     }
                 }
                 if (uiState.loggedInUserEmail != "") {
-                    ClientViewBarberProfileScreen(barberEmail, clientEmail)
+                    ClientViewBarberProfileScreen(barberEmail, clientEmail, snackbarHostState)
                 }
             }
         }

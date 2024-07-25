@@ -37,6 +37,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TimePicker
 import androidx.compose.material3.rememberDatePickerState
@@ -46,6 +47,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -64,19 +66,24 @@ import rs.ac.bg.etf.barberbooker.ui.stateholders.user.barber.BarberProfileViewMo
 fun ClientViewBarberProfileScreen(
     barberEmail: String,
     clientEmail: String,
+    snackbarHostState: SnackbarHostState,
     barberProfileViewModel: BarberProfileViewModel = hiltViewModel()
 ) {
     val uiState by barberProfileViewModel.uiState.collectAsState()
     val context = LocalContext.current
-    var isBarberDataFetched by rememberSaveable { mutableStateOf(false) }
+    var isDataFetched by rememberSaveable { mutableStateOf(false) }
+
+    val snackbarCoroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
-        val job = barberProfileViewModel.fetchBarberData(barberEmail)
-        job.join()
-        isBarberDataFetched = true
+        val fetchBarberDataJob = barberProfileViewModel.fetchBarberData(barberEmail)
+        val updateReservationStatuses = barberProfileViewModel.updateReservationStatuses()
+        fetchBarberDataJob.join()
+        updateReservationStatuses.join()
+        isDataFetched = true
     }
 
-    if (!isBarberDataFetched) return
+    if (!isDataFetched) return
 
     val timePickerState = rememberTimePickerState(is24Hour = true)
     val datePickerState = rememberDatePickerState(
@@ -281,8 +288,12 @@ fun ClientViewBarberProfileScreen(
                 OutlinedButton(
                     onClick = {
                         barberProfileViewModel.clientCreateReservationRequest(
+                            barberEmail,
+                            clientEmail,
                             barberProfileViewModel.convertDateMillisToString(datePickerState.selectedDateMillis!!),
-                            String.format("%02d:%02d", timePickerState.hour, timePickerState.minute)
+                            String.format("%02d:%02d", timePickerState.hour, timePickerState.minute),
+                            snackbarHostState,
+                            snackbarCoroutineScope
                         )
                     },
                     border = BorderStroke(1.dp, Color.White),
