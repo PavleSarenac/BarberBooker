@@ -7,9 +7,9 @@ import androidx.room.RoomDatabase
 import rs.ac.bg.etf.barberbooker.data.room.daos.BarberDao
 import rs.ac.bg.etf.barberbooker.data.room.daos.ClientDao
 import rs.ac.bg.etf.barberbooker.data.room.daos.ReservationDao
-import rs.ac.bg.etf.barberbooker.data.room.entities.Barber
-import rs.ac.bg.etf.barberbooker.data.room.entities.Client
-import rs.ac.bg.etf.barberbooker.data.room.entities.Reservation
+import rs.ac.bg.etf.barberbooker.data.room.entities.tables.Barber
+import rs.ac.bg.etf.barberbooker.data.room.entities.tables.Client
+import rs.ac.bg.etf.barberbooker.data.room.entities.tables.Reservation
 
 @Database(entities = [
     Client::class,

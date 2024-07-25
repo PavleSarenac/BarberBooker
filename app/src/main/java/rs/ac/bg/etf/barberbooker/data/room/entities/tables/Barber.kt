@@ -1,4 +1,4 @@
-package rs.ac.bg.etf.barberbooker.data.room.entities
+package rs.ac.bg.etf.barberbooker.data.room.entities.tables
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

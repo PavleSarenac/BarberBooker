@@ -217,7 +217,6 @@ fun ClientSearchBarbersScreen(
                                 text = "${clientSearchBarbersViewModel.decimalFormat.format(currentBarbershop.price)} RSD",
                                 color = MaterialTheme.colorScheme.secondary
                             )
-
                         },
                         colors = ListItemDefaults.colors(containerColor = Color.Transparent),
                         modifier = Modifier

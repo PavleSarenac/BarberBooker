@@ -4,7 +4,8 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import rs.ac.bg.etf.barberbooker.data.reservationStatuses
-import rs.ac.bg.etf.barberbooker.data.room.entities.Reservation
+import rs.ac.bg.etf.barberbooker.data.room.entities.structures.ExtendedReservationWithBarber
+import rs.ac.bg.etf.barberbooker.data.room.entities.tables.Reservation
 
 @Dao
 interface ReservationDao {
@@ -58,5 +59,25 @@ interface ReservationDao {
         time: String,
         rejectedStatus: String = reservationStatuses[2]
     ): Reservation?
+
+    @Query("""
+        SELECT 
+            r.id AS reservationId,
+            r.clientEmail,
+            r.barberEmail,
+            r.date,
+            r.startTime,
+            r.endTime,
+            r.status,
+            b.id AS barberId,
+            b.barbershopName
+        FROM reservation r
+        INNER JOIN barber b ON r.barberEmail = b.email
+        WHERE clientEmail = :clientEmail AND status = :pendingStatus
+    """)
+    suspend fun getClientPendingReservationRequests(
+        clientEmail: String,
+        pendingStatus: String = reservationStatuses[0]
+    ): List<ExtendedReservationWithBarber>
 
 }

@@ -1,7 +1,7 @@
 package rs.ac.bg.etf.barberbooker.data.room.repositories
 
 import rs.ac.bg.etf.barberbooker.data.room.daos.BarberDao
-import rs.ac.bg.etf.barberbooker.data.room.entities.Barber
+import rs.ac.bg.etf.barberbooker.data.room.entities.tables.Barber
 import javax.inject.Inject
 import javax.inject.Singleton
 

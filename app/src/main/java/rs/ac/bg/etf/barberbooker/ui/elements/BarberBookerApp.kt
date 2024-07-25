@@ -423,7 +423,10 @@ fun BarberBookerScaffold(
                 val clientEmail = navBackStackEntry.arguments?.getString("clientEmail") ?: ""
                 LoggedInClientRegularScreenBackHandler(drawerState, navHostController, clientEmail)
                 if (uiState.loggedInUserEmail != "") {
-                    ClientPendingScreen(clientEmail = clientEmail)
+                    ClientPendingScreen(
+                        clientEmail = clientEmail,
+                        navHostController = navHostController
+                    )
                 }
             }
         }

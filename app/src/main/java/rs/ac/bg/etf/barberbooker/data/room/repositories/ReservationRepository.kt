@@ -1,7 +1,8 @@
 package rs.ac.bg.etf.barberbooker.data.room.repositories
 
 import rs.ac.bg.etf.barberbooker.data.room.daos.ReservationDao
-import rs.ac.bg.etf.barberbooker.data.room.entities.Reservation
+import rs.ac.bg.etf.barberbooker.data.room.entities.structures.ExtendedReservationWithBarber
+import rs.ac.bg.etf.barberbooker.data.room.entities.tables.Reservation
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -33,6 +34,10 @@ class ReservationRepository @Inject constructor(
         time: String
     ): Reservation? {
         return reservationDao.getRejectedReservationRequest(clientEmail, barberEmail, date, time)
+    }
+
+    suspend fun getClientPendingReservationRequests(clientEmail: String): List<ExtendedReservationWithBarber> {
+        return reservationDao.getClientPendingReservationRequests(clientEmail)
     }
 
 }

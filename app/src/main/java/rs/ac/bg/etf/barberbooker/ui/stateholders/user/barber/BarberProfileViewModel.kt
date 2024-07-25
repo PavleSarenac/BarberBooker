@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import rs.ac.bg.etf.barberbooker.data.daysOfTheWeek
 import rs.ac.bg.etf.barberbooker.data.reservationStatuses
-import rs.ac.bg.etf.barberbooker.data.room.entities.Reservation
+import rs.ac.bg.etf.barberbooker.data.room.entities.tables.Reservation
 import rs.ac.bg.etf.barberbooker.data.room.repositories.BarberRepository
 import rs.ac.bg.etf.barberbooker.data.room.repositories.ReservationRepository
 import java.text.DecimalFormat
