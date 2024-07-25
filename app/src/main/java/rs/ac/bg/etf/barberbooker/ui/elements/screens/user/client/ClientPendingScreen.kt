@@ -43,7 +43,7 @@ fun ClientPendingScreen(
     if (!isDataFetched) return
 
     LazyColumn(
-        contentPadding = PaddingValues(start = 16.dp, top = 10.dp, end = 16.dp, bottom = 16.dp),
+        contentPadding = PaddingValues(top = 10.dp, bottom = 16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = Modifier.fillMaxSize()
     ) {
@@ -61,7 +61,7 @@ fun ClientPendingScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 4.dp)
+                    .padding(vertical = 4.dp)
                     .clickable {
                         navHostController.navigate(
                             "${staticRoutes[20]}/${currentRequest.barberEmail}/${clientEmail}"

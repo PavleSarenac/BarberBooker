@@ -80,8 +80,7 @@ fun ClientModalDrawerSheet(
                 selectedTextColor = MaterialTheme.colorScheme.onPrimary,
                 unselectedTextColor = MaterialTheme.colorScheme.onPrimary,
                 selectedContainerColor = MaterialTheme.colorScheme.secondary
-            ),
-            badge = { Text(text = "8") }
+            )
         )
         NavigationDrawerItem(
             label = { Text(text = "Search") },
@@ -97,7 +96,6 @@ fun ClientModalDrawerSheet(
                 selectedTextColor = MaterialTheme.colorScheme.onPrimary,
                 unselectedTextColor = MaterialTheme.colorScheme.onPrimary,
                 selectedContainerColor = MaterialTheme.colorScheme.secondary
-
             )
         )
         NavigationDrawerItem(
@@ -115,8 +113,7 @@ fun ClientModalDrawerSheet(
                 unselectedTextColor = MaterialTheme.colorScheme.onPrimary,
                 selectedContainerColor = MaterialTheme.colorScheme.secondary
 
-            ),
-            badge = { Text(text = "30") }
+            )
         )
         Divider(modifier = Modifier.padding(vertical = 8.dp))
         NavigationDrawerItem(
@@ -134,8 +131,7 @@ fun ClientModalDrawerSheet(
                 unselectedTextColor = MaterialTheme.colorScheme.onPrimary,
                 selectedContainerColor = MaterialTheme.colorScheme.secondary
 
-            ),
-            badge = { Text(text = "30") }
+            )
         )
         NavigationDrawerItem(
             label = { Text(text = "Reviews") },
@@ -152,8 +148,7 @@ fun ClientModalDrawerSheet(
                 unselectedTextColor = MaterialTheme.colorScheme.onPrimary,
                 selectedContainerColor = MaterialTheme.colorScheme.secondary
 
-            ),
-            badge = { Text(text = "99+") }
+            )
         )
     }
 }

@@ -80,8 +80,7 @@ fun BarberModalDrawerSheet(
                 selectedTextColor = MaterialTheme.colorScheme.onPrimary,
                 unselectedTextColor = MaterialTheme.colorScheme.onPrimary,
                 selectedContainerColor = MaterialTheme.colorScheme.secondary
-            ),
-            badge = { Text(text = "8") }
+            )
         )
         NavigationDrawerItem(
             label = { Text(text = "Pending") },
@@ -97,16 +96,14 @@ fun BarberModalDrawerSheet(
                 selectedTextColor = MaterialTheme.colorScheme.onPrimary,
                 unselectedTextColor = MaterialTheme.colorScheme.onPrimary,
                 selectedContainerColor = MaterialTheme.colorScheme.secondary
-
-            ),
-            badge = { Text(text = "21") }
+            )
         )
         NavigationDrawerItem(
-            label = { Text(text = "Reviews") },
-            icon = { Icon(Icons.Filled.Reviews, contentDescription = "Reviews that logged in barber has received") },
-            selected = currentRoute?.contains("${staticRoutes[10]}/") ?: false,
+            label = { Text(text = "Rejections") },
+            icon = { Icon(Icons.Filled.ReportProblem, contentDescription = "Rejected reservation requests") },
+            selected = currentRoute?.contains("${staticRoutes[12]}/") ?: false,
             onClick = {
-                navHostController.navigate("${staticRoutes[10]}/${uiState.loggedInUserEmail}")
+                navHostController.navigate("${staticRoutes[12]}/${uiState.loggedInUserEmail}")
                 coroutineScope.launch {
                     drawerState.close()
                 }
@@ -115,9 +112,7 @@ fun BarberModalDrawerSheet(
                 selectedTextColor = MaterialTheme.colorScheme.onPrimary,
                 unselectedTextColor = MaterialTheme.colorScheme.onPrimary,
                 selectedContainerColor = MaterialTheme.colorScheme.secondary
-
-            ),
-            badge = { Text(text = "30") }
+            )
         )
         Divider(modifier = Modifier.padding(vertical = 8.dp))
         NavigationDrawerItem(
@@ -134,16 +129,14 @@ fun BarberModalDrawerSheet(
                 selectedTextColor = MaterialTheme.colorScheme.onPrimary,
                 unselectedTextColor = MaterialTheme.colorScheme.onPrimary,
                 selectedContainerColor = MaterialTheme.colorScheme.secondary
-
-            ),
-            badge = { Text(text = "99+") }
+            )
         )
         NavigationDrawerItem(
-            label = { Text(text = "Rejections") },
-            icon = { Icon(Icons.Filled.ReportProblem, contentDescription = "Rejected reservation requests") },
-            selected = currentRoute?.contains("${staticRoutes[12]}/") ?: false,
+            label = { Text(text = "Reviews") },
+            icon = { Icon(Icons.Filled.Reviews, contentDescription = "Reviews that logged in barber has received") },
+            selected = currentRoute?.contains("${staticRoutes[10]}/") ?: false,
             onClick = {
-                navHostController.navigate("${staticRoutes[12]}/${uiState.loggedInUserEmail}")
+                navHostController.navigate("${staticRoutes[10]}/${uiState.loggedInUserEmail}")
                 coroutineScope.launch {
                     drawerState.close()
                 }
@@ -152,9 +145,7 @@ fun BarberModalDrawerSheet(
                 selectedTextColor = MaterialTheme.colorScheme.onPrimary,
                 unselectedTextColor = MaterialTheme.colorScheme.onPrimary,
                 selectedContainerColor = MaterialTheme.colorScheme.secondary
-
-            ),
-            badge = { Text(text = "15") }
+            )
         )
     }
 }

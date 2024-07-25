@@ -192,7 +192,7 @@ fun ClientSearchBarbersScreen(
 
         if (uiState.searchResults.isEmpty()) {
             Text(
-                text = "No results found on BarberBooker",
+                text = "No results found on BarberBooker.",
                 modifier = Modifier
                     .padding(start = 16.dp, top = 80.dp, end = 16.dp, bottom = 16.dp)
             )

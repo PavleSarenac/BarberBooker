@@ -2,6 +2,7 @@ package rs.ac.bg.etf.barberbooker.data.room.repositories
 
 import rs.ac.bg.etf.barberbooker.data.room.daos.ReservationDao
 import rs.ac.bg.etf.barberbooker.data.room.entities.structures.ExtendedReservationWithBarber
+import rs.ac.bg.etf.barberbooker.data.room.entities.structures.ExtendedReservationWithClient
 import rs.ac.bg.etf.barberbooker.data.room.entities.tables.Reservation
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -38,6 +39,22 @@ class ReservationRepository @Inject constructor(
 
     suspend fun getClientPendingReservationRequests(clientEmail: String): List<ExtendedReservationWithBarber> {
         return reservationDao.getClientPendingReservationRequests(clientEmail)
+    }
+
+    suspend fun getBarberPendingReservationRequests(barberEmail: String): List<ExtendedReservationWithClient> {
+        return reservationDao.getBarberPendingReservationRequests(barberEmail)
+    }
+
+    suspend fun getBarberAppointments(barberEmail: String): List<ExtendedReservationWithClient> {
+        return reservationDao.getBarberAppointments(barberEmail)
+    }
+
+    suspend fun acceptReservationRequest(reservationId: Long) {
+        reservationDao.acceptReservationRequest(reservationId)
+    }
+
+    suspend fun rejectReservationRequest(reservationId: Long) {
+        reservationDao.rejectReservationRequest(reservationId)
     }
 
 }

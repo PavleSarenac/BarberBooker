@@ -229,7 +229,7 @@ fun BarberBookerScaffold(
                     barberBookerViewModel.updateLoginData(context, true, barberEmail, "barber")
                 }
                 if (uiState.loggedInUserEmail != "") {
-                    BarberInitialScreen(barberEmail, navHostController)
+                    BarberInitialScreen(barberEmail)
                 }
             }
             composable(
@@ -243,7 +243,7 @@ fun BarberBookerScaffold(
                 val barberEmail = navBackStackEntry.arguments?.getString("barberEmail") ?: ""
                 LoggedInBarberRegularScreenBackHandler(drawerState, navHostController, barberEmail)
                 if (uiState.loggedInUserEmail != "") {
-                    BarberPendingScreen(barberEmail, navHostController)
+                    BarberPendingScreen(barberEmail)
                 }
             }
             composable(
