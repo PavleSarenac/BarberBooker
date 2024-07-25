@@ -61,7 +61,7 @@ fun ClientViewProfileScreen(
                 containerColor = MaterialTheme.colorScheme.secondary,
                 contentColor = MaterialTheme.colorScheme.onSecondary
             ),
-            modifier = Modifier.width(300.dp)
+            modifier = Modifier.width(1000.dp)
         ) {
             Row(
                 modifier = Modifier.padding(8.dp)

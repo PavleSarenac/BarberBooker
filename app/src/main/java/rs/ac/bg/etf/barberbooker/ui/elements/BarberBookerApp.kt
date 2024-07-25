@@ -554,7 +554,7 @@ fun ScaffoldTopBar(
             barberBookerViewModel = barberBookerViewModel
         )
         currentRoute.contains(staticRoutes[20]) && uiState.loggedInUserEmail != "" -> ClientTopBar(
-            topBarTitle = "Profile",
+            topBarTitle = "Barbershop",
             drawerState = drawerState,
             navHostController = navHostController,
             context = context,

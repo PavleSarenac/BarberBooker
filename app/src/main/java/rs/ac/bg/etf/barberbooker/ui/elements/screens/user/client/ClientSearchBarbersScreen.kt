@@ -19,8 +19,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.ContentCut
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Checkbox
@@ -112,7 +112,7 @@ fun ClientSearchBarbersScreen(
             leadingIcon = {
                 if (!expanded) {
                     Icon(
-                        imageVector = Icons.Filled.ContentCut,
+                        imageVector = Icons.Filled.Search,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onSecondary
                     )
@@ -156,7 +156,7 @@ fun ClientSearchBarbersScreen(
             placeholder = { Text(text = "Search here") }
         ) {
             Column(Modifier.verticalScroll(rememberScrollState())) {
-                repeat(4) { idx ->
+                repeat(8) { idx ->
                     val resultText = "Suggestion $idx"
                     ListItem(
                         headlineContent = { Text(resultText) },

@@ -13,6 +13,10 @@ import kotlinx.coroutines.withContext
 import rs.ac.bg.etf.barberbooker.data.daysOfTheWeek
 import rs.ac.bg.etf.barberbooker.data.room.repositories.BarberRepository
 import java.text.DecimalFormat
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
 data class BarberProfileUiState(
@@ -46,6 +50,40 @@ class BarberProfileViewModel @Inject constructor(
 
     private val decimalFormat = DecimalFormat("#.00")
 
+    val dateValidator: (Long) -> Boolean = { dateInMillis ->
+        val calendar = Calendar.getInstance().apply {
+            timeInMillis = dateInMillis
+        }
+        val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
+        val validDaysOfWeekStrings = _uiState.value.workingDays.split(", ")
+        val validDaysOfWeekIntegers = mutableListOf<Int>()
+
+        validDaysOfWeekStrings.forEach {
+            validDaysOfWeekIntegers.add(
+                when (it) {
+                    "MON" -> Calendar.MONDAY
+                    "TUE" -> Calendar.TUESDAY
+                    "WED" -> Calendar.WEDNESDAY
+                    "THU" -> Calendar.THURSDAY
+                    "FRI" -> Calendar.FRIDAY
+                    "SAT" -> Calendar.SATURDAY
+                    "SUN" -> Calendar.SUNDAY
+                    else -> -1
+                }
+            )
+        }
+
+        validDaysOfWeekIntegers.contains(dayOfWeek)
+    }
+
+    fun getFirstValidDateInMillis(currentDateInMillis: Long): Long {
+        var firstValidDateInMillis = currentDateInMillis
+        while (!dateValidator(firstValidDateInMillis)) {
+            firstValidDateInMillis += 24 * 60 * 60 * 1000
+        }
+        return firstValidDateInMillis
+    }
+
     fun setBarbershopName(barbershopName: String) {
         _uiState.update { it.copy(barbershopName = barbershopName) }
     }
@@ -72,6 +110,38 @@ class BarberProfileViewModel @Inject constructor(
 
     fun setAddress(address: String) {
         _uiState.update { it.copy(address = address) }
+    }
+
+    fun clientCreateReservationRequest(
+        date: String,
+        time: String
+    ) {
+        println(isReservationDateTimeValid(date, time))
+
+        if (!isReservationDateTimeValid(date, time)) {
+            return
+        }
+    }
+
+    private fun isReservationDateTimeValid(
+        date: String,
+        time: String
+    ): Boolean {
+        val barberStartWorkTime = _uiState.value.workingHours.substring(0, 5)
+        var barberEndWorkTime = _uiState.value.workingHours.substring(8)
+        if (barberEndWorkTime == "00:00") barberEndWorkTime = "24:00"
+
+        if (date < convertDateMillisToString(System.currentTimeMillis())) return false
+
+        if (time < barberStartWorkTime || time >= barberEndWorkTime) return false
+        if (time.substring(3, 5) != "00" && time.substring(3, 5) != "30") return false
+
+        return true
+    }
+
+    fun convertDateMillisToString(dateInMillis: Long): String {
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        return dateFormat.format(Date(dateInMillis))
     }
 
     fun fetchBarberData(barberEmail: String) = viewModelScope.launch(Dispatchers.IO) {
