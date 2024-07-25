@@ -63,6 +63,7 @@ import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.barber.BarberViewProfi
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.client.ClientArchiveScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.client.ClientEditProfileScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.client.ClientInitialScreen
+import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.client.ClientPendingScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.client.ClientReviewsScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.client.ClientSearchBarbersScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.client.ClientViewBarberProfileScreen
@@ -411,6 +412,20 @@ fun BarberBookerScaffold(
                     ClientViewBarberProfileScreen(barberEmail, clientEmail, snackbarHostState)
                 }
             }
+            composable(
+                route = "${staticRoutes[21]}/{clientEmail}",
+                arguments = listOf(
+                    navArgument("clientEmail") {
+                        type = NavType.StringType
+                    }
+                )
+            ) {navBackStackEntry ->
+                val clientEmail = navBackStackEntry.arguments?.getString("clientEmail") ?: ""
+                LoggedInClientRegularScreenBackHandler(drawerState, navHostController, clientEmail)
+                if (uiState.loggedInUserEmail != "") {
+                    ClientPendingScreen(clientEmail = clientEmail)
+                }
+            }
         }
     }
 }
@@ -555,6 +570,14 @@ fun ScaffoldTopBar(
         )
         currentRoute.contains(staticRoutes[20]) && uiState.loggedInUserEmail != "" -> ClientTopBar(
             topBarTitle = "Barbershop",
+            drawerState = drawerState,
+            navHostController = navHostController,
+            context = context,
+            clientEmail = uiState.loggedInUserEmail,
+            barberBookerViewModel = barberBookerViewModel
+        )
+        currentRoute.contains(staticRoutes[21]) && uiState.loggedInUserEmail != "" -> ClientTopBar(
+            topBarTitle = "Pending requests",
             drawerState = drawerState,
             navHostController = navHostController,
             context = context,

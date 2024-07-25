@@ -3,6 +3,7 @@ package rs.ac.bg.etf.barberbooker.ui.elements.composables.user.client
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.HourglassTop
 import androidx.compose.material.icons.filled.Reviews
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.Search
@@ -97,9 +98,27 @@ fun ClientModalDrawerSheet(
                 unselectedTextColor = MaterialTheme.colorScheme.onPrimary,
                 selectedContainerColor = MaterialTheme.colorScheme.secondary
 
-            ),
-            badge = { Text(text = "21") }
+            )
         )
+        NavigationDrawerItem(
+            label = { Text(text = "Pending") },
+            icon = { Icon(Icons.Filled.HourglassTop, contentDescription = "Pending") },
+            selected = currentRoute?.contains("${staticRoutes[21]}/") ?: false,
+            onClick = {
+                navHostController.navigate("${staticRoutes[21]}/${uiState.loggedInUserEmail}")
+                coroutineScope.launch {
+                    drawerState.close()
+                }
+            },
+            colors = NavigationDrawerItemDefaults.colors(
+                selectedTextColor = MaterialTheme.colorScheme.onPrimary,
+                unselectedTextColor = MaterialTheme.colorScheme.onPrimary,
+                selectedContainerColor = MaterialTheme.colorScheme.secondary
+
+            ),
+            badge = { Text(text = "30") }
+        )
+        Divider(modifier = Modifier.padding(vertical = 8.dp))
         NavigationDrawerItem(
             label = { Text(text = "Archive") },
             icon = { Icon(Icons.Filled.WorkHistory, contentDescription = "Past haircuts") },
@@ -118,7 +137,6 @@ fun ClientModalDrawerSheet(
             ),
             badge = { Text(text = "30") }
         )
-        Divider(modifier = Modifier.padding(vertical = 8.dp))
         NavigationDrawerItem(
             label = { Text(text = "Reviews") },
             icon = { Icon(Icons.Filled.Reviews, contentDescription = "All reviews that client has left") },

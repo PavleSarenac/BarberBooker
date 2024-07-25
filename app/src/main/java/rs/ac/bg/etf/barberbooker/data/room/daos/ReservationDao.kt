@@ -15,11 +15,12 @@ interface ReservationDao {
     @Query("""
         UPDATE reservation 
         SET status = :doneStatus 
-        WHERE date = :currentDate AND :currentTime >= endTime
+        WHERE date = :currentDate AND :currentTime >= endTime AND status = :acceptedStatus
     """)
     suspend fun updateReservationStatuses(
         currentDate: String,
         currentTime: String,
+        acceptedStatus: String = reservationStatuses[1],
         doneStatus: String = reservationStatuses[3]
     )
 
@@ -36,13 +37,26 @@ interface ReservationDao {
 
     @Query("""
         SELECT * FROM reservation
-        WHERE clientEmail = :clientEmail AND date = :date AND startTime = :time AND status = :acceptedStatus
+        WHERE clientEmail = :clientEmail AND date = :date AND startTime = :time AND status != :rejectedStatus
     """)
     suspend fun getClientReservationByDateTime(
         clientEmail: String,
         date: String,
         time: String,
-        acceptedStatus: String = reservationStatuses[1]
+        rejectedStatus: String = reservationStatuses[2]
+    ): Reservation?
+
+    @Query("""
+        SELECT * FROM reservation
+        WHERE clientEmail = :clientEmail AND barberEmail = :barberEmail 
+        AND date = :date AND startTime = :time AND status = :rejectedStatus
+    """)
+    suspend fun getRejectedReservationRequest(
+        clientEmail: String,
+        barberEmail: String,
+        date: String,
+        time: String,
+        rejectedStatus: String = reservationStatuses[2]
     ): Reservation?
 
 }

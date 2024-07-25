@@ -26,4 +26,13 @@ class ReservationRepository @Inject constructor(
         reservationDao.updateReservationStatuses(currentDate, currentTime)
     }
 
+    suspend fun getRejectedReservationRequest(
+        clientEmail: String,
+        barberEmail: String,
+        date: String,
+        time: String
+    ): Reservation? {
+        return reservationDao.getRejectedReservationRequest(clientEmail, barberEmail, date, time)
+    }
+
 }

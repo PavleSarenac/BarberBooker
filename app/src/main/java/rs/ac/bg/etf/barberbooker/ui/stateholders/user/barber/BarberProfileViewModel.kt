@@ -161,6 +161,16 @@ class BarberProfileViewModel @Inject constructor(
             return@launch
         }
 
+        if (!isRequestAlreadyRejected(clientEmail, barberEmail, date, time)) {
+            snackbarCoroutineScope.launch(Dispatchers.Main) {
+                snackbarHostState.showSnackbar(
+                    message = "Request already rejected!",
+                    withDismissAction = true
+                )
+            }
+            return@launch
+        }
+
         reservationRepository.addNewReservation(
             Reservation(
                 id = 0,
@@ -196,10 +206,16 @@ class BarberProfileViewModel @Inject constructor(
         }
     }
 
+    private suspend fun isRequestAlreadyRejected(
+        clientEmail: String,
+        barberEmail: String,
+        date: String,
+        time: String
+    ): Boolean {
+        return reservationRepository.getRejectedReservationRequest(clientEmail, barberEmail, date, time) == null
+    }
+
     private suspend fun isClientAvailable(clientEmail: String, date: String, time: String): Boolean {
-        println(clientEmail)
-        println(date)
-        println(time)
         return reservationRepository.getClientReservationByDateTime(clientEmail, date, time) == null
     }
 
@@ -216,9 +232,11 @@ class BarberProfileViewModel @Inject constructor(
         if (barberEndWorkTime == "00:00") barberEndWorkTime = "24:00"
 
         val currentDateTimeInMillis = System.currentTimeMillis()
-        if (date < convertDateMillisToString(currentDateTimeInMillis)) return false
+        val currentDateString = convertDateMillisToString(currentDateTimeInMillis)
+        val currentTimeString = convertTimeMillisToString(currentDateTimeInMillis)
+        if (date < currentDateString) return false
 
-        if (time < convertTimeMillisToString(currentDateTimeInMillis)) return false
+        if (date == currentDateString && time < currentTimeString) return false
         if (time < barberStartWorkTime || time >= barberEndWorkTime) return false
         if (time.substring(3, 5) != "00" && time.substring(3, 5) != "30") return false
 
