@@ -52,10 +52,8 @@ import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -100,6 +98,8 @@ fun ClientViewBarberProfileScreen(
         archiveJob.join()
         val fetchBarberDataJob = barberProfileViewModel.fetchBarberData(barberEmail)
         fetchBarberDataJob.join()
+        val pastReviewsJob = clientReviewsViewModel.getPastReviewsForThisBarber(clientEmail, barberEmail)
+        pastReviewsJob.join()
         isDataFetched = true
     }
 
@@ -333,11 +333,11 @@ fun ClientViewBarberProfileScreen(
             }
         }
 
-        if (clientArchiveUiState.archive.any { it.barberEmail == barberEmail }) {
+        if (
+            clientArchiveUiState.archive.any { it.barberEmail == barberEmail } &&
+            clientReviewsUiState.pastReviewsForThisBarber.isEmpty()
+            ) {
             Spacer(modifier = Modifier.height(24.dp))
-
-            val reviewGrade: MutableState<Int> = rememberSaveable { mutableIntStateOf(0) }
-
             Card(
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.primary,
@@ -410,7 +410,12 @@ fun ClientViewBarberProfileScreen(
                 ) {
                     OutlinedButton(
                         onClick = {
-                            /* TODO */
+                            clientReviewsViewModel.submitReview(
+                                snackbarHostState,
+                                snackbarCoroutineScope,
+                                clientEmail,
+                                barberEmail
+                            )
                         },
                         border = BorderStroke(1.dp, Color.White),
                         shape = MaterialTheme.shapes.medium,
