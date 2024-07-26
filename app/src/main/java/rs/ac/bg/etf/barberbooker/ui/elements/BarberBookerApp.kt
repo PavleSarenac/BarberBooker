@@ -203,7 +203,7 @@ fun BarberBookerScaffold(
                     barberBookerViewModel.updateLoginData(context, true, clientEmail, "client")
                 }
                 if (uiState.loggedInUserEmail != "") {
-                    ClientInitialScreen(clientEmail)
+                    ClientInitialScreen(clientEmail, navHostController)
                 }
             }
             composable(

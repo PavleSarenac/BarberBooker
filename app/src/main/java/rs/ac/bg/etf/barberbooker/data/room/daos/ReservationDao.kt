@@ -90,6 +90,66 @@ interface ReservationDao {
             r.startTime,
             r.endTime,
             r.status,
+            b.id AS barberId,
+            b.barbershopName
+        FROM reservation r
+        INNER JOIN barber b ON r.barberEmail = b.email
+        WHERE clientEmail = :clientEmail AND status = :acceptedStatus
+    """)
+    suspend fun getClientAppointments(
+        clientEmail: String,
+        acceptedStatus: String = reservationStatuses[1]
+    ): List<ExtendedReservationWithBarber>
+
+    @Query("""
+        SELECT 
+            r.id AS reservationId,
+            r.clientEmail,
+            r.barberEmail,
+            r.date,
+            r.startTime,
+            r.endTime,
+            r.status,
+            b.id AS barberId,
+            b.barbershopName
+        FROM reservation r
+        INNER JOIN barber b ON r.barberEmail = b.email
+        WHERE clientEmail = :clientEmail AND status = :rejectedStatus
+    """)
+    suspend fun getClientRejections(
+        clientEmail: String,
+        rejectedStatus: String = reservationStatuses[2]
+    ): List<ExtendedReservationWithBarber>
+
+    @Query("""
+        SELECT 
+            r.id AS reservationId,
+            r.clientEmail,
+            r.barberEmail,
+            r.date,
+            r.startTime,
+            r.endTime,
+            r.status,
+            b.id AS barberId,
+            b.barbershopName
+        FROM reservation r
+        INNER JOIN barber b ON r.barberEmail = b.email
+        WHERE clientEmail = :clientEmail AND status = :doneStatus
+    """)
+    suspend fun getClientArchive(
+        clientEmail: String,
+        doneStatus: String = reservationStatuses[3]
+    ): List<ExtendedReservationWithBarber>
+
+    @Query("""
+        SELECT 
+            r.id AS reservationId,
+            r.clientEmail,
+            r.barberEmail,
+            r.date,
+            r.startTime,
+            r.endTime,
+            r.status,
             c.id AS clientId,
             c.name AS clientName,
             c.surname AS clientSurname
