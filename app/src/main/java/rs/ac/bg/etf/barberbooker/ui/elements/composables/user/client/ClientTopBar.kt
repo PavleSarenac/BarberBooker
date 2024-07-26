@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBackIos
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Menu
@@ -35,6 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import kotlinx.coroutines.launch
 import rs.ac.bg.etf.barberbooker.data.staticRoutes
 import rs.ac.bg.etf.barberbooker.ui.stateholders.BarberBookerViewModel
@@ -52,6 +54,9 @@ fun ClientTopBar(
     val coroutineScope = rememberCoroutineScope()
     var openAccountDialog by rememberSaveable { mutableStateOf(false) }
 
+    val navBackStackEntry by navHostController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+
     CenterAlignedTopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.secondary,
@@ -64,17 +69,30 @@ fun ClientTopBar(
             )
         },
         navigationIcon = {
-            IconButton(onClick = {
-                coroutineScope.launch {
-                    drawerState.apply {
-                        if (isClosed) open() else close()
+            if (currentRoute != null) {
+                if (!currentRoute.contains(staticRoutes[20])) {
+                    IconButton(onClick = {
+                        coroutineScope.launch {
+                            drawerState.apply {
+                                if (isClosed) open() else close()
+                            }
+                        }
+                    } ) {
+                        Icon(
+                            imageVector = Icons.Filled.Menu,
+                            contentDescription = "Show menu"
+                        )
+                    }
+                } else {
+                    IconButton(onClick = {
+                        navHostController.popBackStack()
+                    } ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBackIos,
+                            contentDescription = "Go back to previous screen"
+                        )
                     }
                 }
-            } ) {
-                Icon(
-                    imageVector = Icons.Filled.Menu,
-                    contentDescription = "Show menu"
-                )
             }
         },
         actions = {
