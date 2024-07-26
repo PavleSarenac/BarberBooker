@@ -137,6 +137,27 @@ interface ReservationDao {
             c.surname AS clientSurname
         FROM reservation r
         INNER JOIN client c ON r.clientEmail = c.email
+        WHERE barberEmail = :barberEmail AND status = :doneStatus
+    """)
+    suspend fun getBarberArchive(
+        barberEmail: String,
+        doneStatus: String = reservationStatuses[3]
+    ): List<ExtendedReservationWithClient>
+
+    @Query("""
+        SELECT 
+            r.id AS reservationId,
+            r.clientEmail,
+            r.barberEmail,
+            r.date,
+            r.startTime,
+            r.endTime,
+            r.status,
+            c.id AS clientId,
+            c.name AS clientName,
+            c.surname AS clientSurname
+        FROM reservation r
+        INNER JOIN client c ON r.clientEmail = c.email
         WHERE barberEmail = :barberEmail AND status = :rejectedStatus
     """)
     suspend fun getBarberRejections(

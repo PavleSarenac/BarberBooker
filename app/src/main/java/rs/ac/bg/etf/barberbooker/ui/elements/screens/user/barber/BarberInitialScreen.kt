@@ -21,18 +21,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import rs.ac.bg.etf.barberbooker.ui.stateholders.user.barber.BarberAppointmentsViewModel
+import rs.ac.bg.etf.barberbooker.ui.stateholders.user.barber.BarberProfileViewModel
 
 @Composable
 fun BarberInitialScreen(
     barberEmail: String,
-    barberAppointmentsViewModel: BarberAppointmentsViewModel = hiltViewModel()
+    barberAppointmentsViewModel: BarberAppointmentsViewModel = hiltViewModel(),
+    barberProfileViewModel: BarberProfileViewModel = hiltViewModel()
 ) {
     val barberAppointmentsUiState by barberAppointmentsViewModel.uiState.collectAsState()
     var isDataFetched by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         val appointmentsJob = barberAppointmentsViewModel.getAppointments(barberEmail)
+        val updateReservationsJob = barberProfileViewModel.updateReservationStatuses()
         appointmentsJob.join()
+        updateReservationsJob.join()
         isDataFetched = true
     }
 
