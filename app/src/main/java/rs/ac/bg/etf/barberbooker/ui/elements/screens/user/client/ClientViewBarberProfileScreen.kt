@@ -12,8 +12,11 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessTime
@@ -27,6 +30,9 @@ import androidx.compose.material.icons.filled.LocationCity
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Nature
 import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.RateReview
+import androidx.compose.material.icons.filled.StarOutline
+import androidx.compose.material.icons.filled.StarRate
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -37,15 +43,19 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TimePicker
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -55,11 +65,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import rs.ac.bg.etf.barberbooker.ui.stateholders.user.barber.BarberProfileViewModel
+import rs.ac.bg.etf.barberbooker.ui.stateholders.user.client.ClientArchiveViewModel
+import rs.ac.bg.etf.barberbooker.ui.stateholders.user.client.ClientReviewsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -67,9 +80,14 @@ fun ClientViewBarberProfileScreen(
     barberEmail: String,
     clientEmail: String,
     snackbarHostState: SnackbarHostState,
-    barberProfileViewModel: BarberProfileViewModel = hiltViewModel()
+    barberProfileViewModel: BarberProfileViewModel = hiltViewModel(),
+    clientArchiveViewModel: ClientArchiveViewModel = hiltViewModel(),
+    clientReviewsViewModel: ClientReviewsViewModel = hiltViewModel()
 ) {
     val uiState by barberProfileViewModel.uiState.collectAsState()
+    val clientArchiveUiState by clientArchiveViewModel.uiState.collectAsState()
+    val clientReviewsUiState by clientReviewsViewModel.uiState.collectAsState()
+
     val context = LocalContext.current
     var isDataFetched by rememberSaveable { mutableStateOf(false) }
 
@@ -78,6 +96,8 @@ fun ClientViewBarberProfileScreen(
     LaunchedEffect(Unit) {
         val updateReservationStatusesJob = barberProfileViewModel.updateReservationStatuses()
         updateReservationStatusesJob.join()
+        val archiveJob = clientArchiveViewModel.getArchive(clientEmail)
+        archiveJob.join()
         val fetchBarberDataJob = barberProfileViewModel.fetchBarberData(barberEmail)
         fetchBarberDataJob.join()
         isDataFetched = true
@@ -299,7 +319,7 @@ fun ClientViewBarberProfileScreen(
                     border = BorderStroke(1.dp, Color.White),
                     shape = MaterialTheme.shapes.medium,
                     modifier = Modifier
-                        .padding(horizontal = 48.dp, vertical = 32.dp)
+                        .padding(horizontal = 48.dp, vertical = 12.dp)
                         .fillMaxWidth(),
                     colors = ButtonDefaults.outlinedButtonColors(
                         MaterialTheme.colorScheme.secondary,
@@ -309,6 +329,103 @@ fun ClientViewBarberProfileScreen(
                     Text(
                         text = "Submit request"
                     )
+                }
+            }
+        }
+
+        if (clientArchiveUiState.archive.any { it.barberEmail == barberEmail }) {
+            Spacer(modifier = Modifier.height(24.dp))
+
+            val reviewGrade: MutableState<Int> = rememberSaveable { mutableIntStateOf(0) }
+
+            Card(
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                ),
+                border = BorderStroke(1.dp, Color.White),
+                modifier = Modifier.width(1000.dp)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .align(Alignment.CenterHorizontally)
+                ) {
+                    Icon(imageVector = Icons.Filled.RateReview, contentDescription = null)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "Leave a review",
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+                Row(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .align(Alignment.CenterHorizontally)
+                ) {
+                    for (starRating in 1..5) {
+                        Icon(
+                            imageVector = when {
+                                clientReviewsUiState.newReviewGrade >= starRating -> Icons.Filled.StarRate
+                                else -> Icons.Filled.StarOutline
+                            },
+                            contentDescription = null,
+                            tint = when {
+                                clientReviewsUiState.newReviewGrade >= starRating -> Color.Yellow
+                                else -> MaterialTheme.colorScheme.onPrimary
+                            },
+                            modifier = Modifier
+                                .clickable {
+                                    clientReviewsViewModel.setNewReviewGrade(starRating)
+                                }
+                                .size(40.dp)
+                        )
+                    }
+                }
+                Row {
+                    OutlinedTextField(
+                        value = clientReviewsUiState.newReviewText,
+                        onValueChange = { clientReviewsViewModel.setNewReviewText(it) },
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp, vertical = 16.dp)
+                            .fillMaxWidth(),
+                        placeholder = { Text(text = "Share details of your own experience at this barbershop") },
+                        singleLine = false,
+                        shape = RoundedCornerShape(16.dp),
+                        minLines = 3,
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            imeAction = ImeAction.Default
+                        ),
+                        colors = TextFieldDefaults.colors(
+                            unfocusedContainerColor = MaterialTheme.colorScheme.onPrimary,
+                            focusedContainerColor = MaterialTheme.colorScheme.onPrimary,
+                            focusedTextColor = MaterialTheme.colorScheme.primary,
+                            unfocusedTextColor = MaterialTheme.colorScheme.primary
+                        )
+                    )
+                }
+                Divider()
+                Row(
+                    modifier = Modifier.padding(8.dp)
+                ) {
+                    OutlinedButton(
+                        onClick = {
+                            /* TODO */
+                        },
+                        border = BorderStroke(1.dp, Color.White),
+                        shape = MaterialTheme.shapes.medium,
+                        modifier = Modifier
+                            .padding(horizontal = 48.dp, vertical = 12.dp)
+                            .fillMaxWidth(),
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            MaterialTheme.colorScheme.secondary,
+                            MaterialTheme.colorScheme.onSecondary
+                        )
+                    ) {
+                        Text(
+                            text = "Submit review"
+                        )
+                    }
                 }
             }
         }

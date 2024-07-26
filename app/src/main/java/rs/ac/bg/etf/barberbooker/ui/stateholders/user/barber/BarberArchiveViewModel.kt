@@ -27,8 +27,8 @@ class BarberArchiveViewModel @Inject constructor(
     fun getArchive(barberEmail: String) = viewModelScope.launch(Dispatchers.IO) {
         var archive = reservationRepository.getBarberArchive(barberEmail)
 
-        archive = archive.sortedBy { it.startTime }
-        archive = archive.sortedBy { it.date }
+        archive = archive.sortedByDescending { it.startTime }
+        archive = archive.sortedByDescending { it.date }
 
         withContext(Dispatchers.Main) {
             _uiState.update { it.copy(archive = archive) }

@@ -27,8 +27,8 @@ class ClientArchiveViewModel @Inject constructor(
     fun getArchive(clientEmail: String) = viewModelScope.launch(Dispatchers.IO) {
         var archive = reservationRepository.getClientArchive(clientEmail)
 
-        archive = archive.sortedBy { it.startTime }
-        archive = archive.sortedBy { it.date }
+        archive = archive.sortedByDescending { it.startTime }
+        archive = archive.sortedByDescending { it.date }
 
         withContext(Dispatchers.Main) {
             _uiState.update { it.copy(archive = archive) }
