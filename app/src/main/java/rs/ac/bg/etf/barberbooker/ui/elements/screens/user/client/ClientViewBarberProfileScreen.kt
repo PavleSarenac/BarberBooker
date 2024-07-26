@@ -77,9 +77,9 @@ fun ClientViewBarberProfileScreen(
 
     LaunchedEffect(Unit) {
         val fetchBarberDataJob = barberProfileViewModel.fetchBarberData(barberEmail)
-        val updateReservationStatuses = barberProfileViewModel.updateReservationStatuses()
+        val updateReservationStatusesJob = barberProfileViewModel.updateReservationStatuses()
         fetchBarberDataJob.join()
-        updateReservationStatuses.join()
+        updateReservationStatusesJob.join()
         isDataFetched = true
     }
 

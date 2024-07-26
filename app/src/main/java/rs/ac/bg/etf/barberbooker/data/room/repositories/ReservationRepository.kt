@@ -49,6 +49,10 @@ class ReservationRepository @Inject constructor(
         return reservationDao.getBarberAppointments(barberEmail)
     }
 
+    suspend fun getBarberRejections(barberEmail: String): List<ExtendedReservationWithClient> {
+        return reservationDao.getBarberRejections(barberEmail)
+    }
+
     suspend fun acceptReservationRequest(reservationId: Long) {
         reservationDao.acceptReservationRequest(reservationId)
     }

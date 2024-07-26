@@ -43,4 +43,12 @@ class BarberPendingRequestsViewModel @Inject constructor(
         getPendingReservationRequests(barberEmail)
     }
 
+    fun rejectReservationRequest(
+        barberEmail: String,
+        reservationId: Long
+    ) = viewModelScope.launch(Dispatchers.IO) {
+        reservationRepository.rejectReservationRequest(reservationId)
+        getPendingReservationRequests(barberEmail)
+    }
+
 }

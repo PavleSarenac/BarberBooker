@@ -84,7 +84,12 @@ fun BarberPendingScreen(
                                 Icon(Icons.Filled.Check, contentDescription = null)
                             }
                             IconButton(
-                                onClick = { /*TODO*/ },
+                                onClick = {
+                                    barberPendingRequestsViewModel.rejectReservationRequest(
+                                        barberEmail,
+                                        currentRequest.reservationId
+                                    )
+                                },
                                 colors = IconButtonDefaults.iconButtonColors(
                                     contentColor = MaterialTheme.colorScheme.secondary
                                 )

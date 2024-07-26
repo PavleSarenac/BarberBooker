@@ -285,7 +285,7 @@ fun BarberBookerScaffold(
                 val barberEmail = navBackStackEntry.arguments?.getString("barberEmail") ?: ""
                 LoggedInBarberRegularScreenBackHandler(drawerState, navHostController, barberEmail)
                 if (uiState.loggedInUserEmail != "") {
-                    BarberRejectionsScreen(barberEmail, navHostController)
+                    BarberRejectionsScreen(barberEmail)
                 }
             }
             composable(
