@@ -76,10 +76,10 @@ fun ClientViewBarberProfileScreen(
     val snackbarCoroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
-        val fetchBarberDataJob = barberProfileViewModel.fetchBarberData(barberEmail)
         val updateReservationStatusesJob = barberProfileViewModel.updateReservationStatuses()
-        fetchBarberDataJob.join()
         updateReservationStatusesJob.join()
+        val fetchBarberDataJob = barberProfileViewModel.fetchBarberData(barberEmail)
+        fetchBarberDataJob.join()
         isDataFetched = true
     }
 

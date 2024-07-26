@@ -28,16 +28,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import rs.ac.bg.etf.barberbooker.ui.stateholders.user.barber.BarberProfileViewModel
 
 @Composable
 fun BarberPendingScreen(
     barberEmail: String,
-    barberPendingRequestsViewModel: BarberPendingRequestsViewModel = hiltViewModel()
+    barberPendingRequestsViewModel: BarberPendingRequestsViewModel = hiltViewModel(),
+    barberProfileViewModel: BarberProfileViewModel = hiltViewModel()
 ) {
     val barberPendingRequestsUiState by barberPendingRequestsViewModel.uiState.collectAsState()
     var isDataFetched by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
+        val updateReservationStatusesJob = barberProfileViewModel.updateReservationStatuses()
+        updateReservationStatusesJob.join()
         val pendingRequestsJob = barberPendingRequestsViewModel.getPendingReservationRequests(barberEmail)
         pendingRequestsJob.join()
         isDataFetched = true

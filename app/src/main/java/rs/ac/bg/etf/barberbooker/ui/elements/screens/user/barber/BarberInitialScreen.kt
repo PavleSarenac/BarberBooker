@@ -33,10 +33,10 @@ fun BarberInitialScreen(
     var isDataFetched by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        val appointmentsJob = barberAppointmentsViewModel.getAppointments(barberEmail)
         val updateReservationsJob = barberProfileViewModel.updateReservationStatuses()
-        appointmentsJob.join()
         updateReservationsJob.join()
+        val appointmentsJob = barberAppointmentsViewModel.getAppointments(barberEmail)
+        appointmentsJob.join()
         isDataFetched = true
     }
 

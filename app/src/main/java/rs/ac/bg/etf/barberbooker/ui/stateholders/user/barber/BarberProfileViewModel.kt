@@ -121,6 +121,7 @@ class BarberProfileViewModel @Inject constructor(
         val currentDateString = convertDateMillisToString(currentDateTimeInMillis)
         val currentTimeString = convertTimeMillisToString(currentDateTimeInMillis)
         reservationRepository.updateReservationStatuses(currentDateString, currentTimeString)
+        reservationRepository.updatePendingRequests(currentDateString, currentTimeString)
     }
 
     fun clientCreateReservationRequest(

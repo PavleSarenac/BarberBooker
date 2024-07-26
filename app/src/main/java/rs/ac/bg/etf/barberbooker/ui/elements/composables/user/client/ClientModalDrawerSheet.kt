@@ -7,6 +7,7 @@ import androidx.compose.material.icons.filled.HourglassTop
 import androidx.compose.material.icons.filled.Reviews
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.filled.WorkHistory
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerState
@@ -116,6 +117,23 @@ fun ClientModalDrawerSheet(
             )
         )
         Divider(modifier = Modifier.padding(vertical = 8.dp))
+        NavigationDrawerItem(
+            label = { Text(text = "Rejections") },
+            icon = { Icon(Icons.Filled.Warning, contentDescription = "Rejections") },
+            selected = currentRoute?.contains("${staticRoutes[22]}/") ?: false,
+            onClick = {
+                navHostController.navigate("${staticRoutes[22]}/${uiState.loggedInUserEmail}")
+                coroutineScope.launch {
+                    drawerState.close()
+                }
+            },
+            colors = NavigationDrawerItemDefaults.colors(
+                selectedTextColor = MaterialTheme.colorScheme.onPrimary,
+                unselectedTextColor = MaterialTheme.colorScheme.onPrimary,
+                selectedContainerColor = MaterialTheme.colorScheme.secondary
+
+            )
+        )
         NavigationDrawerItem(
             label = { Text(text = "Archive") },
             icon = { Icon(Icons.Filled.WorkHistory, contentDescription = "Past haircuts") },

@@ -24,31 +24,31 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import rs.ac.bg.etf.barberbooker.data.staticRoutes
 import rs.ac.bg.etf.barberbooker.ui.stateholders.user.barber.BarberProfileViewModel
-import rs.ac.bg.etf.barberbooker.ui.stateholders.user.client.ClientAppointmentsViewModel
+import rs.ac.bg.etf.barberbooker.ui.stateholders.user.client.ClientRejectionsViewModel
 
 @Composable
-fun ClientInitialScreen(
+fun ClientRejectionsScreen(
     clientEmail: String,
     navHostController: NavHostController,
-    clientAppointmentsViewModel: ClientAppointmentsViewModel = hiltViewModel(),
+    clientRejectionsViewModel: ClientRejectionsViewModel = hiltViewModel(),
     barberProfileViewModel: BarberProfileViewModel = hiltViewModel()
 ) {
-    val clientAppointmentsUiState by clientAppointmentsViewModel.uiState.collectAsState()
+    val clientRejectionsUiState by clientRejectionsViewModel.uiState.collectAsState()
     var isDataFetched by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         val updateReservationsJob = barberProfileViewModel.updateReservationStatuses()
         updateReservationsJob.join()
-        val appointmentsJob = clientAppointmentsViewModel.getAppointments(clientEmail)
-        appointmentsJob.join()
+        val rejectionsJob = clientRejectionsViewModel.getRejections(clientEmail)
+        rejectionsJob.join()
         isDataFetched = true
     }
 
     if (!isDataFetched) return
 
-    if (clientAppointmentsUiState.appointments.isEmpty()) {
+    if (clientRejectionsUiState.rejections.isEmpty()) {
         Text(
-            text = "There are no appointments.",
+            text = "There are no rejections.",
             modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp)
         )
     } else {
@@ -57,8 +57,8 @@ fun ClientInitialScreen(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier.fillMaxSize()
         ) {
-            items(count = clientAppointmentsUiState.appointments.size) {
-                val currentRequest = clientAppointmentsUiState.appointments[it]
+            items(count = clientRejectionsUiState.rejections.size) {
+                val currentRequest = clientRejectionsUiState.rejections[it]
                 ListItem(
                     headlineContent = {
                         Text(text = currentRequest.barbershopName)

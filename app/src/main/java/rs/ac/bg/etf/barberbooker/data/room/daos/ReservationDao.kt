@@ -27,6 +27,18 @@ interface ReservationDao {
     )
 
     @Query("""
+        UPDATE reservation 
+        SET status = :rejectedStatus 
+        WHERE date = :currentDate AND :currentTime >= endTime AND status = :pendingStatus
+    """)
+    suspend fun updatePendingRequests(
+        currentDate: String,
+        currentTime: String,
+        pendingStatus: String = reservationStatuses[0],
+        rejectedStatus: String = reservationStatuses[2]
+    )
+
+    @Query("""
         SELECT * FROM reservation
         WHERE barberEmail = :barberEmail AND date = :date AND startTime = :time AND status = :acceptedStatus
     """)

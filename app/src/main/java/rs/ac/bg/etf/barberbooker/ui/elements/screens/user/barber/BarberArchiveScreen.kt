@@ -33,10 +33,10 @@ fun BarberArchiveScreen(
     var isDataFetched by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        val archiveJob = barberArchiveViewModel.getArchive(barberEmail)
         val updateReservationsJob = barberProfileViewModel.updateReservationStatuses()
-        archiveJob.join()
         updateReservationsJob.join()
+        val archiveJob = barberArchiveViewModel.getArchive(barberEmail)
+        archiveJob.join()
         isDataFetched = true
     }
 
@@ -44,7 +44,7 @@ fun BarberArchiveScreen(
 
     if (barberArchiveUiState.archive.isEmpty()) {
         Text(
-            text = "There are no done haircuts.",
+            text = "There are no past appointments.",
             modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp)
         )
     } else {

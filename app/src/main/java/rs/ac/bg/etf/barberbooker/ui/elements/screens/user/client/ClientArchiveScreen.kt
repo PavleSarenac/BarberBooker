@@ -37,10 +37,10 @@ fun ClientArchiveScreen(
     var isDataFetched by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        val archiveJob = clientArchiveViewModel.getArchive(clientEmail)
         val updateReservationsJob = barberProfileViewModel.updateReservationStatuses()
-        archiveJob.join()
         updateReservationsJob.join()
+        val archiveJob = clientArchiveViewModel.getArchive(clientEmail)
+        archiveJob.join()
         isDataFetched = true
     }
 
@@ -48,7 +48,7 @@ fun ClientArchiveScreen(
 
     if (clientArchiveUiState.archive.isEmpty()) {
         Text(
-            text = "There are no appointments.",
+            text = "There are no past appointments.",
             modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp)
         )
     } else {
