@@ -37,6 +37,7 @@ import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.SearchBarDefaults.inputFieldColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -54,8 +55,11 @@ import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import rs.ac.bg.etf.barberbooker.data.staticRoutes
+import rs.ac.bg.etf.barberbooker.ui.stateholders.user.barber.BarberProfileViewModel
+import rs.ac.bg.etf.barberbooker.ui.stateholders.user.client.ClientArchiveViewModel
 import rs.ac.bg.etf.barberbooker.ui.stateholders.user.client.ClientSearchBarbersViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -63,12 +67,26 @@ import rs.ac.bg.etf.barberbooker.ui.stateholders.user.client.ClientSearchBarbers
 fun ClientSearchBarbersScreen(
     clientEmail: String,
     navHostController: NavHostController,
-    clientSearchBarbersViewModel: ClientSearchBarbersViewModel = hiltViewModel()
+    clientSearchBarbersViewModel: ClientSearchBarbersViewModel = hiltViewModel(),
+    clientArchiveViewModel: ClientArchiveViewModel = hiltViewModel(),
+    barberProfileViewModel: BarberProfileViewModel = hiltViewModel()
 ) {
+    var isArchiveFetched by rememberSaveable { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        val updateReservationsJob = barberProfileViewModel.updateReservationStatuses()
+        updateReservationsJob.join()
+        val archiveJob = clientArchiveViewModel.getArchive(clientEmail)
+        archiveJob.join()
+        isArchiveFetched = true
+    }
+
+    if (!isArchiveFetched) return
+
     val uiState by clientSearchBarbersViewModel.uiState.collectAsState()
+    val clientArchiveUiState by clientArchiveViewModel.uiState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
 
-    var text by rememberSaveable { mutableStateOf("") }
     var expanded by rememberSaveable { mutableStateOf(false) }
     var areSearchResultsFetched by rememberSaveable { mutableStateOf(false) }
 
@@ -156,34 +174,37 @@ fun ClientSearchBarbersScreen(
             placeholder = { Text(text = "Search here") }
         ) {
             Column(Modifier.verticalScroll(rememberScrollState())) {
-                repeat(8) { idx ->
-                    val resultText = "Suggestion $idx"
-                    ListItem(
-                        headlineContent = { Text(resultText) },
-                        supportingContent = {
-                            Text(
-                                text = "Additional info",
-                                color = Color.Black
-                            )
-                                            },
-                        leadingContent = { Icon(
-                            imageVector = Icons.Filled.Star,
-                            contentDescription = null,
-                            tint = Color.Black
-                        ) },
-                        colors = ListItemDefaults.colors(containerColor = Color.Transparent),
-                        modifier =
-                        Modifier
-                            .clickable {
-                                text = resultText
-                                expanded = false
-                            }
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp, vertical = 4.dp)
-                    )
-                    Divider(
-                        color = MaterialTheme.colorScheme.onSecondary
-                    )
+                val barbershopSuggestions = mutableListOf<String>()
+                repeat(clientArchiveUiState.archive.size) {
+                    val currentRequest = clientArchiveUiState.archive[it]
+                    if (!barbershopSuggestions.contains(currentRequest.barberEmail)) {
+                        barbershopSuggestions.add(currentRequest.barberEmail)
+                        ListItem(
+                            headlineContent = { Text(currentRequest.barbershopName) },
+                            leadingContent = { Icon(
+                                imageVector = Icons.Filled.Star,
+                                contentDescription = null,
+                                tint = Color.Black
+                            ) },
+                            colors = ListItemDefaults.colors(containerColor = Color.Transparent),
+                            modifier =
+                            Modifier
+                                .clickable {
+                                    coroutineScope.launch {
+                                        expanded = false
+                                        delay(500)
+                                        navHostController.navigate(
+                                            "${staticRoutes[20]}/${currentRequest.barberEmail}/${clientEmail}"
+                                        )
+                                    }
+                                }
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp, vertical = 4.dp)
+                        )
+                        Divider(
+                            color = MaterialTheme.colorScheme.onSecondary
+                        )
+                    }
                 }
             }
         }
