@@ -31,6 +31,7 @@ import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Nature
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.RateReview
+import androidx.compose.material.icons.filled.Reviews
 import androidx.compose.material.icons.filled.StarOutline
 import androidx.compose.material.icons.filled.StarRate
 import androidx.compose.material3.ButtonDefaults
@@ -68,6 +69,8 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import rs.ac.bg.etf.barberbooker.data.staticRoutes
 import rs.ac.bg.etf.barberbooker.ui.stateholders.user.barber.BarberProfileViewModel
 import rs.ac.bg.etf.barberbooker.ui.stateholders.user.client.ClientArchiveViewModel
 import rs.ac.bg.etf.barberbooker.ui.stateholders.user.client.ClientReviewsViewModel
@@ -78,6 +81,7 @@ fun ClientViewBarberProfileScreen(
     barberEmail: String,
     clientEmail: String,
     snackbarHostState: SnackbarHostState,
+    navHostController: NavHostController,
     barberProfileViewModel: BarberProfileViewModel = hiltViewModel(),
     clientArchiveViewModel: ClientArchiveViewModel = hiltViewModel(),
     clientReviewsViewModel: ClientReviewsViewModel = hiltViewModel()
@@ -144,6 +148,20 @@ fun ClientViewBarberProfileScreen(
                 Icon(imageVector = Icons.Filled.ContentCut, contentDescription = "Barbershop name")
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(text = uiState.barbershopName)
+            }
+            Row(
+                modifier = Modifier.padding(8.dp)
+            ) {
+                Icon(imageVector = Icons.Filled.Reviews, contentDescription = "Reviews")
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Reviews",
+                    textDecoration = TextDecoration.Underline,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.clickable {
+                        navHostController.navigate("${staticRoutes[23]}/${barberEmail}")
+                    }
+                )
             }
             Row(
                 modifier = Modifier.padding(8.dp)

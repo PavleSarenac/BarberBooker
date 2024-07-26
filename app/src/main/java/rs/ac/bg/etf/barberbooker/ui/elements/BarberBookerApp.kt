@@ -68,6 +68,7 @@ import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.client.ClientRejection
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.client.ClientReviewsScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.client.ClientSearchBarbersScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.client.ClientViewBarberProfileScreen
+import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.client.ClientViewBarberReviewsScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.client.ClientViewProfileScreen
 import rs.ac.bg.etf.barberbooker.ui.stateholders.BarberBookerUiState
 import rs.ac.bg.etf.barberbooker.ui.stateholders.BarberBookerViewModel
@@ -401,16 +402,10 @@ fun BarberBookerScaffold(
                 val barberEmail = navBackStackEntry.arguments?.getString("barberEmail") ?: ""
                 val clientEmail = navBackStackEntry.arguments?.getString("clientEmail") ?: ""
                 BackHandler {
-                    if (drawerState.isOpen) {
-                        coroutineScope.launch {
-                            drawerState.close()
-                        }
-                    } else {
-                        navHostController.popBackStack()
-                    }
+                    navHostController.popBackStack()
                 }
                 if (uiState.loggedInUserEmail != "") {
-                    ClientViewBarberProfileScreen(barberEmail, clientEmail, snackbarHostState)
+                    ClientViewBarberProfileScreen(barberEmail, clientEmail, snackbarHostState, navHostController)
                 }
             }
             composable(
@@ -445,6 +440,22 @@ fun BarberBookerScaffold(
                         clientEmail = clientEmail,
                         navHostController = navHostController
                     )
+                }
+            }
+            composable(
+                route = "${staticRoutes[23]}/{barberEmail}",
+                arguments = listOf(
+                    navArgument("barberEmail") {
+                        type = NavType.StringType
+                    }
+                )
+            ) {navBackStackEntry ->
+                val barberEmail = navBackStackEntry.arguments?.getString("barberEmail") ?: ""
+                BackHandler {
+                    navHostController.popBackStack()
+                }
+                if (uiState.loggedInUserEmail != "") {
+                    ClientViewBarberReviewsScreen(barberEmail = barberEmail)
                 }
             }
         }
@@ -485,7 +496,8 @@ fun ScaffoldTopBar(
             topBarTitle = "Log in as a barber",
             navHostController = navHostController
         )
-        currentRoute.contains(staticRoutes[7]) && uiState.loggedInUserEmail != "" -> ClientTopBar(
+        currentRoute.split("/")[0] == staticRoutes[7]
+                && uiState.loggedInUserEmail != "" -> ClientTopBar(
             topBarTitle = "Appointments",
             drawerState = drawerState,
             navHostController = navHostController,
@@ -493,7 +505,8 @@ fun ScaffoldTopBar(
             clientEmail = uiState.loggedInUserEmail,
             barberBookerViewModel = barberBookerViewModel
         )
-        currentRoute.contains(staticRoutes[8]) && uiState.loggedInUserEmail != "" -> BarberTopBar(
+        currentRoute.split("/")[0] == staticRoutes[8]
+                && uiState.loggedInUserEmail != "" -> BarberTopBar(
             topBarTitle = "Appointments",
             drawerState = drawerState,
             navHostController = navHostController,
@@ -501,7 +514,8 @@ fun ScaffoldTopBar(
             barberEmail = uiState.loggedInUserEmail,
             barberBookerViewModel = barberBookerViewModel
         )
-        currentRoute.contains(staticRoutes[9]) && uiState.loggedInUserEmail != "" -> BarberTopBar(
+        currentRoute.split("/")[0] == staticRoutes[9]
+                && uiState.loggedInUserEmail != "" -> BarberTopBar(
             topBarTitle = "Pending requests",
             drawerState = drawerState,
             navHostController = navHostController,
@@ -509,7 +523,8 @@ fun ScaffoldTopBar(
             barberEmail = uiState.loggedInUserEmail,
             barberBookerViewModel = barberBookerViewModel
         )
-        currentRoute.contains(staticRoutes[10]) && uiState.loggedInUserEmail != "" -> BarberTopBar(
+        currentRoute.split("/")[0] == staticRoutes[10]
+                && uiState.loggedInUserEmail != "" -> BarberTopBar(
             topBarTitle = "Reviews",
             drawerState = drawerState,
             navHostController = navHostController,
@@ -517,7 +532,8 @@ fun ScaffoldTopBar(
             barberEmail = uiState.loggedInUserEmail,
             barberBookerViewModel = barberBookerViewModel
         )
-        currentRoute.contains(staticRoutes[11]) && uiState.loggedInUserEmail != "" -> BarberTopBar(
+        currentRoute.split("/")[0] == staticRoutes[11]
+                && uiState.loggedInUserEmail != "" -> BarberTopBar(
             topBarTitle = "Archive",
             drawerState = drawerState,
             navHostController = navHostController,
@@ -525,7 +541,8 @@ fun ScaffoldTopBar(
             barberEmail = uiState.loggedInUserEmail,
             barberBookerViewModel = barberBookerViewModel
         )
-        currentRoute.contains(staticRoutes[12]) && uiState.loggedInUserEmail != "" -> BarberTopBar(
+        currentRoute.split("/")[0] == staticRoutes[12]
+                && uiState.loggedInUserEmail != "" -> BarberTopBar(
             topBarTitle = "Rejections",
             drawerState = drawerState,
             navHostController = navHostController,
@@ -533,7 +550,8 @@ fun ScaffoldTopBar(
             barberEmail = uiState.loggedInUserEmail,
             barberBookerViewModel = barberBookerViewModel
         )
-        currentRoute.contains(staticRoutes[13]) && uiState.loggedInUserEmail != "" -> BarberTopBar(
+        currentRoute.split("/")[0] == staticRoutes[13]
+                && uiState.loggedInUserEmail != "" -> BarberTopBar(
             topBarTitle = "My profile",
             drawerState = drawerState,
             navHostController = navHostController,
@@ -541,7 +559,8 @@ fun ScaffoldTopBar(
             barberEmail = uiState.loggedInUserEmail,
             barberBookerViewModel = barberBookerViewModel
         )
-        currentRoute.contains(staticRoutes[14]) && uiState.loggedInUserEmail != "" -> BarberTopBar(
+        currentRoute.split("/")[0] == staticRoutes[14]
+                && uiState.loggedInUserEmail != "" -> BarberTopBar(
             topBarTitle = "Edit Profile",
             drawerState = drawerState,
             navHostController = navHostController,
@@ -549,7 +568,8 @@ fun ScaffoldTopBar(
             barberEmail = uiState.loggedInUserEmail,
             barberBookerViewModel = barberBookerViewModel
         )
-        currentRoute.contains(staticRoutes[15]) && uiState.loggedInUserEmail != "" -> ClientTopBar(
+        currentRoute.split("/")[0] == staticRoutes[15]
+                && uiState.loggedInUserEmail != "" -> ClientTopBar(
             topBarTitle = "Search",
             drawerState = drawerState,
             navHostController = navHostController,
@@ -557,7 +577,8 @@ fun ScaffoldTopBar(
             clientEmail = uiState.loggedInUserEmail,
             barberBookerViewModel = barberBookerViewModel
         )
-        currentRoute.contains(staticRoutes[16]) && uiState.loggedInUserEmail != "" -> ClientTopBar(
+        currentRoute.split("/")[0] == staticRoutes[16]
+                && uiState.loggedInUserEmail != "" -> ClientTopBar(
             topBarTitle = "Archive",
             drawerState = drawerState,
             navHostController = navHostController,
@@ -565,7 +586,8 @@ fun ScaffoldTopBar(
             clientEmail = uiState.loggedInUserEmail,
             barberBookerViewModel = barberBookerViewModel
         )
-        currentRoute.contains(staticRoutes[17]) && uiState.loggedInUserEmail != "" -> ClientTopBar(
+        currentRoute.split("/")[0] == staticRoutes[17]
+                && uiState.loggedInUserEmail != "" -> ClientTopBar(
             topBarTitle = "My reviews",
             drawerState = drawerState,
             navHostController = navHostController,
@@ -573,7 +595,8 @@ fun ScaffoldTopBar(
             clientEmail = uiState.loggedInUserEmail,
             barberBookerViewModel = barberBookerViewModel
         )
-        currentRoute.contains(staticRoutes[18]) && uiState.loggedInUserEmail != "" -> ClientTopBar(
+        currentRoute.split("/")[0] == staticRoutes[18]
+                && uiState.loggedInUserEmail != "" -> ClientTopBar(
             topBarTitle = "My profile",
             drawerState = drawerState,
             navHostController = navHostController,
@@ -581,7 +604,8 @@ fun ScaffoldTopBar(
             clientEmail = uiState.loggedInUserEmail,
             barberBookerViewModel = barberBookerViewModel
         )
-        currentRoute.contains(staticRoutes[19]) && uiState.loggedInUserEmail != "" -> ClientTopBar(
+        currentRoute.split("/")[0] == staticRoutes[19]
+                && uiState.loggedInUserEmail != "" -> ClientTopBar(
             topBarTitle = "Edit profile",
             drawerState = drawerState,
             navHostController = navHostController,
@@ -589,7 +613,8 @@ fun ScaffoldTopBar(
             clientEmail = uiState.loggedInUserEmail,
             barberBookerViewModel = barberBookerViewModel
         )
-        currentRoute.contains(staticRoutes[20]) && uiState.loggedInUserEmail != "" -> ClientTopBar(
+        currentRoute.split("/")[0] == staticRoutes[20]
+                && uiState.loggedInUserEmail != "" -> ClientTopBar(
             topBarTitle = "Barbershop",
             drawerState = drawerState,
             navHostController = navHostController,
@@ -597,7 +622,8 @@ fun ScaffoldTopBar(
             clientEmail = uiState.loggedInUserEmail,
             barberBookerViewModel = barberBookerViewModel
         )
-        currentRoute.contains(staticRoutes[21]) && uiState.loggedInUserEmail != "" -> ClientTopBar(
+        currentRoute.split("/")[0] == staticRoutes[21]
+                && uiState.loggedInUserEmail != "" -> ClientTopBar(
             topBarTitle = "Pending requests",
             drawerState = drawerState,
             navHostController = navHostController,
@@ -605,8 +631,18 @@ fun ScaffoldTopBar(
             clientEmail = uiState.loggedInUserEmail,
             barberBookerViewModel = barberBookerViewModel
         )
-        currentRoute.contains(staticRoutes[22]) && uiState.loggedInUserEmail != "" -> ClientTopBar(
+        currentRoute.split("/")[0] == staticRoutes[22]
+                && uiState.loggedInUserEmail != "" -> ClientTopBar(
             topBarTitle = "Rejections",
+            drawerState = drawerState,
+            navHostController = navHostController,
+            context = context,
+            clientEmail = uiState.loggedInUserEmail,
+            barberBookerViewModel = barberBookerViewModel
+        )
+        currentRoute.split("/")[0] == staticRoutes[23]
+                && uiState.loggedInUserEmail != "" -> ClientTopBar(
+            topBarTitle = "Reviews",
             drawerState = drawerState,
             navHostController = navHostController,
             context = context,

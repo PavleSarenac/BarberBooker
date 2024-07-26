@@ -23,7 +23,8 @@ val staticRoutes = listOf(
     "ClientEditProfileScreen",                             // 19
     "ClientViewBarberProfileScreen",                       // 20
     "ClientPendingScreen",                                 // 21
-    "ClientRejectionsScreen"                               // 22
+    "ClientRejectionsScreen",                              // 22
+    "ClientViewBarberReviewsScreen"                        // 23
 )
 
 val daysOfTheWeek = listOf(

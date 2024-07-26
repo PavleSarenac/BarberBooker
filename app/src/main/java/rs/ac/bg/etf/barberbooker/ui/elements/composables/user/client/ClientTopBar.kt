@@ -70,7 +70,17 @@ fun ClientTopBar(
         },
         navigationIcon = {
             if (currentRoute != null) {
-                if (!currentRoute.contains(staticRoutes[20])) {
+                if (currentRoute.split("/")[0] == staticRoutes[20] ||
+                    currentRoute.split("/")[0] == staticRoutes[23]) {
+                    IconButton(onClick = {
+                        navHostController.popBackStack()
+                    } ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBackIos,
+                            contentDescription = "Go back to previous screen"
+                        )
+                    }
+                } else {
                     IconButton(onClick = {
                         coroutineScope.launch {
                             drawerState.apply {
@@ -81,15 +91,6 @@ fun ClientTopBar(
                         Icon(
                             imageVector = Icons.Filled.Menu,
                             contentDescription = "Show menu"
-                        )
-                    }
-                } else {
-                    IconButton(onClick = {
-                        navHostController.popBackStack()
-                    } ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBackIos,
-                            contentDescription = "Go back to previous screen"
                         )
                     }
                 }
