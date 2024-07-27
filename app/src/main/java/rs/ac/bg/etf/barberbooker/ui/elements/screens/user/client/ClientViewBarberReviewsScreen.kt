@@ -55,7 +55,7 @@ fun ClientViewBarberReviewsScreen(
     if (!isDataFetched) return
 
     LazyColumn(
-        contentPadding = PaddingValues(start = 16.dp, top = 12.dp, end = 16.dp, bottom = 16.dp),
+        contentPadding = PaddingValues(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         items(count = clientViewBarberReviewsUiState.barberReviews.size) {
@@ -70,7 +70,7 @@ fun ClientViewBarberReviewsScreen(
             ) {
                 Row(
                     modifier = Modifier
-                        .padding(8.dp)
+                        .padding(top = 16.dp, bottom = 16.dp)
                         .align(Alignment.CenterHorizontally)
                 ) {
                     Text(
@@ -81,7 +81,7 @@ fun ClientViewBarberReviewsScreen(
                 }
                 Row(
                     modifier = Modifier
-                        .padding(vertical = 8.dp)
+                        .padding(bottom = 16.dp)
                         .align(Alignment.CenterHorizontally),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -107,7 +107,7 @@ fun ClientViewBarberReviewsScreen(
                             value = currentReview.text,
                             onValueChange = {},
                             modifier = Modifier
-                                .padding(horizontal = 16.dp, vertical = 16.dp)
+                                .padding(bottom = 16.dp, start = 16.dp, end = 16.dp)
                                 .fillMaxWidth(),
                             singleLine = false,
                             readOnly = true,
