@@ -24,6 +24,7 @@ import androidx.compose.material.icons.filled.LocationCity
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Nature
 import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.Reviews
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -44,11 +45,14 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import rs.ac.bg.etf.barberbooker.data.staticRoutes
 import rs.ac.bg.etf.barberbooker.ui.stateholders.user.barber.BarberProfileViewModel
 
 @Composable
 fun BarberViewProfileScreen(
     barberEmail: String,
+    navHostController: NavHostController,
     barberProfileViewModel: BarberProfileViewModel = hiltViewModel()
 ) {
     val uiState by barberProfileViewModel.uiState.collectAsState()
@@ -85,6 +89,20 @@ fun BarberViewProfileScreen(
                 Icon(imageVector = Icons.Filled.ContentCut, contentDescription = "Barbershop name")
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(text = uiState.barbershopName)
+            }
+            Row(
+                modifier = Modifier.padding(8.dp)
+            ) {
+                Icon(imageVector = Icons.Filled.Reviews, contentDescription = "Reviews")
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Reviews",
+                    textDecoration = TextDecoration.Underline,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.clickable {
+                        navHostController.navigate("${staticRoutes[10]}/${barberEmail}")
+                    }
+                )
             }
             Row(
                 modifier = Modifier.padding(8.dp)

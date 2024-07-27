@@ -15,6 +15,7 @@ import rs.ac.bg.etf.barberbooker.data.reservationStatuses
 import rs.ac.bg.etf.barberbooker.data.room.entities.tables.Reservation
 import rs.ac.bg.etf.barberbooker.data.room.repositories.BarberRepository
 import rs.ac.bg.etf.barberbooker.data.room.repositories.ReservationRepository
+import rs.ac.bg.etf.barberbooker.data.room.repositories.ReviewRepository
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -34,6 +35,8 @@ data class BarberProfileUiState(
     var workingDays: String = "",
     var workingHours: String = "",
 
+    var averageGrade: String = "",
+
     var isBarbershopNameValid: Boolean = true,
     var isPhoneValid: Boolean = true,
     var isPriceValid: Boolean = true,
@@ -46,7 +49,8 @@ data class BarberProfileUiState(
 @HiltViewModel
 class BarberProfileViewModel @Inject constructor(
     private val barberRepository: BarberRepository,
-    private val reservationRepository: ReservationRepository
+    private val reservationRepository: ReservationRepository,
+    private val reviewRepository: ReviewRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(BarberProfileUiState())
@@ -257,6 +261,12 @@ class BarberProfileViewModel @Inject constructor(
     fun fetchBarberData(barberEmail: String) = viewModelScope.launch(Dispatchers.IO) {
         val barber = barberRepository.getBarberByEmail(barberEmail)
         if (barber != null) {
+            val averageGrade = reviewRepository.getBarberAverageGrade(barberEmail)
+            val averageGradeString = if (averageGrade != 0.00f) {
+                decimalFormat.format(averageGrade)
+            } else {
+                "0.00"
+            }
             withContext(Dispatchers.Main) {
                 _uiState.update { it.copy(
                     email = barber.email,
@@ -268,7 +278,8 @@ class BarberProfileViewModel @Inject constructor(
                     municipality = barber.municipality,
                     address = barber.address,
                     workingDays = barber.workingDays,
-                    workingHours = barber.workingHours
+                    workingHours = barber.workingHours,
+                    averageGrade = averageGradeString
                 ) }
             }
         }

@@ -59,4 +59,13 @@ interface ReviewDao {
         clientEmail: String
     ): List<ExtendedReviewWithBarber>
 
+    @Query("""
+        SELECT COALESCE(AVG(r.grade), 0.00) AS averageGrade
+        FROM review r
+        WHERE r.barberEmail = :barberEmail
+    """)
+    suspend fun getBarberAverageGrade(
+        barberEmail: String
+    ): Float
+
 }

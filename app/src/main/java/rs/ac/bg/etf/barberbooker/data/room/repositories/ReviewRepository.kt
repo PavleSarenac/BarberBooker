@@ -44,4 +44,8 @@ class ReviewRepository @Inject constructor(
         return reviewDao.getClientReviews(clientEmail)
     }
 
+    suspend fun getBarberAverageGrade(barberEmail: String): Float {
+        return reviewDao.getBarberAverageGrade(barberEmail)
+    }
+
 }

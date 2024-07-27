@@ -25,6 +25,7 @@ import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.ContentCut
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Flag
+import androidx.compose.material.icons.filled.Grade
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.LocationCity
 import androidx.compose.material.icons.filled.LocationOn
@@ -71,6 +72,7 @@ import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import rs.ac.bg.etf.barberbooker.data.staticRoutes
+import rs.ac.bg.etf.barberbooker.ui.elements.composables.user.StarRating
 import rs.ac.bg.etf.barberbooker.ui.stateholders.user.barber.BarberProfileViewModel
 import rs.ac.bg.etf.barberbooker.ui.stateholders.user.client.ClientArchiveViewModel
 import rs.ac.bg.etf.barberbooker.ui.stateholders.user.client.ClientReviewsViewModel
@@ -148,6 +150,30 @@ fun ClientViewBarberProfileScreen(
                 Icon(imageVector = Icons.Filled.ContentCut, contentDescription = "Barbershop name")
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(text = uiState.barbershopName)
+            }
+            Row(
+                modifier = Modifier.padding(8.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Grade,
+                    contentDescription = "Average grade"
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                if (uiState.averageGrade == "0.00") {
+                    Text(
+                        text = "No reviews",
+                        modifier = Modifier.padding(top = 2.dp)
+                    )
+                } else {
+                    Text(
+                        text = uiState.averageGrade,
+                        modifier = Modifier.padding(top = 2.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    StarRating(
+                        rating = uiState.averageGrade.toFloat()
+                    )
+                }
             }
             Row(
                 modifier = Modifier.padding(8.dp)

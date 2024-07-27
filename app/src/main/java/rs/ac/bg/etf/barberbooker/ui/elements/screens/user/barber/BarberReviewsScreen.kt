@@ -54,75 +54,82 @@ fun BarberReviewsScreen(
 
     if (!isDataFetched) return
 
-    LazyColumn(
-        contentPadding = PaddingValues(start = 16.dp, top = 24.dp, end = 16.dp, bottom = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        items(count = clientViewBarberReviewsUiState.barberReviews.size) {
-            val currentReview = clientViewBarberReviewsUiState.barberReviews[it]
-            Card(
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary
-                ),
-                border = BorderStroke(1.dp, Color.White),
-                modifier = Modifier.width(1000.dp)
-            ) {
-                Row(
-                    modifier = Modifier
-                        .padding(top = 16.dp, bottom = 16.dp)
-                        .align(Alignment.CenterHorizontally)
+    if (clientViewBarberReviewsUiState.barberReviews.isEmpty()) {
+        Text(
+            text = "There are no reviews.",
+            modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp)
+        )
+    } else {
+        LazyColumn(
+            contentPadding = PaddingValues(start = 16.dp, top = 24.dp, end = 16.dp, bottom = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            items(count = clientViewBarberReviewsUiState.barberReviews.size) {
+                val currentReview = clientViewBarberReviewsUiState.barberReviews[it]
+                Card(
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary
+                    ),
+                    border = BorderStroke(1.dp, Color.White),
+                    modifier = Modifier.width(1000.dp)
                 ) {
-                    Text(
-                        text = "${currentReview.clientName} ${currentReview.clientSurname}, " +
-                                currentReview.date,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-                Row(
-                    modifier = Modifier
-                        .padding(bottom = 16.dp)
-                        .align(Alignment.CenterHorizontally),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    for (starRating in 1..5) {
-                        Icon(
-                            imageVector = when {
-                                currentReview.grade >= starRating -> Icons.Filled.StarRate
-                                else -> Icons.Filled.StarOutline
-                            },
-                            contentDescription = null,
-                            tint = when {
-                                currentReview.grade >= starRating -> Color.Yellow
-                                else -> MaterialTheme.colorScheme.onPrimary
-                            },
-                            modifier = Modifier
-                                .size(30.dp)
+                    Row(
+                        modifier = Modifier
+                            .padding(top = 16.dp, bottom = 16.dp)
+                            .align(Alignment.CenterHorizontally)
+                    ) {
+                        Text(
+                            text = "${currentReview.clientName} ${currentReview.clientSurname}, " +
+                                    currentReview.date,
+                            fontWeight = FontWeight.Bold
                         )
                     }
-                }
-                if (currentReview.text != "") {
-                    Row {
-                        OutlinedTextField(
-                            value = currentReview.text,
-                            onValueChange = {},
-                            modifier = Modifier
-                                .padding(bottom = 16.dp, start = 16.dp, end = 16.dp)
-                                .fillMaxWidth(),
-                            singleLine = false,
-                            readOnly = true,
-                            shape = RoundedCornerShape(16.dp),
-                            minLines = 3,
-                            keyboardOptions = KeyboardOptions.Default.copy(
-                                imeAction = ImeAction.Default
-                            ),
-                            colors = TextFieldDefaults.colors(
-                                unfocusedContainerColor = MaterialTheme.colorScheme.onPrimary,
-                                focusedContainerColor = MaterialTheme.colorScheme.onPrimary,
-                                focusedTextColor = MaterialTheme.colorScheme.primary,
-                                unfocusedTextColor = MaterialTheme.colorScheme.primary
+                    Row(
+                        modifier = Modifier
+                            .padding(bottom = 16.dp)
+                            .align(Alignment.CenterHorizontally),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        for (starRating in 1..5) {
+                            Icon(
+                                imageVector = when {
+                                    currentReview.grade >= starRating -> Icons.Filled.StarRate
+                                    else -> Icons.Filled.StarOutline
+                                },
+                                contentDescription = null,
+                                tint = when {
+                                    currentReview.grade >= starRating -> Color.Yellow
+                                    else -> MaterialTheme.colorScheme.onPrimary
+                                },
+                                modifier = Modifier
+                                    .size(30.dp)
                             )
-                        )
+                        }
+                    }
+                    if (currentReview.text != "") {
+                        Row {
+                            OutlinedTextField(
+                                value = currentReview.text,
+                                onValueChange = {},
+                                modifier = Modifier
+                                    .padding(bottom = 16.dp, start = 16.dp, end = 16.dp)
+                                    .fillMaxWidth(),
+                                singleLine = false,
+                                readOnly = true,
+                                shape = RoundedCornerShape(16.dp),
+                                minLines = 3,
+                                keyboardOptions = KeyboardOptions.Default.copy(
+                                    imeAction = ImeAction.Default
+                                ),
+                                colors = TextFieldDefaults.colors(
+                                    unfocusedContainerColor = MaterialTheme.colorScheme.onPrimary,
+                                    focusedContainerColor = MaterialTheme.colorScheme.onPrimary,
+                                    focusedTextColor = MaterialTheme.colorScheme.primary,
+                                    unfocusedTextColor = MaterialTheme.colorScheme.primary
+                                )
+                            )
+                        }
                     }
                 }
             }
