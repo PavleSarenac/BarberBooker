@@ -7,9 +7,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
@@ -17,6 +20,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
+import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.MoreVert
@@ -58,6 +62,7 @@ import androidx.navigation.NavHostController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import rs.ac.bg.etf.barberbooker.data.staticRoutes
+import rs.ac.bg.etf.barberbooker.ui.elements.composables.user.StarRating
 import rs.ac.bg.etf.barberbooker.ui.stateholders.user.barber.BarberProfileViewModel
 import rs.ac.bg.etf.barberbooker.ui.stateholders.user.client.ClientArchiveViewModel
 import rs.ac.bg.etf.barberbooker.ui.stateholders.user.client.ClientSearchBarbersViewModel
@@ -92,9 +97,9 @@ fun ClientSearchBarbersScreen(
 
     var showSortingDialog by rememberSaveable { mutableStateOf(false) }
 
-    val (sortingByNameState, onSortingByNameStateChange) = rememberSaveable { mutableStateOf(false) }
-    val (sortingByNameAscendingState, onSortingByNameAscendingStateChange) = rememberSaveable { mutableStateOf(true) }
-    val (sortingByNameDescendingState, onSortingByNameDescendingStateChange) = rememberSaveable { mutableStateOf(false) }
+    val (sortingByGradeState, onSortingByGradeStateChange) = rememberSaveable { mutableStateOf(false) }
+    val (sortingByGradeAscendingState, onSortingByGradeAscendingStateChange) = rememberSaveable { mutableStateOf(true) }
+    val (sortingByGradeDescendingState, onSortingByGradeDescendingStateChange) = rememberSaveable { mutableStateOf(false) }
 
     val (sortingByPriceState, onSortingByPriceStateChange) = rememberSaveable { mutableStateOf(false) }
     val (sortingByPriceAscendingState, onSortingByPriceAscendingStateChange) = rememberSaveable { mutableStateOf(true) }
@@ -219,7 +224,7 @@ fun ClientSearchBarbersScreen(
             )
         } else {
             val sortedSearchResults = clientSearchBarbersViewModel.getSortedSearchResults(
-                sortingByNameState, sortingByNameAscendingState, sortingByNameDescendingState,
+                sortingByGradeState, sortingByGradeAscendingState, sortingByGradeDescendingState,
                 sortingByPriceState, sortingByPriceAscendingState, sortingByPriceDescendingState
             )
             LazyColumn(
@@ -234,10 +239,35 @@ fun ClientSearchBarbersScreen(
                             Text(currentBarbershop.barbershopName)
                         },
                         supportingContent = {
-                            Text(
-                                text = "${clientSearchBarbersViewModel.decimalFormat.format(currentBarbershop.price)} RSD",
-                                color = MaterialTheme.colorScheme.secondary
-                            )
+                            val averageGrade = currentBarbershop.averageGrade
+                            if (averageGrade == 0.00f) {
+                                Text("No reviews")
+                            } else {
+                                Row {
+                                    Text(
+                                        text = clientSearchBarbersViewModel.decimalFormat.format(averageGrade)
+                                    )
+                                    Spacer(modifier = Modifier.width(4.dp))
+                                    StarRating(
+                                        rating = averageGrade,
+                                        size = 18.dp
+                                    )
+                                }
+                            }
+                        },
+                        trailingContent = {
+                            Row {
+                                Icon(
+                                    imageVector = Icons.Filled.AttachMoney,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(15.dp)
+                                )
+                                Text(
+                                    text = "${clientSearchBarbersViewModel.decimalFormat.format(currentBarbershop.price)} RSD",
+                                    color = MaterialTheme.colorScheme.secondary
+                                )
+                            }
+
                         },
                         colors = ListItemDefaults.colors(containerColor = Color.Transparent),
                         modifier = Modifier
@@ -275,6 +305,69 @@ fun ClientSearchBarbersScreen(
                             tint = MaterialTheme.colorScheme.onPrimary
                         )
                     }
+                }
+                Row(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                        .toggleable(
+                            value = sortingByGradeState,
+                            onValueChange = { onSortingByGradeStateChange(!sortingByGradeState) },
+                            role = Role.Checkbox
+                        )
+                ) {
+                    Checkbox(
+                        checked = sortingByGradeState,
+                        onCheckedChange = null
+                    )
+                    Text(
+                        text = "Sort by average grade"
+                    )
+                }
+                Row(
+                    modifier = Modifier
+                        .padding(horizontal = 48.dp, vertical = 8.dp)
+                        .toggleable(
+                            value = sortingByGradeAscendingState,
+                            onValueChange = {
+                                if (sortingByGradeState) {
+                                    onSortingByGradeDescendingStateChange(false)
+                                    onSortingByGradeAscendingStateChange(true)
+                                }
+                            },
+                            role = Role.RadioButton
+                        )
+                ) {
+                    RadioButton(
+                        selected = sortingByGradeAscendingState,
+                        onClick = null,
+                        enabled = sortingByGradeState
+                    )
+                    Text(
+                        text = "Ascending"
+                    )
+                }
+                Row(
+                    modifier = Modifier
+                        .padding(horizontal = 48.dp, vertical = 8.dp)
+                        .toggleable(
+                            value = sortingByGradeDescendingState,
+                            onValueChange = {
+                                if (sortingByGradeState) {
+                                    onSortingByGradeAscendingStateChange(false)
+                                    onSortingByGradeDescendingStateChange(true)
+                                }
+                            },
+                            role = Role.RadioButton
+                        )
+                ) {
+                    RadioButton(
+                        selected = sortingByGradeDescendingState,
+                        onClick = null,
+                        enabled = sortingByGradeState
+                    )
+                    Text(
+                        text = "Descending"
+                    )
                 }
                 Row(
                     modifier = Modifier
@@ -334,69 +427,6 @@ fun ClientSearchBarbersScreen(
                         selected = sortingByPriceDescendingState,
                         onClick = null,
                         enabled = sortingByPriceState
-                    )
-                    Text(
-                        text = "Descending"
-                    )
-                }
-                Row(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp, vertical = 8.dp)
-                        .toggleable(
-                            value = sortingByNameState,
-                            onValueChange = { onSortingByNameStateChange(!sortingByNameState) },
-                            role = Role.Checkbox
-                        )
-                ) {
-                    Checkbox(
-                        checked = sortingByNameState,
-                        onCheckedChange = null
-                    )
-                    Text(
-                        text = "Sort by name"
-                    )
-                }
-                Row(
-                    modifier = Modifier
-                        .padding(horizontal = 48.dp, vertical = 8.dp)
-                        .toggleable(
-                            value = sortingByNameAscendingState,
-                            onValueChange = {
-                                if (sortingByNameState) {
-                                    onSortingByNameDescendingStateChange(false)
-                                    onSortingByNameAscendingStateChange(true)
-                                }
-                            },
-                            role = Role.RadioButton
-                        )
-                ) {
-                    RadioButton(
-                        selected = sortingByNameAscendingState,
-                        onClick = null,
-                        enabled = sortingByNameState
-                    )
-                    Text(
-                        text = "Ascending"
-                    )
-                }
-                Row(
-                    modifier = Modifier
-                        .padding(horizontal = 48.dp, vertical = 8.dp)
-                        .toggleable(
-                            value = sortingByNameDescendingState,
-                            onValueChange = {
-                                if (sortingByNameState) {
-                                    onSortingByNameAscendingStateChange(false)
-                                    onSortingByNameDescendingStateChange(true)
-                                }
-                            },
-                            role = Role.RadioButton
-                        )
-                ) {
-                    RadioButton(
-                        selected = sortingByNameDescendingState,
-                        onClick = null,
-                        enabled = sortingByNameState
                     )
                     Text(
                         text = "Descending"

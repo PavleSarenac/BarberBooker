@@ -8,14 +8,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import rs.ac.bg.etf.barberbooker.data.room.entities.tables.Barber
+import rs.ac.bg.etf.barberbooker.data.room.entities.structures.ExtendedBarberWithAverageGrade
 import rs.ac.bg.etf.barberbooker.data.room.repositories.BarberRepository
 import java.text.DecimalFormat
 import javax.inject.Inject
 
 data class ClientSearchBarbersUiState(
     var query: String = "",
-    var searchResults: List<Barber> = listOf()
+    var searchResults: List<ExtendedBarberWithAverageGrade> = listOf()
 )
 
 @HiltViewModel
@@ -41,23 +41,14 @@ class ClientSearchBarbersViewModel @Inject constructor(
     }
 
     fun getSortedSearchResults(
-        sortingByNameState: Boolean,
-        sortingByNameAscendingState: Boolean,
-        sortingByNameDescendingState: Boolean,
+        sortingByGradeState: Boolean,
+        sortingByGradeAscendingState: Boolean,
+        sortingByGradeDescendingState: Boolean,
         sortingByPriceState: Boolean,
         sortingByPriceAscendingState: Boolean,
         sortingByPriceDescendingState: Boolean
-    ): List<Barber> {
+    ): List<ExtendedBarberWithAverageGrade> {
         var sortedSearchResults = _uiState.value.searchResults
-
-        if (sortingByNameState) {
-            if (sortingByNameAscendingState) {
-                sortedSearchResults = sortedSearchResults.sortedBy { it.barbershopName }
-            }
-            if (sortingByNameDescendingState) {
-                sortedSearchResults = sortedSearchResults.sortedByDescending { it.barbershopName }
-            }
-        }
 
         if (sortingByPriceState) {
             if (sortingByPriceAscendingState) {
@@ -65,6 +56,15 @@ class ClientSearchBarbersViewModel @Inject constructor(
             }
             if (sortingByPriceDescendingState) {
                 sortedSearchResults = sortedSearchResults.sortedByDescending { it.price }
+            }
+        }
+
+        if (sortingByGradeState) {
+            if (sortingByGradeAscendingState) {
+                sortedSearchResults = sortedSearchResults.sortedBy { it.averageGrade }
+            }
+            if (sortingByGradeDescendingState) {
+                sortedSearchResults = sortedSearchResults.sortedByDescending { it.averageGrade }
             }
         }
 

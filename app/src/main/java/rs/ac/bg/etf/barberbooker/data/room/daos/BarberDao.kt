@@ -3,6 +3,7 @@ package rs.ac.bg.etf.barberbooker.data.room.daos
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import rs.ac.bg.etf.barberbooker.data.room.entities.structures.ExtendedBarberWithAverageGrade
 import rs.ac.bg.etf.barberbooker.data.room.entities.tables.Barber
 
 @Dao
@@ -44,13 +45,16 @@ interface BarberDao {
     )
 
     @Query("""
-        SELECT * FROM barber 
-        WHERE LOWER(barbershopName) LIKE LOWER(:queryParameter)
-        OR LOWER(country) LIKE LOWER(:queryParameter)
-        OR LOWER(city) LIKE LOWER(:queryParameter)
-        OR LOWER(municipality) LIKE LOWER(:queryParameter)
-        OR LOWER(address) LIKE LOWER(:queryParameter)
+        SELECT b.*, COALESCE(AVG(r.grade), 0.00) AS averageGrade
+        FROM barber b
+        LEFT JOIN review r ON b.email = r.barberEmail
+        WHERE LOWER(b.barbershopName) LIKE LOWER(:queryParameter)
+            OR LOWER(b.country) LIKE LOWER(:queryParameter)
+            OR LOWER(b.city) LIKE LOWER(:queryParameter)
+            OR LOWER(b.municipality) LIKE LOWER(:queryParameter)
+            OR LOWER(b.address) LIKE LOWER(:queryParameter)
+        GROUP BY b.email
     """)
-    suspend fun getSearchResults(queryParameter: String): List<Barber>
+    suspend fun getSearchResults(queryParameter: String): List<ExtendedBarberWithAverageGrade>
 
 }

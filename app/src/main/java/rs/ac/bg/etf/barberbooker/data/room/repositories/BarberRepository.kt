@@ -1,6 +1,7 @@
 package rs.ac.bg.etf.barberbooker.data.room.repositories
 
 import rs.ac.bg.etf.barberbooker.data.room.daos.BarberDao
+import rs.ac.bg.etf.barberbooker.data.room.entities.structures.ExtendedBarberWithAverageGrade
 import rs.ac.bg.etf.barberbooker.data.room.entities.tables.Barber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -52,9 +53,9 @@ class BarberRepository @Inject constructor(private val barberDao: BarberDao) {
         )
     }
 
-    suspend fun getSearchResults(query: String): List<Barber> {
+    suspend fun getSearchResults(query: String): List<ExtendedBarberWithAverageGrade> {
         val queryParameters = query.split(" ")
-        val searchResults = mutableListOf<Barber>()
+        val searchResults = mutableListOf<ExtendedBarberWithAverageGrade>()
 
         queryParameters.forEach {
             searchResults.addAll(barberDao.getSearchResults("%$it%"))
