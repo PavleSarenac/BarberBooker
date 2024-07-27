@@ -228,7 +228,7 @@ fun ClientSearchBarbersScreen(
                 sortingByPriceState, sortingByPriceAscendingState, sortingByPriceDescendingState
             )
             LazyColumn(
-                contentPadding = PaddingValues(start = 16.dp, top = 72.dp, end = 16.dp, bottom = 16.dp),
+                contentPadding = PaddingValues(top = 72.dp, bottom = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.semantics { traversalIndex = 1f },
             ) {
