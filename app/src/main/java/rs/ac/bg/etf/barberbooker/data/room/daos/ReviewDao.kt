@@ -3,6 +3,7 @@ package rs.ac.bg.etf.barberbooker.data.room.daos
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import rs.ac.bg.etf.barberbooker.data.room.entities.structures.ExtendedReviewWithBarber
 import rs.ac.bg.etf.barberbooker.data.room.entities.structures.ExtendedReviewWithClient
 import rs.ac.bg.etf.barberbooker.data.room.entities.tables.Review
 
@@ -39,5 +40,23 @@ interface ReviewDao {
     suspend fun getBarberReviews(
         barberEmail: String
     ): List<ExtendedReviewWithClient>
+
+    @Query("""
+        SELECT 
+            r.id AS reviewId,
+            r.clientEmail,
+            r.barberEmail,
+            r.grade,
+            r.text,
+            r.date,
+            b.id AS barberId,
+            b.barbershopName
+        FROM review r
+        INNER JOIN barber b ON b.email = r.barberEmail
+        WHERE clientEmail = :clientEmail
+    """)
+    suspend fun getClientReviews(
+        clientEmail: String
+    ): List<ExtendedReviewWithBarber>
 
 }

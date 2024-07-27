@@ -1,6 +1,7 @@
 package rs.ac.bg.etf.barberbooker.data.room.repositories
 
 import rs.ac.bg.etf.barberbooker.data.room.daos.ReviewDao
+import rs.ac.bg.etf.barberbooker.data.room.entities.structures.ExtendedReviewWithBarber
 import rs.ac.bg.etf.barberbooker.data.room.entities.structures.ExtendedReviewWithClient
 import rs.ac.bg.etf.barberbooker.data.room.entities.tables.Review
 import javax.inject.Inject
@@ -37,6 +38,10 @@ class ReviewRepository @Inject constructor(
 
     suspend fun getBarberReviews(barberEmail: String): List<ExtendedReviewWithClient> {
         return reviewDao.getBarberReviews(barberEmail)
+    }
+
+    suspend fun getClientReviews(clientEmail: String): List<ExtendedReviewWithBarber> {
+        return reviewDao.getClientReviews(clientEmail)
     }
 
 }
