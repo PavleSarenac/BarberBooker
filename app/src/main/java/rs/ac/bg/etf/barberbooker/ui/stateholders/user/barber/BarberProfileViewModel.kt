@@ -59,6 +59,7 @@ class BarberProfileViewModel @Inject constructor(
     private val decimalFormat = DecimalFormat("#.00")
 
     val dateValidator: (Long) -> Boolean = { dateInMillis ->
+        val currentDateTimeInMillis = System.currentTimeMillis()
         val calendar = Calendar.getInstance().apply {
             timeInMillis = dateInMillis
         }
@@ -82,6 +83,7 @@ class BarberProfileViewModel @Inject constructor(
         }
 
         validDaysOfWeekIntegers.contains(dayOfWeek)
+                && (dateInMillis + 24 * 60 * 60 * 1000) > currentDateTimeInMillis
     }
 
     fun getFirstValidDateInMillis(currentDateInMillis: Long): Long {
