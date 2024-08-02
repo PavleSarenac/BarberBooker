@@ -1,11 +1,7 @@
-package rs.ac.bg.etf.barberbooker.data.room.entities.tables
+package rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-
-@Entity(tableName = "barber")
-data class Barber(
-    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+data class ExtendedBarberWithAverageGrade(
+    var id: Int,
     var email: String,
     var password: String,
     var barbershopName: String,
@@ -16,5 +12,7 @@ data class Barber(
     var municipality: String,
     var address: String,
     var workingDays: String,
-    var workingHours: String
+    var workingHours: String,
+
+    var averageGrade: Float
 )

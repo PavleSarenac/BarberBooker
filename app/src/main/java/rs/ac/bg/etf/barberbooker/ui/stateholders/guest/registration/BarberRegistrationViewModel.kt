@@ -14,8 +14,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import rs.ac.bg.etf.barberbooker.data.daysOfTheWeek
-import rs.ac.bg.etf.barberbooker.data.room.entities.tables.Barber
-import rs.ac.bg.etf.barberbooker.data.room.repositories.BarberRepository
+import rs.ac.bg.etf.barberbooker.data.retrofit.entities.tables.Barber
+import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.BarberRepository
 import rs.ac.bg.etf.barberbooker.data.staticRoutes
 import java.security.MessageDigest
 import javax.inject.Inject

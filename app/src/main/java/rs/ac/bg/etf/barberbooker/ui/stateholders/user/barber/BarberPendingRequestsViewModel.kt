@@ -8,8 +8,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import rs.ac.bg.etf.barberbooker.data.room.entities.structures.ExtendedReservationWithClient
-import rs.ac.bg.etf.barberbooker.data.room.repositories.ReservationRepository
+import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.ExtendedReservationWithClient
+import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.ReservationRepository
 import javax.inject.Inject
 
 data class BarberPendingRequestsUiState(
@@ -37,7 +37,7 @@ class BarberPendingRequestsViewModel @Inject constructor(
 
     fun acceptReservationRequest(
         barberEmail: String,
-        reservationId: Long
+        reservationId: Int
     ) = viewModelScope.launch(Dispatchers.IO) {
         reservationRepository.acceptReservationRequest(reservationId)
         getPendingReservationRequests(barberEmail)
@@ -45,7 +45,7 @@ class BarberPendingRequestsViewModel @Inject constructor(
 
     fun rejectReservationRequest(
         barberEmail: String,
-        reservationId: Long
+        reservationId: Int
     ) = viewModelScope.launch(Dispatchers.IO) {
         reservationRepository.rejectReservationRequest(reservationId)
         getPendingReservationRequests(barberEmail)

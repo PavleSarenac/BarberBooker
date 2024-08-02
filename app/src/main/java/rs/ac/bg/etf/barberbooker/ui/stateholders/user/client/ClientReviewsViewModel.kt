@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import rs.ac.bg.etf.barberbooker.data.room.entities.tables.Review
-import rs.ac.bg.etf.barberbooker.data.room.repositories.ReviewRepository
+import rs.ac.bg.etf.barberbooker.data.retrofit.entities.tables.Review
+import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.ReviewRepository
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale

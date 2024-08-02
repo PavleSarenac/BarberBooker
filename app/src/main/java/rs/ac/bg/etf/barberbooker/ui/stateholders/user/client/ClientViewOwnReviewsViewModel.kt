@@ -8,8 +8,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import rs.ac.bg.etf.barberbooker.data.room.entities.structures.ExtendedReviewWithBarber
-import rs.ac.bg.etf.barberbooker.data.room.repositories.ReviewRepository
+import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.ExtendedReviewWithBarber
+import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.ReviewRepository
 import javax.inject.Inject
 
 data class ClientViewOwnReviewsUiState(

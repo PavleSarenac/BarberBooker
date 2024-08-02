@@ -1,7 +1,7 @@
-package rs.ac.bg.etf.barberbooker.data.room.entities.structures
+package rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures
 
 data class ExtendedReservationWithBarber(
-    var reservationId: Long,
+    var reservationId: Int,
     var clientEmail: String,
     var barberEmail: String,
     var date: String,
@@ -9,6 +9,6 @@ data class ExtendedReservationWithBarber(
     var endTime: String,
     var status: String,
 
-    var barberId: Long,
+    var barberId: Int,
     var barbershopName: String
 )

@@ -1,30 +1,37 @@
-package rs.ac.bg.etf.barberbooker.data.room.repositories
+package rs.ac.bg.etf.barberbooker.data.retrofit.repositories
 
-import rs.ac.bg.etf.barberbooker.data.room.daos.BarberDao
-import rs.ac.bg.etf.barberbooker.data.room.entities.structures.ExtendedBarberWithAverageGrade
-import rs.ac.bg.etf.barberbooker.data.room.entities.tables.Barber
+import rs.ac.bg.etf.barberbooker.data.retrofit.apis.BarberApi
+import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.ExtendedBarberWithAverageGrade
+import rs.ac.bg.etf.barberbooker.data.retrofit.entities.tables.Barber
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class BarberRepository @Inject constructor(private val barberDao: BarberDao) {
+class BarberRepository @Inject constructor(
+    private val barberApi: BarberApi
+) {
 
     suspend fun addNewBarber(barber: Barber) {
-        barberDao.addNewBarber(barber)
+        barberApi.addNewBarber(barber)
     }
 
     suspend fun isEmailAlreadyTaken(email: String): Boolean {
-        val barber = barberDao.getBarberByEmail(email)
-        return barber != null
+        val response = barberApi.getBarberByEmail(email)
+        return response.isSuccessful
     }
 
     suspend fun areLoginCredentialsValid(email: String, hashedPassword: String): Boolean {
-        val barber = barberDao.getBarberByEmailAndPassword(email, hashedPassword)
-        return barber != null
+        val response = barberApi.getBarberByEmailAndPassword(email, hashedPassword)
+        return response.isSuccessful
     }
 
     suspend fun getBarberByEmail(email: String): Barber? {
-        return barberDao.getBarberByEmail(email)
+        val response = barberApi.getBarberByEmail(email)
+        return if (response.isSuccessful) {
+            response.body()
+        } else {
+            null
+        }
     }
 
     suspend fun updateBarberProfile(
@@ -39,7 +46,7 @@ class BarberRepository @Inject constructor(private val barberDao: BarberDao) {
         workingDays: String,
         workingHours: String
     ) {
-        barberDao.updateBarberProfile(
+        barberApi.updateBarberProfile(
             email,
             barbershopName,
             price,
@@ -54,14 +61,7 @@ class BarberRepository @Inject constructor(private val barberDao: BarberDao) {
     }
 
     suspend fun getSearchResults(query: String): List<ExtendedBarberWithAverageGrade> {
-        val queryParameters = query.split(" ")
-        val searchResults = mutableListOf<ExtendedBarberWithAverageGrade>()
-
-        queryParameters.forEach {
-            searchResults.addAll(barberDao.getSearchResults("%$it%"))
-        }
-
-        return searchResults.distinct()
+        return barberApi.getSearchResults(query)
     }
 
 }

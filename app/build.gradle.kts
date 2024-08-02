@@ -103,6 +103,11 @@ dependencies {
     // KOTLIN COROUTINES
     // https://developer.android.com/kotlin/coroutines
     implementation(libs.kotlinx.coroutines.android)
+
+    // RETROFIT
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.logging.interceptor)
 }
 
 kapt {

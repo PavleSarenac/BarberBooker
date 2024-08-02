@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import rs.ac.bg.etf.barberbooker.data.room.repositories.ClientRepository
+import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.ClientRepository
 import java.security.MessageDigest
 import javax.inject.Inject
 

@@ -8,8 +8,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import rs.ac.bg.etf.barberbooker.data.room.entities.structures.ExtendedReservationWithBarber
-import rs.ac.bg.etf.barberbooker.data.room.repositories.ReservationRepository
+import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.ExtendedReservationWithBarber
+import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.ReservationRepository
 import javax.inject.Inject
 
 data class ClientPendingRequestsUiState(

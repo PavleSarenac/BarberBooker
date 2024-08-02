@@ -8,8 +8,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import rs.ac.bg.etf.barberbooker.data.room.entities.structures.ExtendedBarberWithAverageGrade
-import rs.ac.bg.etf.barberbooker.data.room.repositories.BarberRepository
+import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.ExtendedBarberWithAverageGrade
+import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.BarberRepository
 import java.text.DecimalFormat
 import javax.inject.Inject
 

@@ -1,7 +1,7 @@
-package rs.ac.bg.etf.barberbooker.data.room.entities.structures
+package rs.ac.bg.etf.barberbooker.data.retrofit.entities.tables
 
-data class ExtendedBarberWithAverageGrade(
-    var id: Long,
+data class Barber(
+    val id: Int = 0,
     var email: String,
     var password: String,
     var barbershopName: String,
@@ -12,7 +12,5 @@ data class ExtendedBarberWithAverageGrade(
     var municipality: String,
     var address: String,
     var workingDays: String,
-    var workingHours: String,
-
-    var averageGrade: Float
+    var workingHours: String
 )
