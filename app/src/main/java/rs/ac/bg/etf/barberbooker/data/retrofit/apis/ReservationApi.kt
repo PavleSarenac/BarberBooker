@@ -90,6 +90,11 @@ interface ReservationApi {
         @Query("barberEmail") barberEmail: String
     ): List<ExtendedReservationWithClient>
 
+    @GET("getBarberConfirmations")
+    suspend fun getBarberConfirmations(
+        @Query("barberEmail") barberEmail: String
+    ): List<ExtendedReservationWithClient>
+
     @GET("acceptReservationRequest")
     suspend fun acceptReservationRequest(
         @Query("reservationId") reservationId: Int
@@ -98,6 +103,12 @@ interface ReservationApi {
     @GET("rejectReservationRequest")
     suspend fun rejectReservationRequest(
         @Query("reservationId") reservationId: Int
+    )
+
+    @GET("updateDoneReservationStatus")
+    suspend fun updateDoneReservationStatus(
+        @Query("reservationId") reservationId: Int,
+        @Query("status") status: String,
     )
 
 }

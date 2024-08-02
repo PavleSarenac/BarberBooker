@@ -24,7 +24,8 @@ val staticRoutes = listOf(
     "ClientViewBarberProfileScreen",                       // 20
     "ClientPendingScreen",                                 // 21
     "ClientRejectionsScreen",                              // 22
-    "ClientViewBarberReviewsScreen"                        // 23
+    "ClientViewBarberReviewsScreen",                       // 23
+    "BarberConfirmationsScreen"                            // 24
 )
 
 val daysOfTheWeek = listOf(
@@ -41,5 +42,7 @@ val reservationStatuses = listOf(
     "PENDING",
     "ACCEPTED",
     "REJECTED",
-    "DONE"
+    "WAITING_CONFIRMATION",
+    "DONE_SUCCESS",
+    "DONE_FAILURE"
 )

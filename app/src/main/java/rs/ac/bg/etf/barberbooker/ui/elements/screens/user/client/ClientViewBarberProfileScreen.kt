@@ -378,7 +378,7 @@ fun ClientViewBarberProfileScreen(
         }
 
         if (
-            clientArchiveUiState.archive.any { it.barberEmail == barberEmail } &&
+            clientArchiveUiState.archive.any { it.barberEmail == barberEmail && it.status == "DONE_SUCCESS" } &&
             clientReviewsUiState.pastReviewsForThisBarber.isEmpty()
             ) {
             Spacer(modifier = Modifier.height(24.dp))

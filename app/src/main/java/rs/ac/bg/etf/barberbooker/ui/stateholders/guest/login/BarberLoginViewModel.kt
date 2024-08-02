@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.BarberRepository
+import rs.ac.bg.etf.barberbooker.data.staticRoutes
 import java.security.MessageDigest
 import javax.inject.Inject
 
@@ -59,7 +60,7 @@ class BarberLoginViewModel @Inject constructor(
             }
             return@launch
         }
-        navHostController.navigate("BarberInitialScreen/${email}")
+        navHostController.navigate("${staticRoutes[9]}/${email}")
     }
 
     private fun getSHA256HashedPassword(password: String): String {

@@ -24,6 +24,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
@@ -52,6 +53,8 @@ fun BarberTopBar(
     val coroutineScope = rememberCoroutineScope()
     var openAccountDialog by rememberSaveable { mutableStateOf(false) }
 
+    val uiState by barberBookerViewModel.uiState.collectAsState()
+
     CenterAlignedTopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.secondary,
@@ -65,9 +68,11 @@ fun BarberTopBar(
         },
         navigationIcon = {
             IconButton(onClick = {
-                coroutineScope.launch {
-                    drawerState.apply {
-                        if (isClosed) open() else close()
+                if (uiState.isEverythingConfirmed) {
+                    coroutineScope.launch {
+                        drawerState.apply {
+                            if (isClosed) open() else close()
+                        }
                     }
                 }
             } ) {
@@ -79,7 +84,9 @@ fun BarberTopBar(
         },
         actions = {
             IconButton(onClick = {
-                openAccountDialog = true
+                if (uiState.isEverythingConfirmed) {
+                    openAccountDialog = true
+                }
             }) {
                 Icon(
                     imageVector = Icons.Filled.AccountCircle,

@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import rs.ac.bg.etf.barberbooker.data.daysOfTheWeek
-import rs.ac.bg.etf.barberbooker.data.reservationStatuses
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.tables.Reservation
 import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.BarberRepository
 import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.ReservationRepository
@@ -186,7 +185,7 @@ class BarberProfileViewModel @Inject constructor(
                 date = date,
                 startTime = time,
                 endTime = getReservationEndTime(time),
-                status = reservationStatuses[0]
+                status = "PENDING"
             )
         )
 

@@ -1,5 +1,6 @@
 package rs.ac.bg.etf.barberbooker.ui.stateholders.user.barber
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -10,6 +11,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.ExtendedReservationWithClient
 import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.ReservationRepository
+import java.text.SimpleDateFormat
 import javax.inject.Inject
 
 data class BarberRejectionsUiState(
@@ -24,11 +26,13 @@ class BarberRejectionsViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(BarberRejectionsUiState())
     val uiState = _uiState
 
+    @SuppressLint("SimpleDateFormat")
     fun getRejections(barberEmail: String) = viewModelScope.launch(Dispatchers.IO) {
         var rejections = reservationRepository.getBarberRejections(barberEmail)
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy")
 
         rejections = rejections.sortedBy { it.startTime }
-        rejections = rejections.sortedBy { it.date }
+        rejections = rejections.sortedBy { dateFormat.parse(it.date) }
 
         withContext(Dispatchers.Main) {
             _uiState.update { it.copy(rejections = rejections) }

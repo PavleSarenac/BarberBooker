@@ -54,6 +54,7 @@ import rs.ac.bg.etf.barberbooker.ui.elements.screens.guest.registration.SignUpAs
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.guest.registration.SignUpAsClientScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.guest.registration.SignUpScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.barber.BarberArchiveScreen
+import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.barber.BarberConfirmationsScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.barber.BarberEditProfileScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.barber.BarberInitialScreen
 import rs.ac.bg.etf.barberbooker.ui.elements.screens.user.barber.BarberPendingScreen
@@ -106,6 +107,10 @@ fun BarberBookerApp(
         return
     }
 
+    if (uiState.isSomethingConfirmed && !uiState.isEverythingConfirmed) {
+        barberBookerViewModel.getConfirmations(uiState.loggedInUserEmail)
+    }
+
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
@@ -121,7 +126,7 @@ fun BarberBookerApp(
                 }
             }
         },
-        gesturesEnabled = uiState.loggedInUserEmail != ""
+        gesturesEnabled = uiState.loggedInUserEmail != "" && uiState.isEverythingConfirmed
     ) {
         BarberBookerScaffold(
             navHostController,
@@ -155,7 +160,7 @@ fun BarberBookerScaffold(
             ScaffoldTopBar(currentRoute, navHostController, drawerState, context, uiState, barberBookerViewModel)
         },
         bottomBar = {
-            ScaffoldBottomBar(navHostController, uiState)
+            ScaffoldBottomBar(navHostController, uiState, barberBookerViewModel)
         },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) { paddingValues ->
@@ -217,19 +222,7 @@ fun BarberBookerScaffold(
                 )
             ) {navBackStackEntry ->
                 val barberEmail = navBackStackEntry.arguments?.getString("barberEmail") ?: uiState.loggedInUserEmail
-                BackHandler {
-                    if (drawerState.isOpen) {
-                        coroutineScope.launch {
-                            drawerState.close()
-                        }
-                    } else {
-                        barberBookerActivity?.finish()
-                    }
-                }
-                val previousRoute = navHostController.previousBackStackEntry?.destination?.route
-                if (previousRoute == staticRoutes[6]) {
-                    barberBookerViewModel.updateLoginData(context, true, barberEmail, "barber")
-                }
+                LoggedInBarberRegularScreenBackHandler(drawerState, navHostController, barberEmail)
                 if (uiState.loggedInUserEmail != "") {
                     BarberInitialScreen(barberEmail)
                 }
@@ -243,7 +236,19 @@ fun BarberBookerScaffold(
                 )
             ) {navBackStackEntry ->
                 val barberEmail = navBackStackEntry.arguments?.getString("barberEmail") ?: ""
-                LoggedInBarberRegularScreenBackHandler(drawerState, navHostController, barberEmail)
+                BackHandler {
+                    if (drawerState.isOpen) {
+                        coroutineScope.launch {
+                            drawerState.close()
+                        }
+                    } else {
+                        barberBookerActivity?.finish()
+                    }
+                }
+                val previousRoute = navHostController.previousBackStackEntry?.destination?.route
+                if (previousRoute == staticRoutes[6]) {
+                    barberBookerViewModel.updateLoginData(context, true, barberEmail, "barber")
+                }
                 if (uiState.loggedInUserEmail != "") {
                     BarberPendingScreen(barberEmail)
                 }
@@ -458,6 +463,32 @@ fun BarberBookerScaffold(
                     ClientViewBarberReviewsScreen(barberEmail = barberEmail)
                 }
             }
+            composable(
+                route = "${staticRoutes[24]}/{barberEmail}",
+                arguments = listOf(
+                    navArgument("barberEmail") {
+                        type = NavType.StringType
+                    }
+                )
+            ) {navBackStackEntry ->
+                val barberEmail = navBackStackEntry.arguments?.getString("barberEmail") ?: ""
+                if (uiState.isEverythingConfirmed) {
+                    LoggedInBarberRegularScreenBackHandler(drawerState, navHostController, barberEmail)
+                } else {
+                    BackHandler {
+                        if (drawerState.isOpen) {
+                            coroutineScope.launch {
+                                drawerState.close()
+                            }
+                        } else {
+                            barberBookerActivity?.finish()
+                        }
+                    }
+                }
+                if (uiState.loggedInUserEmail != "") {
+                    BarberConfirmationsScreen(barberEmail, barberBookerViewModel)
+                }
+            }
         }
     }
 }
@@ -649,6 +680,15 @@ fun ScaffoldTopBar(
             clientEmail = uiState.loggedInUserEmail,
             barberBookerViewModel = barberBookerViewModel
         )
+        currentRoute.split("/")[0] == staticRoutes[24]
+                && uiState.loggedInUserEmail != "" -> BarberTopBar(
+            topBarTitle = "Confirm reservations",
+            drawerState = drawerState,
+            navHostController = navHostController,
+            context = context,
+            barberEmail = uiState.loggedInUserEmail,
+            barberBookerViewModel = barberBookerViewModel
+        )
         else -> {}
     }
 }
@@ -656,10 +696,11 @@ fun ScaffoldTopBar(
 @Composable
 fun ScaffoldBottomBar(
     navHostController: NavHostController,
-    uiState: BarberBookerUiState
+    uiState: BarberBookerUiState,
+    barberBookerViewModel: BarberBookerViewModel
 ) {
     if (uiState.loggedInUserEmail != "" && uiState.loggedInUserType == "barber") {
-        BarberBottomBar(uiState.loggedInUserEmail, navHostController)
+        BarberBottomBar(uiState.loggedInUserEmail, navHostController, barberBookerViewModel)
     }
     if (uiState.loggedInUserEmail != "" && uiState.loggedInUserType == "client") {
         ClientBottomBar(uiState.loggedInUserEmail, navHostController)
@@ -679,7 +720,7 @@ fun LoggedInBarberRegularScreenBackHandler(
                 drawerState.close()
             }
         } else {
-            navHostController.navigate("${staticRoutes[8]}/${barberEmail}")
+            navHostController.navigate("${staticRoutes[9]}/${barberEmail}")
         }
     }
 }

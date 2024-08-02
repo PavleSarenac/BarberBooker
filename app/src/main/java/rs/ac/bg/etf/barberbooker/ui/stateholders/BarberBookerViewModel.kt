@@ -11,17 +11,25 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.ExtendedReservationWithClient
+import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.ReservationRepository
 import rs.ac.bg.etf.barberbooker.data.staticRoutes
+import java.util.Calendar
 import javax.inject.Inject
 
 data class BarberBookerUiState(
     var startDestination: String = staticRoutes[0],
     var loggedInUserType: String = "",
-    var loggedInUserEmail: String = ""
+    var loggedInUserEmail: String = "",
+    var confirmations: List<ExtendedReservationWithClient> = listOf(),
+    var isEverythingConfirmed: Boolean = false,
+    var isSomethingConfirmed: Boolean = false
 )
 
 @HiltViewModel
-class BarberBookerViewModel @Inject constructor() : ViewModel() {
+class BarberBookerViewModel @Inject constructor(
+    private val reservationRepository: ReservationRepository
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(BarberBookerUiState())
     val uiState = _uiState
@@ -53,7 +61,15 @@ class BarberBookerViewModel @Inject constructor() : ViewModel() {
 
         val startDestination = when {
             isLoggedIn && userType == "client" -> "${staticRoutes[7]}/$userEmail"
-            isLoggedIn && userType == "barber" -> "${staticRoutes[8]}/$userEmail"
+            isLoggedIn && userType == "barber" -> {
+                val job = getConfirmations(userEmail!!)
+                job.join()
+                if (_uiState.value.isEverythingConfirmed) {
+                    "${staticRoutes[9]}/$userEmail"
+                } else {
+                    "${staticRoutes[24]}/$userEmail"
+                }
+            }
             else -> staticRoutes[0]
         }
 
@@ -66,6 +82,51 @@ class BarberBookerViewModel @Inject constructor() : ViewModel() {
                 )
             }
         }
+    }
+
+    fun getConfirmations(barberEmail: String) = viewModelScope.launch(Dispatchers.IO) {
+        val confirmations = reservationRepository.getBarberConfirmations(barberEmail)
+        val isEverythingConfirmed = !confirmations.any {
+            getDateTimeInMillis(it.date, it.endTime) < getCurrentDateTimeMidnightMillis()
+        }
+        withContext(Dispatchers.Main) {
+            _uiState.update { it.copy(
+                confirmations = confirmations,
+                isEverythingConfirmed = isEverythingConfirmed,
+                isSomethingConfirmed = false
+            ) }
+        }
+    }
+
+    fun setIsSomethingConfirmed() = viewModelScope.launch(Dispatchers.Main) {
+        _uiState.update { it.copy(isSomethingConfirmed = true) }
+    }
+
+    private fun getCurrentDateTimeMidnightMillis(): Long {
+        val calendar = Calendar.getInstance()
+
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+
+        return calendar.timeInMillis
+    }
+
+    private fun getDateTimeInMillis(date: String, time: String): Long {
+        val calendar = Calendar.getInstance()
+
+        val day = date.substring(0, 2).toInt()
+        val month = date.substring(3, 5).toInt() - 1
+        val year = date.substring(6).toInt()
+
+        val hour = time.split(":")[0].toInt()
+        val minute = time.split(":")[1].toInt()
+
+        calendar.set(year, month, day, hour, minute, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+
+        return calendar.timeInMillis
     }
 
     fun logOut(context: Context, navHostController: NavHostController) = viewModelScope.launch(Dispatchers.Main) {

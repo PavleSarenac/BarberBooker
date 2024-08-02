@@ -96,12 +96,20 @@ class ReservationRepository @Inject constructor(
         return reservationApi.getBarberRejections(barberEmail)
     }
 
+    suspend fun getBarberConfirmations(barberEmail: String): List<ExtendedReservationWithClient> {
+        return reservationApi.getBarberConfirmations(barberEmail)
+    }
+
     suspend fun acceptReservationRequest(reservationId: Int) {
         reservationApi.acceptReservationRequest(reservationId)
     }
 
     suspend fun rejectReservationRequest(reservationId: Int) {
         reservationApi.rejectReservationRequest(reservationId)
+    }
+
+    suspend fun updateDoneReservationStatus(reservationId: Int, status: String) {
+        reservationApi.updateDoneReservationStatus(reservationId, status)
     }
 
 }

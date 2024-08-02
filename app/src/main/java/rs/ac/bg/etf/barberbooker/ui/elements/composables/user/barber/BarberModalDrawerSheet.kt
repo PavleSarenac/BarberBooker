@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.HourglassTop
+import androidx.compose.material.icons.filled.PendingActions
 import androidx.compose.material.icons.filled.ReportProblem
 import androidx.compose.material.icons.filled.Reviews
 import androidx.compose.material.icons.filled.Schedule
@@ -67,22 +68,6 @@ fun BarberModalDrawerSheet(
         )
         Divider(modifier = Modifier.padding(vertical = 8.dp))
         NavigationDrawerItem(
-            label = { Text(text = "Appointments") },
-            icon = { Icon(Icons.Filled.Schedule, contentDescription = "Appointments") },
-            selected = currentRoute?.contains("${staticRoutes[8]}/") ?: false,
-            onClick = {
-                navHostController.navigate("${staticRoutes[8]}/${uiState.loggedInUserEmail}")
-                coroutineScope.launch {
-                    drawerState.close()
-                }
-            },
-            colors = NavigationDrawerItemDefaults.colors(
-                selectedTextColor = MaterialTheme.colorScheme.onPrimary,
-                unselectedTextColor = MaterialTheme.colorScheme.onPrimary,
-                selectedContainerColor = MaterialTheme.colorScheme.secondary
-            )
-        )
-        NavigationDrawerItem(
             label = { Text(text = "Pending") },
             icon = { Icon(Icons.Filled.HourglassTop, contentDescription = "Pending") },
             selected = currentRoute?.contains("${staticRoutes[9]}/") ?: false,
@@ -99,6 +84,39 @@ fun BarberModalDrawerSheet(
             )
         )
         NavigationDrawerItem(
+            label = { Text(text = "Appointments") },
+            icon = { Icon(Icons.Filled.Schedule, contentDescription = "Appointments") },
+            selected = currentRoute?.contains("${staticRoutes[8]}/") ?: false,
+            onClick = {
+                navHostController.navigate("${staticRoutes[8]}/${uiState.loggedInUserEmail}")
+                coroutineScope.launch {
+                    drawerState.close()
+                }
+            },
+            colors = NavigationDrawerItemDefaults.colors(
+                selectedTextColor = MaterialTheme.colorScheme.onPrimary,
+                unselectedTextColor = MaterialTheme.colorScheme.onPrimary,
+                selectedContainerColor = MaterialTheme.colorScheme.secondary
+            )
+        )
+        NavigationDrawerItem(
+            label = { Text(text = "Confirmations") },
+            icon = { Icon(Icons.Filled.PendingActions, contentDescription = null) },
+            selected = currentRoute?.contains("${staticRoutes[24]}/") ?: false,
+            onClick = {
+                navHostController.navigate("${staticRoutes[24]}/${uiState.loggedInUserEmail}")
+                coroutineScope.launch {
+                    drawerState.close()
+                }
+            },
+            colors = NavigationDrawerItemDefaults.colors(
+                selectedTextColor = MaterialTheme.colorScheme.onPrimary,
+                unselectedTextColor = MaterialTheme.colorScheme.onPrimary,
+                selectedContainerColor = MaterialTheme.colorScheme.secondary
+            )
+        )
+        Divider(modifier = Modifier.padding(vertical = 8.dp))
+        NavigationDrawerItem(
             label = { Text(text = "Rejections") },
             icon = { Icon(Icons.Filled.ReportProblem, contentDescription = "Rejected reservation requests") },
             selected = currentRoute?.contains("${staticRoutes[12]}/") ?: false,
@@ -114,7 +132,6 @@ fun BarberModalDrawerSheet(
                 selectedContainerColor = MaterialTheme.colorScheme.secondary
             )
         )
-        Divider(modifier = Modifier.padding(vertical = 8.dp))
         NavigationDrawerItem(
             label = { Text(text = "Archive") },
             icon = { Icon(Icons.Filled.WorkHistory, contentDescription = "Done haircuts archive") },
