@@ -182,7 +182,8 @@ fun ClientSearchBarbersScreen(
                 val barbershopSuggestions = mutableListOf<String>()
                 repeat(clientArchiveUiState.archive.size) {
                     val currentRequest = clientArchiveUiState.archive[it]
-                    if (!barbershopSuggestions.contains(currentRequest.barberEmail)) {
+                    if (!barbershopSuggestions.contains(currentRequest.barberEmail) &&
+                        currentRequest.status == "DONE_SUCCESS") {
                         barbershopSuggestions.add(currentRequest.barberEmail)
                         ListItem(
                             headlineContent = { Text(currentRequest.barbershopName) },
