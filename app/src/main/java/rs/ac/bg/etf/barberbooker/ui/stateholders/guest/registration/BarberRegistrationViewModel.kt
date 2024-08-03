@@ -6,12 +6,15 @@ import androidx.compose.material3.SnackbarResult
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.ktx.messaging
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import rs.ac.bg.etf.barberbooker.data.daysOfTheWeek
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.tables.Barber
@@ -226,7 +229,8 @@ class BarberRegistrationViewModel @Inject constructor(
             municipality,
             address,
             workingDays,
-            workingHours
+            workingHours,
+            Firebase.messaging.token.await()
         )
         barberRepository.addNewBarber(newBarber)
     }

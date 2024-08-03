@@ -6,12 +6,15 @@ import androidx.compose.material3.SnackbarResult
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.ktx.messaging
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.tables.Client
 import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.ClientRepository
@@ -123,7 +126,7 @@ class ClientRegistrationViewModel @Inject constructor(
         name: String,
         surname: String
     ) {
-        val newClient = Client(0, email, password, name, surname)
+        val newClient = Client(0, email, password, name, surname, Firebase.messaging.token.await())
         clientRepository.addNewClient(newClient)
     }
 

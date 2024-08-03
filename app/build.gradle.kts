@@ -2,9 +2,12 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
 
-    // room and hilt
+    // ROOM AND HILT
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+
+    // FIREBASE
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -108,6 +111,11 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.logging.interceptor)
+
+    // FIREBASE
+    implementation(platform(libs.firebase.bom))
+    //noinspection UseTomlInstead
+    implementation("com.google.firebase:firebase-messaging")
 }
 
 kapt {

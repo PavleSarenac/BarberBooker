@@ -13,6 +13,7 @@ data class ExtendedBarberWithAverageGrade(
     var address: String,
     var workingDays: String,
     var workingHours: String,
+    var fcmToken: String,
 
     var averageGrade: Float
 )
