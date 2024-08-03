@@ -458,7 +458,8 @@ fun ClientViewBarberProfileScreen(
                                 snackbarHostState,
                                 snackbarCoroutineScope,
                                 clientEmail,
-                                barberEmail
+                                barberEmail,
+                                uiState.fcmToken
                             )
                         },
                         border = BorderStroke(1.dp, Color.White),

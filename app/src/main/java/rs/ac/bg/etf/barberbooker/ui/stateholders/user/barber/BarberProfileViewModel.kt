@@ -11,8 +11,10 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import rs.ac.bg.etf.barberbooker.data.daysOfTheWeek
+import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.NotificationData
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.tables.Reservation
 import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.BarberRepository
+import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.NotificationRepository
 import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.ReservationRepository
 import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.ReviewRepository
 import java.text.DecimalFormat
@@ -33,6 +35,7 @@ data class BarberProfileUiState(
     var address: String = "",
     var workingDays: String = "",
     var workingHours: String = "",
+    var fcmToken: String = "",
 
     var averageGrade: String = "",
 
@@ -49,7 +52,8 @@ data class BarberProfileUiState(
 class BarberProfileViewModel @Inject constructor(
     private val barberRepository: BarberRepository,
     private val reservationRepository: ReservationRepository,
-    private val reviewRepository: ReviewRepository
+    private val reviewRepository: ReviewRepository,
+    private val notificationRepository: NotificationRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(BarberProfileUiState())
@@ -189,6 +193,14 @@ class BarberProfileViewModel @Inject constructor(
             )
         )
 
+        notificationRepository.sendNotification(
+            NotificationData(
+                token = _uiState.value.fcmToken,
+                title = "New notification",
+                body = "You have a new reservation request"
+            )
+        )
+
         snackbarCoroutineScope.launch(Dispatchers.Main) {
             snackbarHostState.showSnackbar(
                 message = "Reservation request submitted!",
@@ -280,7 +292,8 @@ class BarberProfileViewModel @Inject constructor(
                     address = barber.address,
                     workingDays = barber.workingDays,
                     workingHours = barber.workingHours,
-                    averageGrade = averageGradeString
+                    averageGrade = averageGradeString,
+                    fcmToken = barber.fcmToken
                 ) }
             }
         }

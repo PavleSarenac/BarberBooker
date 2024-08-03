@@ -10,7 +10,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.NotificationData
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.tables.Review
+import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.NotificationRepository
 import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.ReviewRepository
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -26,7 +28,8 @@ data class ClientReviewsUiState(
 
 @HiltViewModel
 class ClientReviewsViewModel @Inject constructor(
-    private val reviewRepository: ReviewRepository
+    private val reviewRepository: ReviewRepository,
+    private val notificationRepository: NotificationRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ClientReviewsUiState())
@@ -54,7 +57,8 @@ class ClientReviewsViewModel @Inject constructor(
         snackbarHostState: SnackbarHostState,
         snackbarCoroutineScope: CoroutineScope,
         clientEmail: String,
-        barberEmail: String
+        barberEmail: String,
+        fcmToken: String
     ) = viewModelScope.launch(Dispatchers.IO) {
         val grade = _uiState.value.newReviewGrade
         val text = _uiState.value.newReviewText
@@ -80,6 +84,14 @@ class ClientReviewsViewModel @Inject constructor(
 
         val job = getPastReviewsForThisBarber(clientEmail, barberEmail)
         job.join()
+
+        notificationRepository.sendNotification(
+            NotificationData(
+                token = fcmToken,
+                title = "New notification",
+                body = "You have a new review"
+            )
+        )
 
         snackbarCoroutineScope.launch(Dispatchers.Main) {
             snackbarHostState.showSnackbar(

@@ -12,8 +12,8 @@ import rs.ac.bg.etf.barberbooker.data.retrofit.apis.BARBER_URL
 import rs.ac.bg.etf.barberbooker.data.retrofit.apis.BarberApi
 import rs.ac.bg.etf.barberbooker.data.retrofit.apis.CLIENT_URL
 import rs.ac.bg.etf.barberbooker.data.retrofit.apis.ClientApi
-import rs.ac.bg.etf.barberbooker.data.retrofit.apis.FIREBASE_CLOUD_MESSAGING_URL
-import rs.ac.bg.etf.barberbooker.data.retrofit.apis.FirebaseCloudMessagingApi
+import rs.ac.bg.etf.barberbooker.data.retrofit.apis.NOTIFICATION_URL
+import rs.ac.bg.etf.barberbooker.data.retrofit.apis.NotificationApi
 import rs.ac.bg.etf.barberbooker.data.retrofit.apis.RESERVATION_URL
 import rs.ac.bg.etf.barberbooker.data.retrofit.apis.REVIEW_URL
 import rs.ac.bg.etf.barberbooker.data.retrofit.apis.ReservationApi
@@ -106,7 +106,7 @@ object RetrofitModule {
 
     @Singleton
     @Provides
-    fun providesFirebaseCloudMessagingApi(): FirebaseCloudMessagingApi {
+    fun providesNotificationApi(): NotificationApi {
         val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
             setLevel(HttpLoggingInterceptor.Level.BODY)
         }
@@ -116,12 +116,12 @@ object RetrofitModule {
         }.build()
 
         val retrofit = Retrofit.Builder()
-            .baseUrl(FIREBASE_CLOUD_MESSAGING_URL)
+            .baseUrl(NOTIFICATION_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-        return retrofit.create(FirebaseCloudMessagingApi::class.java)
+        return retrofit.create(NotificationApi::class.java)
     }
 
 }
