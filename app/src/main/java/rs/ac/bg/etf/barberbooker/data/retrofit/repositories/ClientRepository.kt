@@ -1,6 +1,7 @@
 package rs.ac.bg.etf.barberbooker.data.retrofit.repositories
 
 import rs.ac.bg.etf.barberbooker.data.retrofit.apis.ClientApi
+import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.FcmTokenUpdateData
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.tables.Client
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -35,6 +36,10 @@ class ClientRepository @Inject constructor(
 
     suspend fun updateClientProfile(email: String, name: String, surname: String) {
         clientApi.updateClientProfile(email, name, surname)
+    }
+
+    suspend fun updateFcmToken(fcmTokenUpdateData: FcmTokenUpdateData) {
+        clientApi.updateFcmToken(fcmTokenUpdateData)
     }
 
 }

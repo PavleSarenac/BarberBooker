@@ -5,9 +5,10 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
+import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.FcmTokenUpdateData
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.tables.Client
 
-const val CLIENT_URL = "http://192.168.0.31:8080/client/"
+const val CLIENT_URL = "http://192.168.0.41:8080/client/"
 
 interface ClientApi {
 
@@ -29,5 +30,8 @@ interface ClientApi {
         @Query("name") name: String,
         @Query("surname") surname: String
     )
+
+    @POST("updateFcmToken")
+    suspend fun updateFcmToken(@Body fcmTokenUpdateData: FcmTokenUpdateData)
 
 }

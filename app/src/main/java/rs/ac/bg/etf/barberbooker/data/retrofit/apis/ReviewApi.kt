@@ -8,7 +8,7 @@ import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.ExtendedRevie
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.ExtendedReviewWithClient
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.tables.Review
 
-const val REVIEW_URL = "http://192.168.0.31:8080/review/"
+const val REVIEW_URL = "http://192.168.0.41:8080/review/"
 
 interface ReviewApi {
 

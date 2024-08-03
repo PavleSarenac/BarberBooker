@@ -6,9 +6,10 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.ExtendedBarberWithAverageGrade
+import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.FcmTokenUpdateData
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.tables.Barber
 
-const val BARBER_URL = "http://192.168.0.31:8080/barber/"
+const val BARBER_URL = "http://192.168.0.41:8080/barber/"
 
 interface BarberApi {
 
@@ -40,5 +41,8 @@ interface BarberApi {
 
     @GET("getSearchResults")
     suspend fun getSearchResults(@Query("query") query: String): List<ExtendedBarberWithAverageGrade>
+
+    @POST("updateFcmToken")
+    suspend fun updateFcmToken(@Body fcmTokenUpdateData: FcmTokenUpdateData)
 
 }

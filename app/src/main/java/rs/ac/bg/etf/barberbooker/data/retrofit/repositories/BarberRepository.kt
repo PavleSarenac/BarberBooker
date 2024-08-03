@@ -2,6 +2,7 @@ package rs.ac.bg.etf.barberbooker.data.retrofit.repositories
 
 import rs.ac.bg.etf.barberbooker.data.retrofit.apis.BarberApi
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.ExtendedBarberWithAverageGrade
+import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.FcmTokenUpdateData
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.tables.Barber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -62,6 +63,10 @@ class BarberRepository @Inject constructor(
 
     suspend fun getSearchResults(query: String): List<ExtendedBarberWithAverageGrade> {
         return barberApi.getSearchResults(query)
+    }
+
+    suspend fun updateFcmToken(fcmTokenUpdateData: FcmTokenUpdateData) {
+        barberApi.updateFcmToken(fcmTokenUpdateData)
     }
 
 }
