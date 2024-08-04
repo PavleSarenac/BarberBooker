@@ -2,14 +2,11 @@ package rs.ac.bg.etf.barberbooker
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessagingService
-import com.google.firebase.messaging.ktx.messaging
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.FcmTokenUpdateData
 import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.BarberRepository
 import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.ClientRepository
@@ -44,14 +41,14 @@ class PushNotificationService: FirebaseMessagingService() {
                     barberRepository.updateFcmToken(
                         FcmTokenUpdateData(
                             email = userEmail!!,
-                            fcmToken = Firebase.messaging.token.await()
+                            fcmToken = token
                         )
                     )
                 } else {
                     clientRepository.updateFcmToken(
                         FcmTokenUpdateData(
                             email = userEmail!!,
-                            fcmToken = Firebase.messaging.token.await()
+                            fcmToken = token
                         )
                     )
                 }

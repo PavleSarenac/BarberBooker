@@ -217,6 +217,7 @@ class BarberRegistrationViewModel @Inject constructor(
         workingDays: String,
         workingHours: String
     ) {
+        val fcmToken = Firebase.messaging.token.await()
         val newBarber = Barber(
             0,
             email,
@@ -230,7 +231,7 @@ class BarberRegistrationViewModel @Inject constructor(
             address,
             workingDays,
             workingHours,
-            Firebase.messaging.token.await()
+            fcmToken
         )
         barberRepository.addNewBarber(newBarber)
     }

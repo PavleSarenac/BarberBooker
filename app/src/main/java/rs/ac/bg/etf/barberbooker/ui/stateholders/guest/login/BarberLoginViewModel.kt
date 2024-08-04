@@ -66,10 +66,11 @@ class BarberLoginViewModel @Inject constructor(
         }
 
         withContext(Dispatchers.IO) {
+            val fcmToken = Firebase.messaging.token.await()
             barberRepository.updateFcmToken(
                 FcmTokenUpdateData(
                     email = email,
-                    fcmToken = Firebase.messaging.token.await()
+                    fcmToken = fcmToken
                 )
             )
         }

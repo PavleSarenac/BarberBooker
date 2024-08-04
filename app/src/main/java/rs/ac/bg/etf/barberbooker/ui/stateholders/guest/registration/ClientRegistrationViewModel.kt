@@ -126,7 +126,8 @@ class ClientRegistrationViewModel @Inject constructor(
         name: String,
         surname: String
     ) {
-        val newClient = Client(0, email, password, name, surname, Firebase.messaging.token.await())
+        val fcmToken = Firebase.messaging.token.await()
+        val newClient = Client(0, email, password, name, surname, fcmToken)
         clientRepository.addNewClient(newClient)
     }
 

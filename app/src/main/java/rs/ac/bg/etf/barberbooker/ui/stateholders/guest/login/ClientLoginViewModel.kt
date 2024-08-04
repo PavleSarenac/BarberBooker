@@ -65,10 +65,11 @@ class ClientLoginViewModel @Inject constructor(
         }
 
         withContext(Dispatchers.IO) {
+            val fcmToken = Firebase.messaging.token.await()
             clientRepository.updateFcmToken(
                 FcmTokenUpdateData(
                     email = email,
-                    fcmToken = Firebase.messaging.token.await()
+                    fcmToken = fcmToken
                 )
             )
         }
