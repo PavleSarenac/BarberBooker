@@ -81,9 +81,9 @@ fun BarberConfirmationsScreen(
                                     barberConfirmationsViewModel.confirmPositiveReservation(
                                         barberEmail,
                                         currentRequest.reservationId,
-                                        "DONE_SUCCESS"
+                                        "DONE_SUCCESS",
+                                        barberBookerViewModel
                                     )
-                                    barberBookerViewModel.setIsSomethingConfirmed()
                                 },
                                 colors = IconButtonDefaults.iconButtonColors(
                                     contentColor = MaterialTheme.colorScheme.secondary
@@ -96,9 +96,9 @@ fun BarberConfirmationsScreen(
                                     barberConfirmationsViewModel.confirmNegativeReservation(
                                         barberEmail,
                                         currentRequest.reservationId,
-                                        "DONE_FAILURE"
+                                        "DONE_FAILURE",
+                                        barberBookerViewModel
                                     )
-                                    barberBookerViewModel.setIsSomethingConfirmed()
                                 },
                                 colors = IconButtonDefaults.iconButtonColors(
                                     contentColor = MaterialTheme.colorScheme.secondary

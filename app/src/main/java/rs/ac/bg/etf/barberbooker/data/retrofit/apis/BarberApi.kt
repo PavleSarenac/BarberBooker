@@ -9,7 +9,7 @@ import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.ExtendedBarbe
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.FcmTokenUpdateData
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.tables.Barber
 
-const val BARBER_URL = "http://192.168.0.34:8080/barber/"
+const val BARBER_URL = "http://192.168.0.39:8080/barber/"
 
 interface BarberApi {
 

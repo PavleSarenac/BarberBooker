@@ -107,10 +107,6 @@ fun BarberBookerApp(
         return
     }
 
-    if (uiState.isSomethingConfirmed && !uiState.isEverythingConfirmed) {
-        barberBookerViewModel.getConfirmations(uiState.loggedInUserEmail)
-    }
-
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {

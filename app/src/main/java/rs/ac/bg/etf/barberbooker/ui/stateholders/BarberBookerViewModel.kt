@@ -22,8 +22,7 @@ data class BarberBookerUiState(
     var loggedInUserType: String = "",
     var loggedInUserEmail: String = "",
     var confirmations: List<ExtendedReservationWithClient> = listOf(),
-    var isEverythingConfirmed: Boolean = false,
-    var isSomethingConfirmed: Boolean = false
+    var isEverythingConfirmed: Boolean = false
 )
 
 @HiltViewModel
@@ -92,14 +91,9 @@ class BarberBookerViewModel @Inject constructor(
         withContext(Dispatchers.Main) {
             _uiState.update { it.copy(
                 confirmations = confirmations,
-                isEverythingConfirmed = isEverythingConfirmed,
-                isSomethingConfirmed = false
+                isEverythingConfirmed = isEverythingConfirmed
             ) }
         }
-    }
-
-    fun setIsSomethingConfirmed() = viewModelScope.launch(Dispatchers.Main) {
-        _uiState.update { it.copy(isSomethingConfirmed = true) }
     }
 
     private fun getCurrentDateTimeMidnightMillis(): Long {

@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.ExtendedReservationWithClient
 import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.ReservationRepository
+import rs.ac.bg.etf.barberbooker.ui.stateholders.BarberBookerViewModel
 import java.text.SimpleDateFormat
 import javax.inject.Inject
 
@@ -42,18 +43,24 @@ class BarberConfirmationsViewModel @Inject constructor(
     fun confirmPositiveReservation(
         barberEmail: String,
         reservationId: Int,
-        status: String
+        status: String,
+        barberBookerViewModel: BarberBookerViewModel
     ) = viewModelScope.launch(Dispatchers.IO) {
         reservationRepository.updateDoneReservationStatus(reservationId, status)
+        val job = barberBookerViewModel.getConfirmations(barberEmail)
+        job.join()
         getConfirmations(barberEmail)
     }
 
     fun confirmNegativeReservation(
         barberEmail: String,
         reservationId: Int,
-        status: String
+        status: String,
+        barberBookerViewModel: BarberBookerViewModel
     ) = viewModelScope.launch(Dispatchers.IO) {
         reservationRepository.updateDoneReservationStatus(reservationId, status)
+        val job = barberBookerViewModel.getConfirmations(barberEmail)
+        job.join()
         getConfirmations(barberEmail)
     }
 

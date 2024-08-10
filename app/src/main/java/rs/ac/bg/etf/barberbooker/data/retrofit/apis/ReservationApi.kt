@@ -9,7 +9,7 @@ import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.ExtendedReser
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.ExtendedReservationWithClient
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.tables.Reservation
 
-const val RESERVATION_URL = "http://192.168.0.34:8080/reservation/"
+const val RESERVATION_URL = "http://192.168.0.39:8080/reservation/"
 
 interface ReservationApi {
 
