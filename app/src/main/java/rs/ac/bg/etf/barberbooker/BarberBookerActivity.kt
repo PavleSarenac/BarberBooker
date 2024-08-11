@@ -22,6 +22,14 @@ const val REVIEWS_CHANNEL_ID = "REVIEWS_NOTIFICATIONS"
 const val REVIEWS_CHANNEL_NAME = "Reviews"
 const val REVIEWS_CHANNEL_DESCRIPTION = "New reviews"
 
+const val REJECTIONS_CHANNEL_ID = "REJECTIONS_NOTIFICATIONS"
+const val REJECTIONS_CHANNEL_NAME = "Rejections"
+const val REJECTIONS_CHANNEL_DESCRIPTION = "New rejections"
+
+const val APPOINTMENTS_CHANNEL_ID = "APPOINTMENTS_NOTIFICATIONS"
+const val APPOINTMENTS_CHANNEL_NAME = "Appointments requests"
+const val APPOINTMENTS_CHANNEL_DESCRIPTION = "New appointments"
+
 @AndroidEntryPoint
 class BarberBookerActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,6 +37,8 @@ class BarberBookerActivity : ComponentActivity() {
         requestNotificationsPermission()
         createRequestsNotificationChannel()
         createReviewsNotificationChannel()
+        createRejectionsNotificationChannel()
+        createAppointmentsNotificationChannel()
 
         val notificationRoute = intent.getStringExtra("route") ?: ""
 
@@ -71,6 +81,22 @@ class BarberBookerActivity : ComponentActivity() {
             NotificationChannelCompat.Builder(REVIEWS_CHANNEL_ID, NotificationManagerCompat.IMPORTANCE_HIGH)
                 .setName(REVIEWS_CHANNEL_NAME)
                 .setDescription(REVIEWS_CHANNEL_DESCRIPTION).build()
+        NotificationManagerCompat.from(this).createNotificationChannel(notificationChannel)
+    }
+
+    private fun createRejectionsNotificationChannel() {
+        val notificationChannel =
+            NotificationChannelCompat.Builder(REJECTIONS_CHANNEL_ID, NotificationManagerCompat.IMPORTANCE_HIGH)
+                .setName(REJECTIONS_CHANNEL_NAME)
+                .setDescription(REJECTIONS_CHANNEL_DESCRIPTION).build()
+        NotificationManagerCompat.from(this).createNotificationChannel(notificationChannel)
+    }
+
+    private fun createAppointmentsNotificationChannel() {
+        val notificationChannel =
+            NotificationChannelCompat.Builder(APPOINTMENTS_CHANNEL_ID, NotificationManagerCompat.IMPORTANCE_HIGH)
+                .setName(APPOINTMENTS_CHANNEL_NAME)
+                .setDescription(APPOINTMENTS_CHANNEL_DESCRIPTION).build()
         NotificationManagerCompat.from(this).createNotificationChannel(notificationChannel)
     }
 }

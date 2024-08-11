@@ -62,7 +62,13 @@ class BarberBookerViewModel @Inject constructor(
         val userType = sharedPreferences.getString("user_type", "")
 
         val startDestination = when {
-            isLoggedIn && userType == "client" -> "${staticRoutes[7]}/$userEmail"
+            isLoggedIn && userType == "client" -> {
+                if (notificationRoute == "") {
+                    "${staticRoutes[7]}/$userEmail"
+                } else {
+                    notificationRoute
+                }
+            }
             isLoggedIn && userType == "barber" -> {
                 val job = getConfirmations(userEmail!!)
                 job.join()
