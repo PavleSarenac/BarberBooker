@@ -76,6 +76,7 @@ import rs.ac.bg.etf.barberbooker.ui.stateholders.BarberBookerViewModel
 
 @Composable
 fun BarberBookerApp(
+    notificationRoute: String,
     barberBookerViewModel: BarberBookerViewModel = hiltViewModel()
 ) {
     val navHostController = rememberNavController()
@@ -93,7 +94,7 @@ fun BarberBookerApp(
     var isStartDestinationLoaded by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        val job = barberBookerViewModel.updateStartDestination(context)
+        val job = barberBookerViewModel.updateStartDestination(context, notificationRoute)
         job.join()
         isStartDestinationLoaded = true
     }

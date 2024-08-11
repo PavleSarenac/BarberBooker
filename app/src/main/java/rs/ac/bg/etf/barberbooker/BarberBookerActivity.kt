@@ -11,15 +11,32 @@ import rs.ac.bg.etf.barberbooker.ui.elements.BarberBookerApp
 import rs.ac.bg.etf.barberbooker.ui.elements.theme.BarberBookerTheme
 import android.Manifest.permission.POST_NOTIFICATIONS
 import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationChannelCompat
+import androidx.core.app.NotificationManagerCompat
+
+const val REQUESTS_CHANNEL_ID = "REQUESTS_NOTIFICATIONS"
+const val REQUESTS_CHANNEL_NAME = "Reservation requests"
+const val REQUESTS_CHANNEL_DESCRIPTION = "New reservation requests"
+
+const val REVIEWS_CHANNEL_ID = "REVIEWS_NOTIFICATIONS"
+const val REVIEWS_CHANNEL_NAME = "Reviews"
+const val REVIEWS_CHANNEL_DESCRIPTION = "New reviews"
 
 @AndroidEntryPoint
 class BarberBookerActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestNotificationsPermission()
+        createRequestsNotificationChannel()
+        createReviewsNotificationChannel()
+
+        val notificationRoute = intent.getStringExtra("route") ?: ""
+
         setContent {
             BarberBookerTheme {
-                BarberBookerApp()
+                BarberBookerApp(
+                    notificationRoute = notificationRoute
+                )
             }
         }
     }
@@ -39,5 +56,21 @@ class BarberBookerActivity : ComponentActivity() {
                 )
             }
         }
+    }
+
+    private fun createRequestsNotificationChannel() {
+        val notificationChannel =
+            NotificationChannelCompat.Builder(REQUESTS_CHANNEL_ID, NotificationManagerCompat.IMPORTANCE_HIGH)
+                .setName(REQUESTS_CHANNEL_NAME)
+                .setDescription(REQUESTS_CHANNEL_DESCRIPTION).build()
+        NotificationManagerCompat.from(this).createNotificationChannel(notificationChannel)
+    }
+
+    private fun createReviewsNotificationChannel() {
+        val notificationChannel =
+            NotificationChannelCompat.Builder(REVIEWS_CHANNEL_ID, NotificationManagerCompat.IMPORTANCE_HIGH)
+                .setName(REVIEWS_CHANNEL_NAME)
+                .setDescription(REVIEWS_CHANNEL_DESCRIPTION).build()
+        NotificationManagerCompat.from(this).createNotificationChannel(notificationChannel)
     }
 }

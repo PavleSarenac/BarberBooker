@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import rs.ac.bg.etf.barberbooker.REQUESTS_CHANNEL_ID
 import rs.ac.bg.etf.barberbooker.data.daysOfTheWeek
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.NotificationData
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.tables.Reservation
@@ -17,6 +18,7 @@ import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.BarberRepository
 import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.NotificationRepository
 import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.ReservationRepository
 import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.ReviewRepository
+import rs.ac.bg.etf.barberbooker.data.staticRoutes
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -197,7 +199,9 @@ class BarberProfileViewModel @Inject constructor(
             NotificationData(
                 token = _uiState.value.fcmToken,
                 title = "New notification",
-                body = "You have a new reservation request"
+                body = "You have a new reservation request",
+                route = "${staticRoutes[9]}/${barberEmail}",
+                channelId = REQUESTS_CHANNEL_ID
             )
         )
 

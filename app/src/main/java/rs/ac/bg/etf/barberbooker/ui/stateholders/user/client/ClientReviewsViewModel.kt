@@ -10,10 +10,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import rs.ac.bg.etf.barberbooker.REVIEWS_CHANNEL_ID
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.NotificationData
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.tables.Review
 import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.NotificationRepository
 import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.ReviewRepository
+import rs.ac.bg.etf.barberbooker.data.staticRoutes
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -89,7 +91,9 @@ class ClientReviewsViewModel @Inject constructor(
             NotificationData(
                 token = fcmToken,
                 title = "New notification",
-                body = "You have a new review"
+                body = "You have a new review",
+                route = "${staticRoutes[10]}/${barberEmail}",
+                channelId = REVIEWS_CHANNEL_ID
             )
         )
 

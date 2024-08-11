@@ -52,7 +52,10 @@ class BarberBookerViewModel @Inject constructor(
         }
     }
 
-    fun updateStartDestination(context: Context) = viewModelScope.launch(Dispatchers.IO) {
+    fun updateStartDestination(
+        context: Context,
+        notificationRoute: String
+    ) = viewModelScope.launch(Dispatchers.IO) {
         val sharedPreferences: SharedPreferences = context.getSharedPreferences("login_data", Context.MODE_PRIVATE)
         val isLoggedIn = sharedPreferences.getBoolean("is_logged_in", false)
         val userEmail = sharedPreferences.getString("user_email", "")
@@ -64,7 +67,11 @@ class BarberBookerViewModel @Inject constructor(
                 val job = getConfirmations(userEmail!!)
                 job.join()
                 if (_uiState.value.isEverythingConfirmed) {
-                    "${staticRoutes[9]}/$userEmail"
+                    if (notificationRoute == "") {
+                        "${staticRoutes[9]}/$userEmail"
+                    } else {
+                        notificationRoute
+                    }
                 } else {
                     "${staticRoutes[24]}/$userEmail"
                 }
