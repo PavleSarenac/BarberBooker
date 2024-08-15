@@ -5,6 +5,7 @@
 
 <b>Necessary code modifications prior to running the app:</b>
 <ul>
+  <li>Create a Firebase project since the app uses Firebase Cloud Messaging for notifications. After that, add your google-services.json file in the app folder as stated in the Firebase instructions.</li>
   <li>Change the IP address of the WiFi router in files where Retrofit APIs are defined and also in the network_security_config.xml file - put the IP address of your WiFi router.</li>
 </ul>
 
