@@ -176,7 +176,7 @@ fun ClientSearchBarbersScreen(
             modifier = Modifier
                 .align(Alignment.TopCenter)
                 .semantics { traversalIndex = 0f },
-            placeholder = { Text(text = "Search here") }
+            placeholder = { Text(text = "Search barbershops here") }
         ) {
             Column(Modifier.verticalScroll(rememberScrollState())) {
                 val barbershopSuggestions = mutableListOf<String>()
