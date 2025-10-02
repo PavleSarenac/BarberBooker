@@ -57,12 +57,15 @@ fun BarberInitialScreen(
                 val currentRequest = barberAppointmentsUiState.appointments[it]
                 ListItem(
                     headlineContent = {
-                        Text(text = "${currentRequest.clientName} ${currentRequest.clientSurname}")
+                        Text(
+                            text = "${currentRequest.clientName} ${currentRequest.clientSurname}",
+                            color = MaterialTheme.colorScheme.onPrimary
+                        )
                     },
                     supportingContent = {
                         Text(
                             text = "${currentRequest.date}, ${currentRequest.startTime} - ${currentRequest.endTime}",
-                            color = MaterialTheme.colorScheme.secondary
+                            color = MaterialTheme.colorScheme.onPrimary
                         )
                     },
                     modifier = Modifier

@@ -61,12 +61,15 @@ fun ClientPendingScreen(
                 val currentRequest = clientPendingRequestsUiState.pendingReservationRequests[it]
                 ListItem(
                     headlineContent = {
-                        Text(text = currentRequest.barbershopName)
+                        Text(
+                            text = currentRequest.barbershopName,
+                            color = MaterialTheme.colorScheme.onPrimary
+                        )
                     },
                     supportingContent = {
                         Text(
                             text = "${currentRequest.date}, ${currentRequest.startTime} - ${currentRequest.endTime}",
-                            color = MaterialTheme.colorScheme.secondary
+                            color = MaterialTheme.colorScheme.onPrimary
                         )
                     },
                     modifier = Modifier
