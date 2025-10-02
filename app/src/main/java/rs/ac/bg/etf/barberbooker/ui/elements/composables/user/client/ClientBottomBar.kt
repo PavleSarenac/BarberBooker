@@ -5,8 +5,10 @@ import androidx.compose.material.icons.filled.HourglassTop
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,7 +31,11 @@ fun ClientBottomBar(clientEmail: String, navHostController: NavHostController) {
                     return@NavigationBarItem
                 }
                 navHostController.navigate("${staticRoutes[7]}/${clientEmail}")
-            }
+            },
+            colors = NavigationBarItemDefaults.colors(
+                selectedTextColor = MaterialTheme.colorScheme.onPrimary,
+                unselectedTextColor = MaterialTheme.colorScheme.onPrimary
+            )
         )
         NavigationBarItem(
             icon = { Icon(Icons.Filled.Search, contentDescription = "Search") },
@@ -40,7 +46,11 @@ fun ClientBottomBar(clientEmail: String, navHostController: NavHostController) {
                     return@NavigationBarItem
                 }
                 navHostController.navigate("${staticRoutes[15]}/${clientEmail}")
-            }
+            },
+            colors = NavigationBarItemDefaults.colors(
+                selectedTextColor = MaterialTheme.colorScheme.onPrimary,
+                unselectedTextColor = MaterialTheme.colorScheme.onPrimary
+            )
         )
         NavigationBarItem(
             icon = { Icon(Icons.Filled.HourglassTop, contentDescription = "Pending") },
@@ -51,7 +61,11 @@ fun ClientBottomBar(clientEmail: String, navHostController: NavHostController) {
                     return@NavigationBarItem
                 }
                 navHostController.navigate("${staticRoutes[21]}/${clientEmail}")
-            }
+            },
+            colors = NavigationBarItemDefaults.colors(
+                selectedTextColor = MaterialTheme.colorScheme.onPrimary,
+                unselectedTextColor = MaterialTheme.colorScheme.onPrimary
+            )
         )
     }
 }
