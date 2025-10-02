@@ -21,7 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import rs.ac.bg.etf.barberbooker.data.staticRoutes
+import rs.ac.bg.etf.barberbooker.data.*
 
 @Composable
 fun SignUpScreen(navHostController: NavHostController, paddingValues: PaddingValues) {
@@ -36,7 +36,7 @@ fun SignUpScreen(navHostController: NavHostController, paddingValues: PaddingVal
     ) {
         Spacer(modifier = Modifier.weight(1f))
         OutlinedButton(
-            onClick = { navHostController.navigate(staticRoutes[3]) },
+            onClick = { navHostController.navigate(staticRoutes[SIGN_UP_AS_CLIENT_SCREEN_ROUTE_INDEX]) },
             border = BorderStroke(1.dp, Color.White),
             shape = MaterialTheme.shapes.medium,
             modifier = Modifier
@@ -52,7 +52,7 @@ fun SignUpScreen(navHostController: NavHostController, paddingValues: PaddingVal
             )
         }
         OutlinedButton(
-            onClick = { navHostController.navigate(staticRoutes[4]) },
+            onClick = { navHostController.navigate(staticRoutes[SIGN_UP_AS_BARBER_SCREEN_ROUTE_INDEX]) },
             border = BorderStroke(1.dp, Color.White),
             shape = MaterialTheme.shapes.medium,
             modifier = Modifier

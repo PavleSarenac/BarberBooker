@@ -21,7 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import rs.ac.bg.etf.barberbooker.data.staticRoutes
+import rs.ac.bg.etf.barberbooker.data.*
 
 
 @Composable
@@ -40,7 +40,7 @@ fun LogInScreen(
     ) {
         Spacer(modifier = Modifier.weight(1f))
         OutlinedButton(
-            onClick = { navHostController.navigate(staticRoutes[5]) },
+            onClick = { navHostController.navigate(staticRoutes[LOG_IN_AS_CLIENT_SCREEN_ROUTE_INDEX]) },
             border = BorderStroke(1.dp, Color.White),
             shape = MaterialTheme.shapes.medium,
             modifier = Modifier
@@ -56,7 +56,7 @@ fun LogInScreen(
             )
         }
         OutlinedButton(
-            onClick = { navHostController.navigate(staticRoutes[6]) },
+            onClick = { navHostController.navigate(staticRoutes[LOG_IN_AS_BARBER_SCREEN_ROUTE_INDEX]) },
             border = BorderStroke(1.dp, Color.White),
             shape = MaterialTheme.shapes.medium,
             modifier = Modifier

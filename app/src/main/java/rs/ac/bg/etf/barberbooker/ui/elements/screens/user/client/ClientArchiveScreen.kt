@@ -27,7 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import rs.ac.bg.etf.barberbooker.data.staticRoutes
+import rs.ac.bg.etf.barberbooker.data.*
 import rs.ac.bg.etf.barberbooker.ui.stateholders.user.barber.BarberProfileViewModel
 import rs.ac.bg.etf.barberbooker.ui.stateholders.user.client.ClientArchiveViewModel
 
@@ -97,7 +97,7 @@ fun ClientArchiveScreen(
                         .padding(vertical = 4.dp)
                         .clickable {
                             navHostController.navigate(
-                                "${staticRoutes[20]}/${currentRequest.barberEmail}/${clientEmail}"
+                                "${staticRoutes[CLIENT_VIEW_BARBER_PROFILE_SCREEN_ROUTE_INDEX]}/${currentRequest.barberEmail}/${clientEmail}"
                             )
                         }
                 )

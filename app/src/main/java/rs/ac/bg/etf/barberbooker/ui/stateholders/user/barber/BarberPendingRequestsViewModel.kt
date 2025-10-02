@@ -15,7 +15,7 @@ import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.ExtendedReser
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.NotificationData
 import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.NotificationRepository
 import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.ReservationRepository
-import rs.ac.bg.etf.barberbooker.data.staticRoutes
+import rs.ac.bg.etf.barberbooker.data.*
 import java.text.SimpleDateFormat
 import javax.inject.Inject
 
@@ -58,7 +58,7 @@ class BarberPendingRequestsViewModel @Inject constructor(
                 token = fcmToken,
                 title = "New notification",
                 body = "Your reservation request was accepted",
-                route = "${staticRoutes[7]}/${clientEmail}",
+                route = "${staticRoutes[CLIENT_INITIAL_SCREEN_ROUTE_INDEX]}/${clientEmail}",
                 channelId = APPOINTMENTS_CHANNEL_ID
             )
         )
@@ -77,7 +77,7 @@ class BarberPendingRequestsViewModel @Inject constructor(
                 token = fcmToken,
                 title = "New notification",
                 body = "Your reservation request was rejected",
-                route = "${staticRoutes[22]}/${clientEmail}",
+                route = "${staticRoutes[CLIENT_REJECTIONS_SCREEN_ROUTE_INDEX]}/${clientEmail}",
                 channelId = REJECTIONS_CHANNEL_ID
             )
         )

@@ -14,7 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import rs.ac.bg.etf.barberbooker.data.staticRoutes
+import rs.ac.bg.etf.barberbooker.data.*
 
 @Composable
 fun ClientBottomBar(clientEmail: String, navHostController: NavHostController) {
@@ -25,12 +25,12 @@ fun ClientBottomBar(clientEmail: String, navHostController: NavHostController) {
         NavigationBarItem(
             icon = { Icon(Icons.Filled.Schedule, contentDescription = "Appointments") },
             label = { Text(text = "Appointments") },
-            selected = currentRoute?.contains("${staticRoutes[7]}/") ?: false,
+            selected = currentRoute?.contains("${staticRoutes[CLIENT_INITIAL_SCREEN_ROUTE_INDEX]}/") ?: false,
             onClick = {
-                if (currentRoute?.contains("${staticRoutes[7]}/") == true) {
+                if (currentRoute?.contains("${staticRoutes[CLIENT_INITIAL_SCREEN_ROUTE_INDEX]}/") == true) {
                     return@NavigationBarItem
                 }
-                navHostController.navigate("${staticRoutes[7]}/${clientEmail}")
+                navHostController.navigate("${staticRoutes[CLIENT_INITIAL_SCREEN_ROUTE_INDEX]}/${clientEmail}")
             },
             colors = NavigationBarItemDefaults.colors(
                 selectedTextColor = MaterialTheme.colorScheme.onPrimary,
@@ -40,12 +40,12 @@ fun ClientBottomBar(clientEmail: String, navHostController: NavHostController) {
         NavigationBarItem(
             icon = { Icon(Icons.Filled.Search, contentDescription = "Search") },
             label = { Text(text = "Search") },
-            selected = currentRoute?.contains("${staticRoutes[15]}/") ?: false,
+            selected = currentRoute?.contains("${staticRoutes[CLIENT_SEARCH_BARBERS_SCREEN_ROUTE_INDEX]}/") ?: false,
             onClick = {
-                if (currentRoute?.contains("${staticRoutes[15]}/") == true) {
+                if (currentRoute?.contains("${staticRoutes[CLIENT_SEARCH_BARBERS_SCREEN_ROUTE_INDEX]}/") == true) {
                     return@NavigationBarItem
                 }
-                navHostController.navigate("${staticRoutes[15]}/${clientEmail}")
+                navHostController.navigate("${staticRoutes[CLIENT_SEARCH_BARBERS_SCREEN_ROUTE_INDEX]}/${clientEmail}")
             },
             colors = NavigationBarItemDefaults.colors(
                 selectedTextColor = MaterialTheme.colorScheme.onPrimary,
@@ -55,12 +55,12 @@ fun ClientBottomBar(clientEmail: String, navHostController: NavHostController) {
         NavigationBarItem(
             icon = { Icon(Icons.Filled.HourglassTop, contentDescription = "Pending") },
             label = { Text(text = "Pending") },
-            selected = currentRoute?.contains("${staticRoutes[21]}/") ?: false,
+            selected = currentRoute?.contains("${staticRoutes[CLIENT_PENDING_SCREEN_ROUTE_INDEX]}/") ?: false,
             onClick = {
-                if (currentRoute?.contains("${staticRoutes[21]}/") == true) {
+                if (currentRoute?.contains("${staticRoutes[CLIENT_PENDING_SCREEN_ROUTE_INDEX]}/") == true) {
                     return@NavigationBarItem
                 }
-                navHostController.navigate("${staticRoutes[21]}/${clientEmail}")
+                navHostController.navigate("${staticRoutes[CLIENT_PENDING_SCREEN_ROUTE_INDEX]}/${clientEmail}")
             },
             colors = NavigationBarItemDefaults.colors(
                 selectedTextColor = MaterialTheme.colorScheme.onPrimary,

@@ -61,7 +61,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import rs.ac.bg.etf.barberbooker.data.staticRoutes
+import rs.ac.bg.etf.barberbooker.data.*
 import rs.ac.bg.etf.barberbooker.ui.elements.composables.user.StarRating
 import rs.ac.bg.etf.barberbooker.ui.stateholders.user.barber.BarberProfileViewModel
 import rs.ac.bg.etf.barberbooker.ui.stateholders.user.client.ClientArchiveViewModel
@@ -200,7 +200,7 @@ fun ClientSearchBarbersScreen(
                                         expanded = false
                                         delay(500)
                                         navHostController.navigate(
-                                            "${staticRoutes[20]}/${currentRequest.barberEmail}/${clientEmail}"
+                                            "${staticRoutes[CLIENT_VIEW_BARBER_PROFILE_SCREEN_ROUTE_INDEX]}/${currentRequest.barberEmail}/${clientEmail}"
                                         )
                                     }
                                 }
@@ -276,7 +276,7 @@ fun ClientSearchBarbersScreen(
                             .padding(horizontal = 16.dp, vertical = 4.dp)
                             .clickable {
                                 navHostController.navigate(
-                                    "${staticRoutes[20]}/${currentBarbershop.email}/${clientEmail}"
+                                    "${staticRoutes[CLIENT_VIEW_BARBER_PROFILE_SCREEN_ROUTE_INDEX]}/${currentBarbershop.email}/${clientEmail}"
                                 )
                             }
                     )

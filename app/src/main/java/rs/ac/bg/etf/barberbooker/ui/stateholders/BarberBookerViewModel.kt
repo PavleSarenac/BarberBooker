@@ -13,12 +13,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.ExtendedReservationWithClient
 import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.ReservationRepository
-import rs.ac.bg.etf.barberbooker.data.staticRoutes
+import rs.ac.bg.etf.barberbooker.data.*
 import java.util.Calendar
 import javax.inject.Inject
 
 data class BarberBookerUiState(
-    var startDestination: String = staticRoutes[0],
+    var startDestination: String = staticRoutes[INITIAL_SCREEN_ROUTE_INDEX],
     var loggedInUserType: String = "",
     var loggedInUserEmail: String = "",
     var confirmations: List<ExtendedReservationWithClient> = listOf(),
@@ -64,7 +64,7 @@ class BarberBookerViewModel @Inject constructor(
         val startDestination = when {
             isLoggedIn && userType == "client" -> {
                 if (notificationRoute == "") {
-                    "${staticRoutes[7]}/$userEmail"
+                    "${staticRoutes[CLIENT_INITIAL_SCREEN_ROUTE_INDEX]}/$userEmail"
                 } else {
                     notificationRoute
                 }
@@ -74,15 +74,15 @@ class BarberBookerViewModel @Inject constructor(
                 job.join()
                 if (_uiState.value.isEverythingConfirmed) {
                     if (notificationRoute == "") {
-                        "${staticRoutes[9]}/$userEmail"
+                        "${staticRoutes[BARBER_PENDING_SCREEN_ROUTE_INDEX]}/$userEmail"
                     } else {
                         notificationRoute
                     }
                 } else {
-                    "${staticRoutes[24]}/$userEmail"
+                    "${staticRoutes[BARBER_CONFIRMATIONS_SCREEN_ROUTE_INDEX]}/$userEmail"
                 }
             }
-            else -> staticRoutes[0]
+            else -> staticRoutes[INITIAL_SCREEN_ROUTE_INDEX]
         }
 
         withContext(Dispatchers.Main) {
@@ -152,7 +152,7 @@ class BarberBookerViewModel @Inject constructor(
                 loggedInUserEmail = ""
             )
         }
-        navHostController.navigate(staticRoutes[0])
+        navHostController.navigate(staticRoutes[INITIAL_SCREEN_ROUTE_INDEX])
     }
 
 }

@@ -18,7 +18,7 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.tables.Client
 import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.ClientRepository
-import rs.ac.bg.etf.barberbooker.data.staticRoutes
+import rs.ac.bg.etf.barberbooker.data.*
 import java.security.MessageDigest
 import javax.inject.Inject
 
@@ -103,7 +103,7 @@ class ClientRegistrationViewModel @Inject constructor(
                 duration = SnackbarDuration.Indefinite
             )
             if (snackbarResult == SnackbarResult.ActionPerformed) {
-                navHostController.navigate(staticRoutes[5])
+                navHostController.navigate(staticRoutes[LOG_IN_AS_CLIENT_SCREEN_ROUTE_INDEX])
             }
         }
     }

@@ -22,7 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import rs.ac.bg.etf.barberbooker.data.staticRoutes
+import rs.ac.bg.etf.barberbooker.data.*
 
 @Composable
 fun InitialScreen(navHostController: NavHostController) {
@@ -44,7 +44,7 @@ fun InitialScreen(navHostController: NavHostController) {
         )
         Spacer(modifier = Modifier.weight(1f))
         OutlinedButton(
-            onClick = { navHostController.navigate(staticRoutes[1]) },
+            onClick = { navHostController.navigate(staticRoutes[LOGIN_SCREEN_ROUTE_INDEX]) },
             border = BorderStroke(1.dp, Color.White),
             shape = MaterialTheme.shapes.medium,
             modifier = Modifier
@@ -60,7 +60,7 @@ fun InitialScreen(navHostController: NavHostController) {
             )
         }
         OutlinedButton(
-            onClick = { navHostController.navigate(staticRoutes[2]) },
+            onClick = { navHostController.navigate(staticRoutes[SIGN_UP_SCREEN_ROUTE_INDEX]) },
             border = BorderStroke(1.dp, Color.White),
             shape = MaterialTheme.shapes.medium,
             modifier = Modifier

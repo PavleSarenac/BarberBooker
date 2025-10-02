@@ -13,7 +13,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import rs.ac.bg.etf.barberbooker.data.staticRoutes
+import rs.ac.bg.etf.barberbooker.data.*
 import rs.ac.bg.etf.barberbooker.ui.stateholders.BarberBookerViewModel
 
 @Composable
@@ -31,39 +31,39 @@ fun BarberBottomBar(
         NavigationBarItem(
             icon = { Icon(Icons.Filled.HourglassTop, contentDescription = "Pending requests") },
             label = { Text(text = "Pending") },
-            selected = currentRoute?.contains("${staticRoutes[9]}/") ?: false,
+            selected = currentRoute?.contains("${staticRoutes[BARBER_PENDING_SCREEN_ROUTE_INDEX]}/") ?: false,
             onClick = {
                 if (uiState.isEverythingConfirmed) {
-                    if (currentRoute?.contains("${staticRoutes[9]}/") == true) {
+                    if (currentRoute?.contains("${staticRoutes[BARBER_PENDING_SCREEN_ROUTE_INDEX]}/") == true) {
                         return@NavigationBarItem
                     }
-                    navHostController.navigate("${staticRoutes[9]}/${barberEmail}")
+                    navHostController.navigate("${staticRoutes[BARBER_PENDING_SCREEN_ROUTE_INDEX]}/${barberEmail}")
                 }
             }
         )
         NavigationBarItem(
             icon = { Icon(Icons.Filled.Schedule, contentDescription = "Appointments") },
             label = { Text(text = "Appointments") },
-            selected = currentRoute?.contains("${staticRoutes[8]}/") ?: false,
+            selected = currentRoute?.contains("${staticRoutes[BARBER_INITIAL_SCREEN_ROUTE_INDEX]}/") ?: false,
             onClick = {
                 if (uiState.isEverythingConfirmed) {
-                    if (currentRoute?.contains("${staticRoutes[8]}/") == true) {
+                    if (currentRoute?.contains("${staticRoutes[BARBER_INITIAL_SCREEN_ROUTE_INDEX]}/") == true) {
                         return@NavigationBarItem
                     }
-                    navHostController.navigate("${staticRoutes[8]}/${barberEmail}")
+                    navHostController.navigate("${staticRoutes[BARBER_INITIAL_SCREEN_ROUTE_INDEX]}/${barberEmail}")
                 }
             }
         )
         NavigationBarItem(
             icon = { Icon(Icons.Filled.PendingActions, contentDescription = null) },
             label = { Text(text = "Confirmations") },
-            selected = currentRoute?.contains("${staticRoutes[24]}/") ?: false,
+            selected = currentRoute?.contains("${staticRoutes[BARBER_CONFIRMATIONS_SCREEN_ROUTE_INDEX]}/") ?: false,
             onClick = {
                 if (uiState.isEverythingConfirmed) {
-                    if (currentRoute?.contains("${staticRoutes[24]}/") == true) {
+                    if (currentRoute?.contains("${staticRoutes[BARBER_CONFIRMATIONS_SCREEN_ROUTE_INDEX]}/") == true) {
                         return@NavigationBarItem
                     }
-                    navHostController.navigate("${staticRoutes[24]}/${barberEmail}")
+                    navHostController.navigate("${staticRoutes[BARBER_CONFIRMATIONS_SCREEN_ROUTE_INDEX]}/${barberEmail}")
                 }
             }
         )

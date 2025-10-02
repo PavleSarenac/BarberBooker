@@ -38,8 +38,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import rs.ac.bg.etf.barberbooker.data.INITIAL_SCREEN_ROUTE_INDEX
-import rs.ac.bg.etf.barberbooker.data.staticRoutes
+import rs.ac.bg.etf.barberbooker.data.*
 import rs.ac.bg.etf.barberbooker.ui.elements.composables.guest.GuestTopBar
 import rs.ac.bg.etf.barberbooker.ui.elements.composables.user.barber.BarberBottomBar
 import rs.ac.bg.etf.barberbooker.ui.elements.composables.user.barber.BarberModalDrawerSheet
@@ -168,32 +167,32 @@ fun BarberBookerScaffold(
             startDestination = uiState.startDestination,
             modifier = Modifier.padding(paddingValues)
         ) {
-            composable(route = staticRoutes[0]) {
+            composable(route = staticRoutes[INITIAL_SCREEN_ROUTE_INDEX]) {
                 BackHandler {
                     barberBookerActivity?.finish()
                 }
                 InitialScreen(navHostController)
             }
-            composable(route = staticRoutes[1]) {
+            composable(route = staticRoutes[LOGIN_SCREEN_ROUTE_INDEX]) {
                 LogInScreen(navHostController, paddingValues)
             }
-            composable(route = staticRoutes[2]) {
+            composable(route = staticRoutes[SIGN_UP_SCREEN_ROUTE_INDEX]) {
                 SignUpScreen(navHostController, paddingValues)
             }
-            composable(route = staticRoutes[3]) {
+            composable(route = staticRoutes[SIGN_UP_AS_CLIENT_SCREEN_ROUTE_INDEX]) {
                 SignUpAsClientScreen(navHostController, paddingValues, snackbarHostState)
             }
-            composable(route = staticRoutes[4]) {
+            composable(route = staticRoutes[SIGN_UP_AS_BARBER_SCREEN_ROUTE_INDEX]) {
                 SignUpAsBarberScreen(navHostController, paddingValues, snackbarHostState)
             }
-            composable(route = staticRoutes[5]) {
+            composable(route = staticRoutes[LOG_IN_AS_CLIENT_SCREEN_ROUTE_INDEX]) {
                 LogInAsClientScreen(navHostController, paddingValues, snackbarHostState)
             }
-            composable(route = staticRoutes[6]) {
+            composable(route = staticRoutes[LOG_IN_AS_BARBER_SCREEN_ROUTE_INDEX]) {
                 LogInAsBarberScreen(navHostController, paddingValues, snackbarHostState)
             }
             composable(
-                route = "${staticRoutes[7]}/{clientEmail}",
+                route = "${staticRoutes[CLIENT_INITIAL_SCREEN_ROUTE_INDEX]}/{clientEmail}",
                 arguments = listOf(
                     navArgument("clientEmail") {
                         type = NavType.StringType
@@ -205,7 +204,7 @@ fun BarberBookerScaffold(
                     barberBookerActivity?.finish()
                 }
                 val previousRoute = navHostController.previousBackStackEntry?.destination?.route
-                if (previousRoute == staticRoutes[5]) {
+                if (previousRoute == staticRoutes[LOG_IN_AS_CLIENT_SCREEN_ROUTE_INDEX]) {
                     barberBookerViewModel.updateLoginData(context, true, clientEmail, "client")
                 }
                 if (uiState.loggedInUserEmail != "") {
@@ -213,7 +212,7 @@ fun BarberBookerScaffold(
                 }
             }
             composable(
-                route = "${staticRoutes[8]}/{barberEmail}",
+                route = "${staticRoutes[BARBER_INITIAL_SCREEN_ROUTE_INDEX]}/{barberEmail}",
                 arguments = listOf(
                     navArgument("barberEmail") {
                         type = NavType.StringType
@@ -227,7 +226,7 @@ fun BarberBookerScaffold(
                 }
             }
             composable(
-                route = "${staticRoutes[9]}/{barberEmail}",
+                route = "${staticRoutes[BARBER_PENDING_SCREEN_ROUTE_INDEX]}/{barberEmail}",
                 arguments = listOf(
                     navArgument("barberEmail") {
                         type = NavType.StringType
@@ -245,7 +244,7 @@ fun BarberBookerScaffold(
                     }
                 }
                 val previousRoute = navHostController.previousBackStackEntry?.destination?.route
-                if (previousRoute == staticRoutes[6]) {
+                if (previousRoute == staticRoutes[LOG_IN_AS_BARBER_SCREEN_ROUTE_INDEX]) {
                     barberBookerViewModel.updateLoginData(context, true, barberEmail, "barber")
                 }
                 if (uiState.loggedInUserEmail != "") {
@@ -253,7 +252,7 @@ fun BarberBookerScaffold(
                 }
             }
             composable(
-                route = "${staticRoutes[10]}/{barberEmail}",
+                route = "${staticRoutes[BARBER_REVIEWS_SCREEN_ROUTE_INDEX]}/{barberEmail}",
                 arguments = listOf(
                     navArgument("barberEmail") {
                         type = NavType.StringType
@@ -267,7 +266,7 @@ fun BarberBookerScaffold(
                 }
             }
             composable(
-                route = "${staticRoutes[11]}/{barberEmail}",
+                route = "${staticRoutes[BARBER_ARCHIVE_SCREEN_ROUTE_INDEX]}/{barberEmail}",
                 arguments = listOf(
                     navArgument("barberEmail") {
                         type = NavType.StringType
@@ -281,7 +280,7 @@ fun BarberBookerScaffold(
                 }
             }
             composable(
-                route = "${staticRoutes[12]}/{barberEmail}",
+                route = "${staticRoutes[BARBER_REJECTIONS_SCREEN_ROUTE_INDEX]}/{barberEmail}",
                 arguments = listOf(
                     navArgument("barberEmail") {
                         type = NavType.StringType
@@ -295,7 +294,7 @@ fun BarberBookerScaffold(
                 }
             }
             composable(
-                route = "${staticRoutes[13]}/{barberEmail}",
+                route = "${staticRoutes[BARBER_VIEW_PROFILE_SCREEN_ROUTE_INDEX]}/{barberEmail}",
                 arguments = listOf(
                     navArgument("barberEmail") {
                         type = NavType.StringType
@@ -309,7 +308,7 @@ fun BarberBookerScaffold(
                 }
             }
             composable(
-                route = "${staticRoutes[14]}/{barberEmail}",
+                route = "${staticRoutes[BARBER_EDIT_PROFILE_SCREEN_ROUTE_INDEX]}/{barberEmail}",
                 arguments = listOf(
                     navArgument("barberEmail") {
                         type = NavType.StringType
@@ -323,7 +322,7 @@ fun BarberBookerScaffold(
                 }
             }
             composable(
-                route = "${staticRoutes[15]}/{clientEmail}",
+                route = "${staticRoutes[CLIENT_SEARCH_BARBERS_SCREEN_ROUTE_INDEX]}/{clientEmail}",
                 arguments = listOf(
                     navArgument("clientEmail") {
                         type = NavType.StringType
@@ -337,7 +336,7 @@ fun BarberBookerScaffold(
                 }
             }
             composable(
-                route = "${staticRoutes[16]}/{clientEmail}",
+                route = "${staticRoutes[CLIENT_ARCHIVE_SCREEN_ROUTE_INDEX]}/{clientEmail}",
                 arguments = listOf(
                     navArgument("clientEmail") {
                         type = NavType.StringType
@@ -351,7 +350,7 @@ fun BarberBookerScaffold(
                 }
             }
             composable(
-                route = "${staticRoutes[17]}/{clientEmail}",
+                route = "${staticRoutes[CLIENT_REVIEWS_SCREEN_ROUTE_INDEX]}/{clientEmail}",
                 arguments = listOf(
                     navArgument("clientEmail") {
                         type = NavType.StringType
@@ -365,7 +364,7 @@ fun BarberBookerScaffold(
                 }
             }
             composable(
-                route = "${staticRoutes[18]}/{clientEmail}",
+                route = "${staticRoutes[CLIENT_VIEW_PROFILE_SCREEN_ROUTE_INDEX]}/{clientEmail}",
                 arguments = listOf(
                     navArgument("clientEmail") {
                         type = NavType.StringType
@@ -379,7 +378,7 @@ fun BarberBookerScaffold(
                 }
             }
             composable(
-                route = "${staticRoutes[19]}/{clientEmail}",
+                route = "${staticRoutes[CLIENT_EDIT_PROFILE_SCREEN_ROUTE_INDEX]}/{clientEmail}",
                 arguments = listOf(
                     navArgument("clientEmail") {
                         type = NavType.StringType
@@ -393,7 +392,7 @@ fun BarberBookerScaffold(
                 }
             }
             composable(
-                route = "${staticRoutes[20]}/{barberEmail}/{clientEmail}",
+                route = "${staticRoutes[CLIENT_VIEW_BARBER_PROFILE_SCREEN_ROUTE_INDEX]}/{barberEmail}/{clientEmail}",
                 arguments = listOf(
                     navArgument("barberEmail") {
                         type = NavType.StringType
@@ -413,7 +412,7 @@ fun BarberBookerScaffold(
                 }
             }
             composable(
-                route = "${staticRoutes[21]}/{clientEmail}",
+                route = "${staticRoutes[CLIENT_PENDING_SCREEN_ROUTE_INDEX]}/{clientEmail}",
                 arguments = listOf(
                     navArgument("clientEmail") {
                         type = NavType.StringType
@@ -430,7 +429,7 @@ fun BarberBookerScaffold(
                 }
             }
             composable(
-                route = "${staticRoutes[22]}/{clientEmail}",
+                route = "${staticRoutes[CLIENT_REJECTIONS_SCREEN_ROUTE_INDEX]}/{clientEmail}",
                 arguments = listOf(
                     navArgument("clientEmail") {
                         type = NavType.StringType
@@ -447,7 +446,7 @@ fun BarberBookerScaffold(
                 }
             }
             composable(
-                route = "${staticRoutes[23]}/{barberEmail}",
+                route = "${staticRoutes[CLIENT_VIEW_BARBER_REVIEWS_SCREEN_ROUTE_INDEX]}/{barberEmail}",
                 arguments = listOf(
                     navArgument("barberEmail") {
                         type = NavType.StringType
@@ -463,7 +462,7 @@ fun BarberBookerScaffold(
                 }
             }
             composable(
-                route = "${staticRoutes[24]}/{barberEmail}",
+                route = "${staticRoutes[BARBER_CONFIRMATIONS_SCREEN_ROUTE_INDEX]}/{barberEmail}",
                 arguments = listOf(
                     navArgument("barberEmail") {
                         type = NavType.StringType
@@ -502,31 +501,31 @@ fun ScaffoldTopBar(
     barberBookerViewModel: BarberBookerViewModel
 ) {
     when {
-        currentRoute == staticRoutes[1] -> GuestTopBar(
+        currentRoute == staticRoutes[LOGIN_SCREEN_ROUTE_INDEX] -> GuestTopBar(
             topBarTitle = "Log in to BarberBooker",
             navHostController = navHostController
         )
-        currentRoute == staticRoutes[2] -> GuestTopBar(
+        currentRoute == staticRoutes[SIGN_UP_SCREEN_ROUTE_INDEX] -> GuestTopBar(
             topBarTitle = "Sign up for BarberBooker",
             navHostController = navHostController
         )
-        currentRoute == staticRoutes[3] -> GuestTopBar(
+        currentRoute == staticRoutes[SIGN_UP_AS_CLIENT_SCREEN_ROUTE_INDEX] -> GuestTopBar(
             topBarTitle = "Sign up as a client",
             navHostController = navHostController
         )
-        currentRoute == staticRoutes[4] -> GuestTopBar(
+        currentRoute == staticRoutes[SIGN_UP_AS_BARBER_SCREEN_ROUTE_INDEX] -> GuestTopBar(
             topBarTitle = "Sign up as a barber",
             navHostController = navHostController
         )
-        currentRoute == staticRoutes[5] -> GuestTopBar(
+        currentRoute == staticRoutes[LOG_IN_AS_CLIENT_SCREEN_ROUTE_INDEX] -> GuestTopBar(
             topBarTitle = "Log in as a client",
             navHostController = navHostController
         )
-        currentRoute == staticRoutes[6] -> GuestTopBar(
+        currentRoute == staticRoutes[LOG_IN_AS_BARBER_SCREEN_ROUTE_INDEX] -> GuestTopBar(
             topBarTitle = "Log in as a barber",
             navHostController = navHostController
         )
-        currentRoute.split("/")[0] == staticRoutes[7]
+        currentRoute.split("/")[0] == staticRoutes[CLIENT_INITIAL_SCREEN_ROUTE_INDEX]
                 && uiState.loggedInUserEmail != "" -> ClientTopBar(
             topBarTitle = "Appointments",
             drawerState = drawerState,
@@ -535,7 +534,7 @@ fun ScaffoldTopBar(
             clientEmail = uiState.loggedInUserEmail,
             barberBookerViewModel = barberBookerViewModel
         )
-        currentRoute.split("/")[0] == staticRoutes[8]
+        currentRoute.split("/")[0] == staticRoutes[BARBER_INITIAL_SCREEN_ROUTE_INDEX]
                 && uiState.loggedInUserEmail != "" -> BarberTopBar(
             topBarTitle = "Appointments",
             drawerState = drawerState,
@@ -544,7 +543,7 @@ fun ScaffoldTopBar(
             barberEmail = uiState.loggedInUserEmail,
             barberBookerViewModel = barberBookerViewModel
         )
-        currentRoute.split("/")[0] == staticRoutes[9]
+        currentRoute.split("/")[0] == staticRoutes[BARBER_PENDING_SCREEN_ROUTE_INDEX]
                 && uiState.loggedInUserEmail != "" -> BarberTopBar(
             topBarTitle = "Pending requests",
             drawerState = drawerState,
@@ -553,7 +552,7 @@ fun ScaffoldTopBar(
             barberEmail = uiState.loggedInUserEmail,
             barberBookerViewModel = barberBookerViewModel
         )
-        currentRoute.split("/")[0] == staticRoutes[10]
+        currentRoute.split("/")[0] == staticRoutes[BARBER_REVIEWS_SCREEN_ROUTE_INDEX]
                 && uiState.loggedInUserEmail != "" -> BarberTopBar(
             topBarTitle = "Reviews",
             drawerState = drawerState,
@@ -562,7 +561,7 @@ fun ScaffoldTopBar(
             barberEmail = uiState.loggedInUserEmail,
             barberBookerViewModel = barberBookerViewModel
         )
-        currentRoute.split("/")[0] == staticRoutes[11]
+        currentRoute.split("/")[0] == staticRoutes[BARBER_ARCHIVE_SCREEN_ROUTE_INDEX]
                 && uiState.loggedInUserEmail != "" -> BarberTopBar(
             topBarTitle = "Archive",
             drawerState = drawerState,
@@ -571,7 +570,7 @@ fun ScaffoldTopBar(
             barberEmail = uiState.loggedInUserEmail,
             barberBookerViewModel = barberBookerViewModel
         )
-        currentRoute.split("/")[0] == staticRoutes[12]
+        currentRoute.split("/")[0] == staticRoutes[BARBER_REJECTIONS_SCREEN_ROUTE_INDEX]
                 && uiState.loggedInUserEmail != "" -> BarberTopBar(
             topBarTitle = "Rejections",
             drawerState = drawerState,
@@ -580,7 +579,7 @@ fun ScaffoldTopBar(
             barberEmail = uiState.loggedInUserEmail,
             barberBookerViewModel = barberBookerViewModel
         )
-        currentRoute.split("/")[0] == staticRoutes[13]
+        currentRoute.split("/")[0] == staticRoutes[BARBER_VIEW_PROFILE_SCREEN_ROUTE_INDEX]
                 && uiState.loggedInUserEmail != "" -> BarberTopBar(
             topBarTitle = "My profile",
             drawerState = drawerState,
@@ -589,7 +588,7 @@ fun ScaffoldTopBar(
             barberEmail = uiState.loggedInUserEmail,
             barberBookerViewModel = barberBookerViewModel
         )
-        currentRoute.split("/")[0] == staticRoutes[14]
+        currentRoute.split("/")[0] == staticRoutes[BARBER_EDIT_PROFILE_SCREEN_ROUTE_INDEX]
                 && uiState.loggedInUserEmail != "" -> BarberTopBar(
             topBarTitle = "Edit Profile",
             drawerState = drawerState,
@@ -598,7 +597,7 @@ fun ScaffoldTopBar(
             barberEmail = uiState.loggedInUserEmail,
             barberBookerViewModel = barberBookerViewModel
         )
-        currentRoute.split("/")[0] == staticRoutes[15]
+        currentRoute.split("/")[0] == staticRoutes[CLIENT_SEARCH_BARBERS_SCREEN_ROUTE_INDEX]
                 && uiState.loggedInUserEmail != "" -> ClientTopBar(
             topBarTitle = "Search",
             drawerState = drawerState,
@@ -607,7 +606,7 @@ fun ScaffoldTopBar(
             clientEmail = uiState.loggedInUserEmail,
             barberBookerViewModel = barberBookerViewModel
         )
-        currentRoute.split("/")[0] == staticRoutes[16]
+        currentRoute.split("/")[0] == staticRoutes[CLIENT_ARCHIVE_SCREEN_ROUTE_INDEX]
                 && uiState.loggedInUserEmail != "" -> ClientTopBar(
             topBarTitle = "Archive",
             drawerState = drawerState,
@@ -616,7 +615,7 @@ fun ScaffoldTopBar(
             clientEmail = uiState.loggedInUserEmail,
             barberBookerViewModel = barberBookerViewModel
         )
-        currentRoute.split("/")[0] == staticRoutes[17]
+        currentRoute.split("/")[0] == staticRoutes[CLIENT_REVIEWS_SCREEN_ROUTE_INDEX]
                 && uiState.loggedInUserEmail != "" -> ClientTopBar(
             topBarTitle = "My reviews",
             drawerState = drawerState,
@@ -625,7 +624,7 @@ fun ScaffoldTopBar(
             clientEmail = uiState.loggedInUserEmail,
             barberBookerViewModel = barberBookerViewModel
         )
-        currentRoute.split("/")[0] == staticRoutes[18]
+        currentRoute.split("/")[0] == staticRoutes[CLIENT_VIEW_PROFILE_SCREEN_ROUTE_INDEX]
                 && uiState.loggedInUserEmail != "" -> ClientTopBar(
             topBarTitle = "My profile",
             drawerState = drawerState,
@@ -634,7 +633,7 @@ fun ScaffoldTopBar(
             clientEmail = uiState.loggedInUserEmail,
             barberBookerViewModel = barberBookerViewModel
         )
-        currentRoute.split("/")[0] == staticRoutes[19]
+        currentRoute.split("/")[0] == staticRoutes[CLIENT_EDIT_PROFILE_SCREEN_ROUTE_INDEX]
                 && uiState.loggedInUserEmail != "" -> ClientTopBar(
             topBarTitle = "Edit profile",
             drawerState = drawerState,
@@ -643,7 +642,7 @@ fun ScaffoldTopBar(
             clientEmail = uiState.loggedInUserEmail,
             barberBookerViewModel = barberBookerViewModel
         )
-        currentRoute.split("/")[0] == staticRoutes[20]
+        currentRoute.split("/")[0] == staticRoutes[CLIENT_VIEW_BARBER_PROFILE_SCREEN_ROUTE_INDEX]
                 && uiState.loggedInUserEmail != "" -> ClientTopBar(
             topBarTitle = "Barbershop",
             drawerState = drawerState,
@@ -652,7 +651,7 @@ fun ScaffoldTopBar(
             clientEmail = uiState.loggedInUserEmail,
             barberBookerViewModel = barberBookerViewModel
         )
-        currentRoute.split("/")[0] == staticRoutes[21]
+        currentRoute.split("/")[0] == staticRoutes[CLIENT_PENDING_SCREEN_ROUTE_INDEX]
                 && uiState.loggedInUserEmail != "" -> ClientTopBar(
             topBarTitle = "Pending requests",
             drawerState = drawerState,
@@ -661,7 +660,7 @@ fun ScaffoldTopBar(
             clientEmail = uiState.loggedInUserEmail,
             barberBookerViewModel = barberBookerViewModel
         )
-        currentRoute.split("/")[0] == staticRoutes[22]
+        currentRoute.split("/")[0] == staticRoutes[CLIENT_REJECTIONS_SCREEN_ROUTE_INDEX]
                 && uiState.loggedInUserEmail != "" -> ClientTopBar(
             topBarTitle = "Rejections",
             drawerState = drawerState,
@@ -670,7 +669,7 @@ fun ScaffoldTopBar(
             clientEmail = uiState.loggedInUserEmail,
             barberBookerViewModel = barberBookerViewModel
         )
-        currentRoute.split("/")[0] == staticRoutes[23]
+        currentRoute.split("/")[0] == staticRoutes[CLIENT_VIEW_BARBER_REVIEWS_SCREEN_ROUTE_INDEX]
                 && uiState.loggedInUserEmail != "" -> ClientTopBar(
             topBarTitle = "Reviews",
             drawerState = drawerState,
@@ -679,7 +678,7 @@ fun ScaffoldTopBar(
             clientEmail = uiState.loggedInUserEmail,
             barberBookerViewModel = barberBookerViewModel
         )
-        currentRoute.split("/")[0] == staticRoutes[24]
+        currentRoute.split("/")[0] == staticRoutes[BARBER_CONFIRMATIONS_SCREEN_ROUTE_INDEX]
                 && uiState.loggedInUserEmail != "" -> BarberTopBar(
             topBarTitle = "Confirm reservations",
             drawerState = drawerState,
@@ -719,7 +718,7 @@ fun LoggedInBarberRegularScreenBackHandler(
                 drawerState.close()
             }
         } else {
-            navHostController.navigate("${staticRoutes[9]}/${barberEmail}")
+            navHostController.navigate("${staticRoutes[BARBER_PENDING_SCREEN_ROUTE_INDEX]}/${barberEmail}")
         }
     }
 }
@@ -737,7 +736,7 @@ fun LoggedInClientRegularScreenBackHandler(
                 drawerState.close()
             }
         } else {
-            navHostController.navigate("${staticRoutes[7]}/${clientEmail}")
+            navHostController.navigate("${staticRoutes[CLIENT_INITIAL_SCREEN_ROUTE_INDEX]}/${clientEmail}")
         }
     }
 }

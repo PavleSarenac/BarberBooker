@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import kotlinx.coroutines.launch
-import rs.ac.bg.etf.barberbooker.data.staticRoutes
+import rs.ac.bg.etf.barberbooker.data.*
 import rs.ac.bg.etf.barberbooker.ui.stateholders.BarberBookerViewModel
 
 @Composable
@@ -70,9 +70,9 @@ fun BarberModalDrawerSheet(
         NavigationDrawerItem(
             label = { Text(text = "Pending") },
             icon = { Icon(Icons.Filled.HourglassTop, contentDescription = "Pending") },
-            selected = currentRoute?.contains("${staticRoutes[9]}/") ?: false,
+            selected = currentRoute?.contains("${staticRoutes[BARBER_PENDING_SCREEN_ROUTE_INDEX]}/") ?: false,
             onClick = {
-                navHostController.navigate("${staticRoutes[9]}/${uiState.loggedInUserEmail}")
+                navHostController.navigate("${staticRoutes[BARBER_PENDING_SCREEN_ROUTE_INDEX]}/${uiState.loggedInUserEmail}")
                 coroutineScope.launch {
                     drawerState.close()
                 }
@@ -86,9 +86,9 @@ fun BarberModalDrawerSheet(
         NavigationDrawerItem(
             label = { Text(text = "Appointments") },
             icon = { Icon(Icons.Filled.Schedule, contentDescription = "Appointments") },
-            selected = currentRoute?.contains("${staticRoutes[8]}/") ?: false,
+            selected = currentRoute?.contains("${staticRoutes[BARBER_INITIAL_SCREEN_ROUTE_INDEX]}/") ?: false,
             onClick = {
-                navHostController.navigate("${staticRoutes[8]}/${uiState.loggedInUserEmail}")
+                navHostController.navigate("${staticRoutes[BARBER_INITIAL_SCREEN_ROUTE_INDEX]}/${uiState.loggedInUserEmail}")
                 coroutineScope.launch {
                     drawerState.close()
                 }
@@ -102,9 +102,9 @@ fun BarberModalDrawerSheet(
         NavigationDrawerItem(
             label = { Text(text = "Confirmations") },
             icon = { Icon(Icons.Filled.PendingActions, contentDescription = null) },
-            selected = currentRoute?.contains("${staticRoutes[24]}/") ?: false,
+            selected = currentRoute?.contains("${staticRoutes[BARBER_CONFIRMATIONS_SCREEN_ROUTE_INDEX]}/") ?: false,
             onClick = {
-                navHostController.navigate("${staticRoutes[24]}/${uiState.loggedInUserEmail}")
+                navHostController.navigate("${staticRoutes[BARBER_CONFIRMATIONS_SCREEN_ROUTE_INDEX]}/${uiState.loggedInUserEmail}")
                 coroutineScope.launch {
                     drawerState.close()
                 }
@@ -119,9 +119,9 @@ fun BarberModalDrawerSheet(
         NavigationDrawerItem(
             label = { Text(text = "Rejections") },
             icon = { Icon(Icons.Filled.ReportProblem, contentDescription = "Rejected reservation requests") },
-            selected = currentRoute?.contains("${staticRoutes[12]}/") ?: false,
+            selected = currentRoute?.contains("${staticRoutes[BARBER_REJECTIONS_SCREEN_ROUTE_INDEX]}/") ?: false,
             onClick = {
-                navHostController.navigate("${staticRoutes[12]}/${uiState.loggedInUserEmail}")
+                navHostController.navigate("${staticRoutes[BARBER_REJECTIONS_SCREEN_ROUTE_INDEX]}/${uiState.loggedInUserEmail}")
                 coroutineScope.launch {
                     drawerState.close()
                 }
@@ -135,9 +135,9 @@ fun BarberModalDrawerSheet(
         NavigationDrawerItem(
             label = { Text(text = "Archive") },
             icon = { Icon(Icons.Filled.WorkHistory, contentDescription = "Done haircuts archive") },
-            selected = currentRoute?.contains("${staticRoutes[11]}/") ?: false,
+            selected = currentRoute?.contains("${staticRoutes[BARBER_ARCHIVE_SCREEN_ROUTE_INDEX]}/") ?: false,
             onClick = {
-                navHostController.navigate("${staticRoutes[11]}/${uiState.loggedInUserEmail}")
+                navHostController.navigate("${staticRoutes[BARBER_ARCHIVE_SCREEN_ROUTE_INDEX]}/${uiState.loggedInUserEmail}")
                 coroutineScope.launch {
                     drawerState.close()
                 }
@@ -151,9 +151,9 @@ fun BarberModalDrawerSheet(
         NavigationDrawerItem(
             label = { Text(text = "Reviews") },
             icon = { Icon(Icons.Filled.Reviews, contentDescription = "Reviews that logged in barber has received") },
-            selected = currentRoute?.contains("${staticRoutes[10]}/") ?: false,
+            selected = currentRoute?.contains("${staticRoutes[BARBER_REVIEWS_SCREEN_ROUTE_INDEX]}/") ?: false,
             onClick = {
-                navHostController.navigate("${staticRoutes[10]}/${uiState.loggedInUserEmail}")
+                navHostController.navigate("${staticRoutes[BARBER_REVIEWS_SCREEN_ROUTE_INDEX]}/${uiState.loggedInUserEmail}")
                 coroutineScope.launch {
                     drawerState.close()
                 }

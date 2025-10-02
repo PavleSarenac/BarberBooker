@@ -37,7 +37,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
-import rs.ac.bg.etf.barberbooker.data.staticRoutes
+import rs.ac.bg.etf.barberbooker.data.*
 import rs.ac.bg.etf.barberbooker.ui.stateholders.BarberBookerViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -120,7 +120,7 @@ fun BarberTopBar(
                     OutlinedButton(
                         onClick = {
                             openAccountDialog = false
-                            navHostController.navigate("${staticRoutes[13]}/${barberEmail}")
+                            navHostController.navigate("${staticRoutes[BARBER_VIEW_PROFILE_SCREEN_ROUTE_INDEX]}/${barberEmail}")
                         },
                         border = BorderStroke(1.dp, Color.White),
                         modifier = Modifier
@@ -140,7 +140,7 @@ fun BarberTopBar(
                     OutlinedButton(
                         onClick = {
                             openAccountDialog = false
-                            navHostController.navigate("${staticRoutes[14]}/${barberEmail}")
+                            navHostController.navigate("${staticRoutes[BARBER_EDIT_PROFILE_SCREEN_ROUTE_INDEX]}/${barberEmail}")
                         },
                         border = BorderStroke(1.dp, Color.White),
                         modifier = Modifier

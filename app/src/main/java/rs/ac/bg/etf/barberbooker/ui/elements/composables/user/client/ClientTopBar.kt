@@ -42,7 +42,7 @@ import rs.ac.bg.etf.barberbooker.data.CLIENT_EDIT_PROFILE_SCREEN_ROUTE_INDEX
 import rs.ac.bg.etf.barberbooker.data.CLIENT_VIEW_BARBER_PROFILE_SCREEN_ROUTE_INDEX
 import rs.ac.bg.etf.barberbooker.data.CLIENT_VIEW_BARBER_REVIEWS_SCREEN_ROUTE_INDEX
 import rs.ac.bg.etf.barberbooker.data.CLIENT_VIEW_PROFILE_SCREEN_ROUTE_INDEX
-import rs.ac.bg.etf.barberbooker.data.staticRoutes
+import rs.ac.bg.etf.barberbooker.data.*
 import rs.ac.bg.etf.barberbooker.ui.stateholders.BarberBookerViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)

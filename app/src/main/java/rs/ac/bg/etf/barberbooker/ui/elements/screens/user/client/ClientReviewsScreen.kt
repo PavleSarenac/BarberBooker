@@ -37,7 +37,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import rs.ac.bg.etf.barberbooker.data.staticRoutes
+import rs.ac.bg.etf.barberbooker.data.*
 import rs.ac.bg.etf.barberbooker.ui.stateholders.user.client.ClientViewOwnReviewsViewModel
 
 @Composable
@@ -81,7 +81,7 @@ fun ClientReviewsScreen(
                         .padding(bottom = 16.dp)
                         .clickable {
                             navHostController.navigate(
-                                "${staticRoutes[20]}/${currentReview.barberEmail}/${currentReview.clientEmail}"
+                                "${staticRoutes[CLIENT_VIEW_BARBER_PROFILE_SCREEN_ROUTE_INDEX]}/${currentReview.barberEmail}/${currentReview.clientEmail}"
                             )
                         }
                 ) {

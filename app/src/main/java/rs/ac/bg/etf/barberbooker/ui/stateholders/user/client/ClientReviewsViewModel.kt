@@ -15,7 +15,7 @@ import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.NotificationD
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.tables.Review
 import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.NotificationRepository
 import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.ReviewRepository
-import rs.ac.bg.etf.barberbooker.data.staticRoutes
+import rs.ac.bg.etf.barberbooker.data.*
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -92,7 +92,7 @@ class ClientReviewsViewModel @Inject constructor(
                 token = fcmToken,
                 title = "New notification",
                 body = "You have a new review",
-                route = "${staticRoutes[10]}/${barberEmail}",
+                route = "${staticRoutes[BARBER_REVIEWS_SCREEN_ROUTE_INDEX]}/${barberEmail}",
                 channelId = REVIEWS_CHANNEL_ID
             )
         )

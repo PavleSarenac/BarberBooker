@@ -47,7 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import rs.ac.bg.etf.barberbooker.data.staticRoutes
+import rs.ac.bg.etf.barberbooker.data.*
 import rs.ac.bg.etf.barberbooker.ui.elements.composables.user.StarRating
 import rs.ac.bg.etf.barberbooker.ui.stateholders.user.barber.BarberProfileViewModel
 
@@ -126,7 +126,7 @@ fun BarberViewProfileScreen(
                     textDecoration = TextDecoration.Underline,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.clickable {
-                        navHostController.navigate("${staticRoutes[10]}/${barberEmail}")
+                        navHostController.navigate("${staticRoutes[BARBER_REVIEWS_SCREEN_ROUTE_INDEX]}/${barberEmail}")
                     }
                 )
             }

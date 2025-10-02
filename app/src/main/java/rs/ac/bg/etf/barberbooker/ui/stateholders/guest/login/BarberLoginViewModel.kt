@@ -16,7 +16,7 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.FcmTokenUpdateData
 import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.BarberRepository
-import rs.ac.bg.etf.barberbooker.data.staticRoutes
+import rs.ac.bg.etf.barberbooker.data.*
 import java.security.MessageDigest
 import javax.inject.Inject
 
@@ -75,7 +75,7 @@ class BarberLoginViewModel @Inject constructor(
             )
         }
 
-        navHostController.navigate("${staticRoutes[9]}/${email}")
+        navHostController.navigate("${staticRoutes[BARBER_PENDING_SCREEN_ROUTE_INDEX]}/${email}")
     }
 
     private fun getSHA256HashedPassword(password: String): String {

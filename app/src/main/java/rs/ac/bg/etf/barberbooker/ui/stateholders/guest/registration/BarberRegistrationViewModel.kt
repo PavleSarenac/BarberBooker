@@ -19,7 +19,7 @@ import kotlinx.coroutines.withContext
 import rs.ac.bg.etf.barberbooker.data.daysOfTheWeek
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.tables.Barber
 import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.BarberRepository
-import rs.ac.bg.etf.barberbooker.data.staticRoutes
+import rs.ac.bg.etf.barberbooker.data.*
 import java.security.MessageDigest
 import javax.inject.Inject
 
@@ -193,7 +193,7 @@ class BarberRegistrationViewModel @Inject constructor(
                 duration = SnackbarDuration.Indefinite
             )
             if (snackbarResult == SnackbarResult.ActionPerformed) {
-                navHostController.navigate(staticRoutes[6])
+                navHostController.navigate(staticRoutes[LOG_IN_AS_BARBER_SCREEN_ROUTE_INDEX])
             }
         }
     }

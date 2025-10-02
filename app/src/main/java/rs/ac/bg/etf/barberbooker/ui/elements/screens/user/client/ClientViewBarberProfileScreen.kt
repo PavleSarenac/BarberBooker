@@ -71,7 +71,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import rs.ac.bg.etf.barberbooker.data.staticRoutes
+import rs.ac.bg.etf.barberbooker.data.*
 import rs.ac.bg.etf.barberbooker.ui.elements.composables.user.StarRating
 import rs.ac.bg.etf.barberbooker.ui.stateholders.user.barber.BarberProfileViewModel
 import rs.ac.bg.etf.barberbooker.ui.stateholders.user.client.ClientArchiveViewModel
@@ -185,7 +185,7 @@ fun ClientViewBarberProfileScreen(
                     textDecoration = TextDecoration.Underline,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.clickable {
-                        navHostController.navigate("${staticRoutes[23]}/${barberEmail}")
+                        navHostController.navigate("${staticRoutes[CLIENT_VIEW_BARBER_REVIEWS_SCREEN_ROUTE_INDEX]}/${barberEmail}")
                     }
                 )
             }

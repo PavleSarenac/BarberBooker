@@ -18,7 +18,7 @@ import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.BarberRepository
 import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.NotificationRepository
 import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.ReservationRepository
 import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.ReviewRepository
-import rs.ac.bg.etf.barberbooker.data.staticRoutes
+import rs.ac.bg.etf.barberbooker.data.*
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -200,7 +200,7 @@ class BarberProfileViewModel @Inject constructor(
                 token = _uiState.value.fcmToken,
                 title = "New notification",
                 body = "You have a new reservation request",
-                route = "${staticRoutes[9]}/${barberEmail}",
+                route = "${staticRoutes[BARBER_PENDING_SCREEN_ROUTE_INDEX]}/${barberEmail}",
                 channelId = REQUESTS_CHANNEL_ID
             )
         )
