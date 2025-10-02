@@ -38,6 +38,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import rs.ac.bg.etf.barberbooker.data.INITIAL_SCREEN_ROUTE_INDEX
 import rs.ac.bg.etf.barberbooker.data.staticRoutes
 import rs.ac.bg.etf.barberbooker.ui.elements.composables.guest.GuestTopBar
 import rs.ac.bg.etf.barberbooker.ui.elements.composables.user.barber.BarberBottomBar
@@ -81,7 +82,7 @@ fun BarberBookerApp(
 ) {
     val navHostController = rememberNavController()
     val currentBackStackEntry by navHostController.currentBackStackEntryAsState()
-    val currentRoute = currentBackStackEntry?.destination?.route ?: staticRoutes[0]
+    val currentRoute = currentBackStackEntry?.destination?.route ?: staticRoutes[INITIAL_SCREEN_ROUTE_INDEX]
 
     val context = LocalContext.current
     val barberBookerActivity = context as Activity?

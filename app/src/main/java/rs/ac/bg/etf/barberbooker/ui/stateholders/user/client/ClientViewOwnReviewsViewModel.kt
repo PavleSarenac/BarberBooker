@@ -35,5 +35,4 @@ class ClientViewOwnReviewsViewModel @Inject constructor(
             _uiState.update { it.copy(clientReviews = clientReviews) }
         }
     }
-
 }

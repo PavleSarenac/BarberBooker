@@ -38,6 +38,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import kotlinx.coroutines.launch
+import rs.ac.bg.etf.barberbooker.data.CLIENT_EDIT_PROFILE_SCREEN_ROUTE_INDEX
+import rs.ac.bg.etf.barberbooker.data.CLIENT_VIEW_BARBER_PROFILE_SCREEN_ROUTE_INDEX
+import rs.ac.bg.etf.barberbooker.data.CLIENT_VIEW_BARBER_REVIEWS_SCREEN_ROUTE_INDEX
+import rs.ac.bg.etf.barberbooker.data.CLIENT_VIEW_PROFILE_SCREEN_ROUTE_INDEX
 import rs.ac.bg.etf.barberbooker.data.staticRoutes
 import rs.ac.bg.etf.barberbooker.ui.stateholders.BarberBookerViewModel
 
@@ -70,8 +74,8 @@ fun ClientTopBar(
         },
         navigationIcon = {
             if (currentRoute != null) {
-                if (currentRoute.split("/")[0] == staticRoutes[20] ||
-                    currentRoute.split("/")[0] == staticRoutes[23]) {
+                if (currentRoute.split("/")[0] == staticRoutes[CLIENT_VIEW_BARBER_PROFILE_SCREEN_ROUTE_INDEX] ||
+                    currentRoute.split("/")[0] == staticRoutes[CLIENT_VIEW_BARBER_REVIEWS_SCREEN_ROUTE_INDEX]) {
                     IconButton(onClick = {
                         navHostController.popBackStack()
                     } ) {
@@ -90,7 +94,8 @@ fun ClientTopBar(
                     } ) {
                         Icon(
                             imageVector = Icons.Filled.Menu,
-                            contentDescription = "Show menu"
+                            contentDescription = "Show menu",
+                            tint = MaterialTheme.colorScheme.onSecondary
                         )
                     }
                 }
@@ -132,7 +137,7 @@ fun ClientTopBar(
                     OutlinedButton(
                         onClick = {
                             openAccountDialog = false
-                            navHostController.navigate("${staticRoutes[18]}/${clientEmail}")
+                            navHostController.navigate("${staticRoutes[CLIENT_VIEW_PROFILE_SCREEN_ROUTE_INDEX]}/${clientEmail}")
                         },
                         border = BorderStroke(1.dp, Color.White),
                         modifier = Modifier
@@ -152,7 +157,7 @@ fun ClientTopBar(
                     OutlinedButton(
                         onClick = {
                             openAccountDialog = false
-                            navHostController.navigate("${staticRoutes[19]}/${clientEmail}")
+                            navHostController.navigate("${staticRoutes[CLIENT_EDIT_PROFILE_SCREEN_ROUTE_INDEX]}/${clientEmail}")
                         },
                         border = BorderStroke(1.dp, Color.White),
                         modifier = Modifier
