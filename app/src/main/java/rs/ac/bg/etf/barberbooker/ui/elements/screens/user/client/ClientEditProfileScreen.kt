@@ -73,7 +73,9 @@ fun ClientEditProfileScreen(
                 unfocusedBorderColor = MaterialTheme.colorScheme.onPrimary,
                 cursorColor = MaterialTheme.colorScheme.onPrimary,
                 focusedLabelColor = MaterialTheme.colorScheme.onPrimary,
-                unfocusedLabelColor = MaterialTheme.colorScheme.onPrimary
+                unfocusedLabelColor = MaterialTheme.colorScheme.onPrimary,
+                focusedTextColor = MaterialTheme.colorScheme.onPrimary,
+                unfocusedTextColor = MaterialTheme.colorScheme.onPrimary
             ),
             label = { Text(text = "Name") },
             singleLine = true,
@@ -86,7 +88,12 @@ fun ClientEditProfileScreen(
             }),
             modifier = Modifier.padding(horizontal = 48.dp, vertical = 8.dp),
             isError = !uiState.isNameValid,
-            placeholder = { Text("e.g., Milos") }
+            placeholder = {
+                Text(
+                    text = "e.g., Milos",
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            }
         )
         OutlinedTextField(
             value = uiState.surname,
@@ -96,9 +103,13 @@ fun ClientEditProfileScreen(
                 unfocusedBorderColor = MaterialTheme.colorScheme.onPrimary,
                 cursorColor = MaterialTheme.colorScheme.onPrimary,
                 focusedLabelColor = MaterialTheme.colorScheme.onPrimary,
-                unfocusedLabelColor = MaterialTheme.colorScheme.onPrimary
+                unfocusedLabelColor = MaterialTheme.colorScheme.onPrimary,
+                focusedTextColor = MaterialTheme.colorScheme.onPrimary,
+                unfocusedTextColor = MaterialTheme.colorScheme.onPrimary
             ),
-            label = { Text(text = "Surname") },
+            label = {
+                Text(text = "Surname")
+            },
             singleLine = true,
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Text,
@@ -109,7 +120,12 @@ fun ClientEditProfileScreen(
             }),
             modifier = Modifier.padding(horizontal = 48.dp, vertical = 8.dp),
             isError = !uiState.isSurnameValid,
-            placeholder = { Text("e.g., Milosevic") }
+            placeholder = {
+                Text(
+                    text = "e.g., Milosevic",
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            }
         )
         OutlinedButton(
             onClick = {
