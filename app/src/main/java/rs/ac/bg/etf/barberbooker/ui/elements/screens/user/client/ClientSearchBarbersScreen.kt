@@ -23,7 +23,10 @@ import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.ContentCut
+import androidx.compose.material.icons.filled.LocationCity
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Reviews
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Checkbox
@@ -249,25 +252,65 @@ fun ClientSearchBarbersScreen(
                     val currentBarbershop = sortedSearchResults[it]
                     ListItem(
                         headlineContent = {
-                            Text(
-                                text = currentBarbershop.barbershopName,
-                                color = MaterialTheme.colorScheme.onSecondary
-                            )
+                            Row {
+                                Icon(
+                                    imageVector = Icons.Filled.ContentCut,
+                                    contentDescription = "Barbershop name",
+                                    modifier = Modifier
+                                        .size(10.dp)
+                                        .align(Alignment.CenterVertically),
+                                    tint = MaterialTheme.colorScheme.onSecondary
+                                )
+                                Spacer(modifier = Modifier.width(4.dp))
+                                Text(
+                                    text = currentBarbershop.barbershopName,
+                                    color = MaterialTheme.colorScheme.onSecondary
+                                )
+                            }
                         },
                         supportingContent = {
-                            val averageGrade = currentBarbershop.averageGrade
-                            if (averageGrade == 0.00f) {
-                                Text("No reviews")
-                            } else {
+                            Column {
                                 Row {
-                                    Text(
-                                        text = clientSearchBarbersViewModel.decimalFormat.format(averageGrade)
+                                    Icon(
+                                        imageVector = Icons.Filled.LocationCity,
+                                        contentDescription = "Location",
+                                        modifier = Modifier
+                                            .size(10.dp)
+                                            .align(Alignment.CenterVertically),
+                                        tint = MaterialTheme.colorScheme.onSecondary
                                     )
                                     Spacer(modifier = Modifier.width(4.dp))
-                                    StarRating(
-                                        rating = averageGrade,
-                                        size = 18.dp
+                                    Text(
+                                        text = "${currentBarbershop.municipality}, ${currentBarbershop.city}",
+                                        color = MaterialTheme.colorScheme.onSecondary
                                     )
+                                }
+                                Row {
+                                    Icon(
+                                        imageVector = Icons.Filled.Reviews,
+                                        contentDescription = "Average Rating",
+                                        modifier = Modifier
+                                            .size(10.dp)
+                                            .align(Alignment.CenterVertically),
+                                        tint = MaterialTheme.colorScheme.onSecondary
+                                    )
+                                    Spacer(modifier = Modifier.width(4.dp))
+                                    val averageGrade = currentBarbershop.averageGrade
+                                    if (averageGrade == 0.00f) {
+                                        Text(
+                                            text = "No reviews",
+                                            color = MaterialTheme.colorScheme.onSecondary
+                                        )
+                                    } else {
+                                        Text(
+                                            text = clientSearchBarbersViewModel.decimalFormat.format(averageGrade)
+                                        )
+                                        Spacer(modifier = Modifier.width(4.dp))
+                                        StarRating(
+                                            rating = averageGrade,
+                                            size = 18.dp
+                                        )
+                                    }
                                 }
                             }
                         },
