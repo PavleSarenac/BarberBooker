@@ -104,6 +104,14 @@ fun ClientSearchBarbersScreen(
     val (sortingByPriceAscendingState, onSortingByPriceAscendingStateChange) = rememberSaveable { mutableStateOf(true) }
     val (sortingByPriceDescendingState, onSortingByPriceDescendingStateChange) = rememberSaveable { mutableStateOf(false) }
 
+    val barbershopSuggestions = clientArchiveUiState.archive
+        .filter { it.status == "DONE_SUCCESS" }
+        .distinctBy { it.barberEmail }
+        .filter { currentRequest ->
+            uiState.query.isBlank() ||
+            currentRequest.barbershopName.startsWith(uiState.query, ignoreCase = true)
+        }
+
     Box(
         Modifier
             .fillMaxSize()
@@ -181,43 +189,38 @@ fun ClientSearchBarbersScreen(
             placeholder = { Text(text = "Search barbershops here") }
         ) {
             Column(Modifier.verticalScroll(rememberScrollState())) {
-                val barbershopSuggestions = mutableListOf<String>()
-                repeat(clientArchiveUiState.archive.size) {
-                    val currentRequest = clientArchiveUiState.archive[it]
-                    if (!barbershopSuggestions.contains(currentRequest.barberEmail) && currentRequest.status == "DONE_SUCCESS") {
-                        barbershopSuggestions.add(currentRequest.barberEmail)
-                        ListItem(
-                            headlineContent = {
-                                Text(
-                                    text = currentRequest.barbershopName,
-                                    color = MaterialTheme.colorScheme.onSecondary
-                                )
-                            },
-                            supportingContent = {
-                                Text(
-                                    text = "${currentRequest.barberMunicipality}, ${currentRequest.barberCity}",
-                                    color = MaterialTheme.colorScheme.onSecondary
-                                )
-                            },
-                            colors = ListItemDefaults.colors(containerColor = Color.Transparent),
-                            modifier =
-                            Modifier
-                                .clickable {
-                                    coroutineScope.launch {
-                                        expanded = false
-                                        delay(500)
-                                        navHostController.navigate(
-                                            "${staticRoutes[CLIENT_VIEW_BARBER_PROFILE_SCREEN_ROUTE_INDEX]}/${currentRequest.barberEmail}/${clientEmail}"
-                                        )
-                                    }
+                barbershopSuggestions.forEach {currentRequest ->
+                    ListItem(
+                        headlineContent = {
+                            Text(
+                                text = currentRequest.barbershopName,
+                                color = MaterialTheme.colorScheme.onSecondary
+                            )
+                        },
+                        supportingContent = {
+                            Text(
+                                text = "${currentRequest.barberMunicipality}, ${currentRequest.barberCity}",
+                                color = MaterialTheme.colorScheme.onSecondary
+                            )
+                        },
+                        colors = ListItemDefaults.colors(containerColor = Color.Transparent),
+                        modifier =
+                        Modifier
+                            .clickable {
+                                coroutineScope.launch {
+                                    expanded = false
+                                    delay(500)
+                                    navHostController.navigate(
+                                        "${staticRoutes[CLIENT_VIEW_BARBER_PROFILE_SCREEN_ROUTE_INDEX]}/${currentRequest.barberEmail}/${clientEmail}"
+                                    )
                                 }
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp, vertical = 4.dp)
-                        )
-                        Divider(
-                            color = MaterialTheme.colorScheme.onSecondary
-                        )
-                    }
+                            }
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 4.dp)
+                    )
+                    Divider(
+                        color = MaterialTheme.colorScheme.onSecondary
+                    )
                 }
             }
         }
