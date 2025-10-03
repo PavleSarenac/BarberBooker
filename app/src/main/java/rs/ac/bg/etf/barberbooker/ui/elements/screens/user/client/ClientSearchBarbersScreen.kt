@@ -25,7 +25,6 @@ import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Divider
@@ -129,7 +128,10 @@ fun ClientSearchBarbersScreen(
                 inputFieldColors = inputFieldColors(
                     focusedPlaceholderColor = MaterialTheme.colorScheme.onSecondary,
                     unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSecondary,
-                    disabledPlaceholderColor = MaterialTheme.colorScheme.onSecondary
+                    disabledPlaceholderColor = MaterialTheme.colorScheme.onSecondary,
+                    focusedTextColor = MaterialTheme.colorScheme.onSecondary,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onSecondary,
+                    disabledTextColor = MaterialTheme.colorScheme.onSecondary
                 )
             ),
             leadingIcon = {
@@ -182,16 +184,21 @@ fun ClientSearchBarbersScreen(
                 val barbershopSuggestions = mutableListOf<String>()
                 repeat(clientArchiveUiState.archive.size) {
                     val currentRequest = clientArchiveUiState.archive[it]
-                    if (!barbershopSuggestions.contains(currentRequest.barberEmail) &&
-                        currentRequest.status == "DONE_SUCCESS") {
+                    if (!barbershopSuggestions.contains(currentRequest.barberEmail) && currentRequest.status == "DONE_SUCCESS") {
                         barbershopSuggestions.add(currentRequest.barberEmail)
                         ListItem(
-                            headlineContent = { Text(currentRequest.barbershopName) },
-                            leadingContent = { Icon(
-                                imageVector = Icons.Filled.Star,
-                                contentDescription = null,
-                                tint = Color.Black
-                            ) },
+                            headlineContent = {
+                                Text(
+                                    text = currentRequest.barbershopName,
+                                    color = MaterialTheme.colorScheme.onSecondary
+                                )
+                            },
+                            supportingContent = {
+                                Text(
+                                    text = "${currentRequest.barberMunicipality}, ${currentRequest.barberCity}",
+                                    color = MaterialTheme.colorScheme.onSecondary
+                                )
+                            },
                             colors = ListItemDefaults.colors(containerColor = Color.Transparent),
                             modifier =
                             Modifier

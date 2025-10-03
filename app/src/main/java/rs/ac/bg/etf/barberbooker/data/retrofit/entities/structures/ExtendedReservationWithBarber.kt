@@ -10,5 +10,8 @@ data class ExtendedReservationWithBarber(
     var status: String,
 
     var barberId: Int,
-    var barbershopName: String
+    var barbershopName: String,
+    var barberCity: String = "",
+    var barberMunicipality: String = "",
+    var barberPrice: Double = 0.0
 )

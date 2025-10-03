@@ -529,5 +529,4 @@ class BarberProfileViewModel @Inject constructor(
     private fun areSelectedWorkingDaysValid(selectedWorkingDays: String): Boolean {
         return selectedWorkingDays.isNotEmpty()
     }
-
 }
