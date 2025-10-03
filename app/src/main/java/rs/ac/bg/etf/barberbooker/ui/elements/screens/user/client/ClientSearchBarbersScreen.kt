@@ -109,7 +109,9 @@ fun ClientSearchBarbersScreen(
         .distinctBy { it.barberEmail }
         .filter { currentRequest ->
             uiState.query.isBlank() ||
-            currentRequest.barbershopName.startsWith(uiState.query, ignoreCase = true)
+            currentRequest.barbershopName.startsWith(uiState.query, ignoreCase = true) ||
+            currentRequest.barberCity.startsWith(uiState.query, ignoreCase = true) ||
+            currentRequest.barberMunicipality.startsWith(uiState.query, ignoreCase = true)
         }
 
     Box(
@@ -247,7 +249,10 @@ fun ClientSearchBarbersScreen(
                     val currentBarbershop = sortedSearchResults[it]
                     ListItem(
                         headlineContent = {
-                            Text(currentBarbershop.barbershopName)
+                            Text(
+                                text = currentBarbershop.barbershopName,
+                                color = MaterialTheme.colorScheme.onSecondary
+                            )
                         },
                         supportingContent = {
                             val averageGrade = currentBarbershop.averageGrade
@@ -275,7 +280,7 @@ fun ClientSearchBarbersScreen(
                                 )
                                 Text(
                                     text = "${clientSearchBarbersViewModel.decimalFormat.format(currentBarbershop.price)} RSD",
-                                    color = MaterialTheme.colorScheme.secondary
+                                    color = MaterialTheme.colorScheme.onSecondary
                                 )
                             }
 
