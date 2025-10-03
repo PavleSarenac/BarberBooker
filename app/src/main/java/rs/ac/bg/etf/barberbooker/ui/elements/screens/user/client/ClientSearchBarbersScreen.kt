@@ -24,7 +24,7 @@ import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.ContentCut
-import androidx.compose.material.icons.filled.LocationCity
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Reviews
 import androidx.compose.material.icons.filled.Search
@@ -272,7 +272,7 @@ fun ClientSearchBarbersScreen(
                             Column {
                                 Row {
                                     Icon(
-                                        imageVector = Icons.Filled.LocationCity,
+                                        imageVector = Icons.Filled.LocationOn,
                                         contentDescription = "Location",
                                         modifier = Modifier
                                             .size(10.dp)
