@@ -131,7 +131,10 @@ fun ClientViewBarberProfileScreen(
                 containerColor = MaterialTheme.colorScheme.secondary,
                 contentColor = MaterialTheme.colorScheme.onSecondary
             ),
-            modifier = Modifier.width(1000.dp)
+            border = BorderStroke(2.dp, MaterialTheme.colorScheme.onPrimary),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
         ) {
             Row(
                 modifier = Modifier
@@ -303,8 +306,10 @@ fun ClientViewBarberProfileScreen(
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary
             ),
-            border = BorderStroke(1.dp, Color.White),
-            modifier = Modifier.width(1000.dp)
+            border = BorderStroke(2.dp, Color.White),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
         ) {
             Row(
                 modifier = Modifier
@@ -369,7 +374,7 @@ fun ClientViewBarberProfileScreen(
                             snackbarCoroutineScope
                         )
                     },
-                    border = BorderStroke(1.dp, Color.White),
+                    border = BorderStroke(2.dp, MaterialTheme.colorScheme.onPrimary),
                     shape = MaterialTheme.shapes.medium,
                     modifier = Modifier
                         .padding(horizontal = 48.dp, vertical = 12.dp)
@@ -396,8 +401,10 @@ fun ClientViewBarberProfileScreen(
                     containerColor = MaterialTheme.colorScheme.primary,
                     contentColor = MaterialTheme.colorScheme.onPrimary
                 ),
-                border = BorderStroke(1.dp, Color.White),
-                modifier = Modifier.width(1000.dp)
+                border = BorderStroke(2.dp, MaterialTheme.colorScheme.onPrimary),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
             ) {
                 Row(
                     modifier = Modifier
@@ -452,8 +459,10 @@ fun ClientViewBarberProfileScreen(
                         colors = TextFieldDefaults.colors(
                             unfocusedContainerColor = MaterialTheme.colorScheme.onPrimary,
                             focusedContainerColor = MaterialTheme.colorScheme.onPrimary,
+                            unfocusedTextColor = MaterialTheme.colorScheme.primary,
                             focusedTextColor = MaterialTheme.colorScheme.primary,
-                            unfocusedTextColor = MaterialTheme.colorScheme.primary
+                            unfocusedPlaceholderColor = Color.Black,
+                            focusedPlaceholderColor = Color.Black
                         )
                     )
                 }
@@ -471,7 +480,7 @@ fun ClientViewBarberProfileScreen(
                                 uiState.fcmToken
                             )
                         },
-                        border = BorderStroke(1.dp, Color.White),
+                        border = BorderStroke(2.dp, MaterialTheme.colorScheme.onPrimary),
                         shape = MaterialTheme.shapes.medium,
                         modifier = Modifier
                             .padding(horizontal = 48.dp, vertical = 12.dp)
