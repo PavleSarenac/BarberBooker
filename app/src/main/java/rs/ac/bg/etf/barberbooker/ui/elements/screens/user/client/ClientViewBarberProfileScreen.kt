@@ -464,9 +464,7 @@ fun ClientViewBarberProfileScreen(
                     )
                 }
                 Divider()
-                Row(
-                    modifier = Modifier.padding(8.dp)
-                ) {
+                Row {
                     OutlinedButton(
                         onClick = {
                             clientReviewsViewModel.submitReview(
@@ -480,7 +478,7 @@ fun ClientViewBarberProfileScreen(
                         border = BorderStroke(2.dp, MaterialTheme.colorScheme.onPrimary),
                         shape = MaterialTheme.shapes.medium,
                         modifier = Modifier
-                            .padding(horizontal = 48.dp, vertical = 12.dp)
+                            .padding(horizontal = 90.dp, vertical = 12.dp)
                             .fillMaxWidth(),
                         colors = ButtonDefaults.outlinedButtonColors(
                             MaterialTheme.colorScheme.secondary,
