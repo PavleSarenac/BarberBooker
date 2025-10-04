@@ -1,8 +1,11 @@
 package rs.ac.bg.etf.barberbooker.ui.elements.composables.user.barber
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -64,25 +67,40 @@ fun TimeSlotDropdown(
 
         ExposedDropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false }
+            onDismissRequest = { expanded = false },
+            modifier = Modifier
+                .background(color = MaterialTheme.colorScheme.secondary)
         ) {
-            timeSlots.forEach { slot ->
-                DropdownMenuItem(
-                    text = { Text(
-                        text = slot,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth()
-                    ) },
-                    onClick = {
-                        selectedTime = slot
-                        expanded = false
-                        onTimeSelected(slot)
-                    },
-                    colors = MenuDefaults.itemColors(
-                        textColor = MaterialTheme.colorScheme.onSecondary,
-                        disabledTextColor = MaterialTheme.colorScheme.onSecondary
+            timeSlots.forEachIndexed { index, slot ->
+                Column(modifier = Modifier.fillMaxWidth())
+                {
+                    DropdownMenuItem(
+                        text = { Text(
+                            text = slot,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.fillMaxWidth()
+                        ) },
+                        onClick = {
+                            selectedTime = slot
+                            expanded = false
+                            onTimeSelected(slot)
+                        },
+                        colors = MenuDefaults.itemColors(
+                            textColor = MaterialTheme.colorScheme.onSecondary,
+                            disabledTextColor = MaterialTheme.colorScheme.onSecondary
+                        ),
+                        modifier = Modifier
+                            .background(color = MaterialTheme.colorScheme.secondary)
                     )
-                )
+                    if (index < timeSlots.lastIndex)
+                    {
+                        Divider(
+                            color = MaterialTheme.colorScheme.onSecondary,
+                            thickness = 1.dp,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                }
             }
         }
     }
