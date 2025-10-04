@@ -1,7 +1,14 @@
 package rs.ac.bg.etf.barberbooker.ui.elements.composables.user.client
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.HourglassTop
 import androidx.compose.material.icons.filled.Reviews
@@ -57,116 +64,133 @@ fun ClientModalDrawerSheet(
         Modifier.width(screenHeightDp)
     }
 
-    ModalDrawerSheet(
-        modifier = drawerModifier
-    ) {
-        Text(
-            text = "BarberBooker",
-            fontWeight = FontWeight.Bold,
-            fontSize = 24.sp,
-            modifier = Modifier.padding(16.dp)
-        )
-        Divider(modifier = Modifier.padding(vertical = 8.dp))
-        NavigationDrawerItem(
-            label = { Text(text = "Appointments") },
-            icon = { Icon(Icons.Filled.Schedule, contentDescription = "Appointments") },
-            selected = currentRoute?.contains("${staticRoutes[CLIENT_INITIAL_SCREEN_ROUTE_INDEX]}/") ?: false,
-            onClick = {
-                navHostController.navigate("${staticRoutes[CLIENT_INITIAL_SCREEN_ROUTE_INDEX]}/${uiState.loggedInUserEmail}")
-                coroutineScope.launch {
-                    drawerState.close()
-                }
-            },
-            colors = NavigationDrawerItemDefaults.colors(
-                selectedTextColor = MaterialTheme.colorScheme.onPrimary,
-                unselectedTextColor = MaterialTheme.colorScheme.onPrimary,
-                selectedContainerColor = MaterialTheme.colorScheme.secondary
-            )
-        )
-        NavigationDrawerItem(
-            label = { Text(text = "Search") },
-            icon = { Icon(Icons.Filled.Search, contentDescription = "Search") },
-            selected = currentRoute?.contains("${staticRoutes[CLIENT_SEARCH_BARBERS_SCREEN_ROUTE_INDEX]}/") ?: false,
-            onClick = {
-                navHostController.navigate("${staticRoutes[CLIENT_SEARCH_BARBERS_SCREEN_ROUTE_INDEX]}/${uiState.loggedInUserEmail}")
-                coroutineScope.launch {
-                    drawerState.close()
-                }
-            },
-            colors = NavigationDrawerItemDefaults.colors(
-                selectedTextColor = MaterialTheme.colorScheme.onPrimary,
-                unselectedTextColor = MaterialTheme.colorScheme.onPrimary,
-                selectedContainerColor = MaterialTheme.colorScheme.secondary
-            )
-        )
-        NavigationDrawerItem(
-            label = { Text(text = "Pending") },
-            icon = { Icon(Icons.Filled.HourglassTop, contentDescription = "Pending") },
-            selected = currentRoute?.contains("${staticRoutes[CLIENT_PENDING_SCREEN_ROUTE_INDEX]}/") ?: false,
-            onClick = {
-                navHostController.navigate("${staticRoutes[CLIENT_PENDING_SCREEN_ROUTE_INDEX]}/${uiState.loggedInUserEmail}")
-                coroutineScope.launch {
-                    drawerState.close()
-                }
-            },
-            colors = NavigationDrawerItemDefaults.colors(
-                selectedTextColor = MaterialTheme.colorScheme.onPrimary,
-                unselectedTextColor = MaterialTheme.colorScheme.onPrimary,
-                selectedContainerColor = MaterialTheme.colorScheme.secondary
+    ModalDrawerSheet(modifier = drawerModifier.fillMaxHeight()) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .verticalScroll(rememberScrollState())
+            ) {
+                Text(
+                    text = "BarberBooker",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 24.sp,
+                    modifier = Modifier.padding(16.dp)
+                )
+                Divider(
+                    modifier = Modifier
+                        .padding(vertical = 8.dp)
+                        .fillMaxWidth(),
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    thickness = 2.dp
+                )
+                NavigationDrawerItem(
+                    label = { Text(text = "Appointments") },
+                    icon = { Icon(Icons.Filled.Schedule, contentDescription = "Appointments") },
+                    selected = currentRoute?.contains("${staticRoutes[CLIENT_INITIAL_SCREEN_ROUTE_INDEX]}/") ?: false,
+                    onClick = {
+                        navHostController.navigate("${staticRoutes[CLIENT_INITIAL_SCREEN_ROUTE_INDEX]}/${uiState.loggedInUserEmail}")
+                        coroutineScope.launch {
+                            drawerState.close()
+                        }
+                    },
+                    colors = NavigationDrawerItemDefaults.colors(
+                        selectedTextColor = MaterialTheme.colorScheme.onPrimary,
+                        unselectedTextColor = MaterialTheme.colorScheme.onPrimary,
+                        selectedContainerColor = MaterialTheme.colorScheme.secondary
+                    )
+                )
+                NavigationDrawerItem(
+                    label = { Text(text = "Search") },
+                    icon = { Icon(Icons.Filled.Search, contentDescription = "Search") },
+                    selected = currentRoute?.contains("${staticRoutes[CLIENT_SEARCH_BARBERS_SCREEN_ROUTE_INDEX]}/") ?: false,
+                    onClick = {
+                        navHostController.navigate("${staticRoutes[CLIENT_SEARCH_BARBERS_SCREEN_ROUTE_INDEX]}/${uiState.loggedInUserEmail}")
+                        coroutineScope.launch {
+                            drawerState.close()
+                        }
+                    },
+                    colors = NavigationDrawerItemDefaults.colors(
+                        selectedTextColor = MaterialTheme.colorScheme.onPrimary,
+                        unselectedTextColor = MaterialTheme.colorScheme.onPrimary,
+                        selectedContainerColor = MaterialTheme.colorScheme.secondary
+                    )
+                )
+                NavigationDrawerItem(
+                    label = { Text(text = "Pending") },
+                    icon = { Icon(Icons.Filled.HourglassTop, contentDescription = "Pending") },
+                    selected = currentRoute?.contains("${staticRoutes[CLIENT_PENDING_SCREEN_ROUTE_INDEX]}/") ?: false,
+                    onClick = {
+                        navHostController.navigate("${staticRoutes[CLIENT_PENDING_SCREEN_ROUTE_INDEX]}/${uiState.loggedInUserEmail}")
+                        coroutineScope.launch {
+                            drawerState.close()
+                        }
+                    },
+                    colors = NavigationDrawerItemDefaults.colors(
+                        selectedTextColor = MaterialTheme.colorScheme.onPrimary,
+                        unselectedTextColor = MaterialTheme.colorScheme.onPrimary,
+                        selectedContainerColor = MaterialTheme.colorScheme.secondary
 
-            )
-        )
-        Divider(modifier = Modifier.padding(vertical = 8.dp))
-        NavigationDrawerItem(
-            label = { Text(text = "Rejections") },
-            icon = { Icon(Icons.Filled.Warning, contentDescription = "Rejections") },
-            selected = currentRoute?.contains("${staticRoutes[CLIENT_REJECTIONS_SCREEN_ROUTE_INDEX]}/") ?: false,
-            onClick = {
-                navHostController.navigate("${staticRoutes[CLIENT_REJECTIONS_SCREEN_ROUTE_INDEX]}/${uiState.loggedInUserEmail}")
-                coroutineScope.launch {
-                    drawerState.close()
-                }
-            },
-            colors = NavigationDrawerItemDefaults.colors(
-                selectedTextColor = MaterialTheme.colorScheme.onPrimary,
-                unselectedTextColor = MaterialTheme.colorScheme.onPrimary,
-                selectedContainerColor = MaterialTheme.colorScheme.secondary
+                    )
+                )
+                Divider(
+                    modifier = Modifier
+                        .padding(vertical = 8.dp)
+                        .fillMaxWidth(),
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    thickness = 2.dp
+                )
+                NavigationDrawerItem(
+                    label = { Text(text = "Rejections") },
+                    icon = { Icon(Icons.Filled.Warning, contentDescription = "Rejections") },
+                    selected = currentRoute?.contains("${staticRoutes[CLIENT_REJECTIONS_SCREEN_ROUTE_INDEX]}/") ?: false,
+                    onClick = {
+                        navHostController.navigate("${staticRoutes[CLIENT_REJECTIONS_SCREEN_ROUTE_INDEX]}/${uiState.loggedInUserEmail}")
+                        coroutineScope.launch {
+                            drawerState.close()
+                        }
+                    },
+                    colors = NavigationDrawerItemDefaults.colors(
+                        selectedTextColor = MaterialTheme.colorScheme.onPrimary,
+                        unselectedTextColor = MaterialTheme.colorScheme.onPrimary,
+                        selectedContainerColor = MaterialTheme.colorScheme.secondary
 
-            )
-        )
-        NavigationDrawerItem(
-            label = { Text(text = "Archive") },
-            icon = { Icon(Icons.Filled.WorkHistory, contentDescription = "Past haircuts") },
-            selected = currentRoute?.contains("${staticRoutes[CLIENT_ARCHIVE_SCREEN_ROUTE_INDEX]}/") ?: false,
-            onClick = {
-                navHostController.navigate("${staticRoutes[CLIENT_ARCHIVE_SCREEN_ROUTE_INDEX]}/${uiState.loggedInUserEmail}")
-                coroutineScope.launch {
-                    drawerState.close()
-                }
-            },
-            colors = NavigationDrawerItemDefaults.colors(
-                selectedTextColor = MaterialTheme.colorScheme.onPrimary,
-                unselectedTextColor = MaterialTheme.colorScheme.onPrimary,
-                selectedContainerColor = MaterialTheme.colorScheme.secondary
+                    )
+                )
+                NavigationDrawerItem(
+                    label = { Text(text = "Archive") },
+                    icon = { Icon(Icons.Filled.WorkHistory, contentDescription = "Past haircuts") },
+                    selected = currentRoute?.contains("${staticRoutes[CLIENT_ARCHIVE_SCREEN_ROUTE_INDEX]}/") ?: false,
+                    onClick = {
+                        navHostController.navigate("${staticRoutes[CLIENT_ARCHIVE_SCREEN_ROUTE_INDEX]}/${uiState.loggedInUserEmail}")
+                        coroutineScope.launch {
+                            drawerState.close()
+                        }
+                    },
+                    colors = NavigationDrawerItemDefaults.colors(
+                        selectedTextColor = MaterialTheme.colorScheme.onPrimary,
+                        unselectedTextColor = MaterialTheme.colorScheme.onPrimary,
+                        selectedContainerColor = MaterialTheme.colorScheme.secondary
 
-            )
-        )
-        NavigationDrawerItem(
-            label = { Text(text = "Reviews") },
-            icon = { Icon(Icons.Filled.Reviews, contentDescription = "All reviews that client has left") },
-            selected = currentRoute?.contains("${staticRoutes[CLIENT_REVIEWS_SCREEN_ROUTE_INDEX]}/") ?: false,
-            onClick = {
-                navHostController.navigate("${staticRoutes[CLIENT_REVIEWS_SCREEN_ROUTE_INDEX]}/${uiState.loggedInUserEmail}")
-                coroutineScope.launch {
-                    drawerState.close()
-                }
-            },
-            colors = NavigationDrawerItemDefaults.colors(
-                selectedTextColor = MaterialTheme.colorScheme.onPrimary,
-                unselectedTextColor = MaterialTheme.colorScheme.onPrimary,
-                selectedContainerColor = MaterialTheme.colorScheme.secondary
-
-            )
-        )
+                    )
+                )
+                NavigationDrawerItem(
+                    label = { Text(text = "Reviews") },
+                    icon = { Icon(Icons.Filled.Reviews, contentDescription = "All reviews that client has left") },
+                    selected = currentRoute?.contains("${staticRoutes[CLIENT_REVIEWS_SCREEN_ROUTE_INDEX]}/") ?: false,
+                    onClick = {
+                        navHostController.navigate("${staticRoutes[CLIENT_REVIEWS_SCREEN_ROUTE_INDEX]}/${uiState.loggedInUserEmail}")
+                        coroutineScope.launch {
+                            drawerState.close()
+                        }
+                    },
+                    colors = NavigationDrawerItemDefaults.colors(
+                        selectedTextColor = MaterialTheme.colorScheme.onPrimary,
+                        unselectedTextColor = MaterialTheme.colorScheme.onPrimary,
+                        selectedContainerColor = MaterialTheme.colorScheme.secondary
+                    )
+                )
+            }
+        }
     }
 }

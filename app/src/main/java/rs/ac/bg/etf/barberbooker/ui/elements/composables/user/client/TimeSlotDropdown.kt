@@ -1,4 +1,4 @@
-package rs.ac.bg.etf.barberbooker.ui.elements.composables.user.barber
+package rs.ac.bg.etf.barberbooker.ui.elements.composables.user.client
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

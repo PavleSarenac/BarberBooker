@@ -7,8 +7,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.MaterialTheme
@@ -111,20 +109,17 @@ fun BarberBookerApp(
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
-            Column(
-                modifier = Modifier
-                    .verticalScroll(rememberScrollState())
-            ) {
-                if (uiState.loggedInUserType == "client") {
-                    ClientModalDrawerSheet(drawerState, navHostController, barberBookerViewModel)
-                }
-                else if (uiState.loggedInUserType == "barber") {
-                    BarberModalDrawerSheet(drawerState, navHostController, barberBookerViewModel)
-                }
+            if (uiState.loggedInUserType == "client") {
+                ClientModalDrawerSheet(drawerState, navHostController, barberBookerViewModel)
+            }
+            else if (uiState.loggedInUserType == "barber") {
+                BarberModalDrawerSheet(drawerState, navHostController, barberBookerViewModel)
             }
         },
-        gesturesEnabled = uiState.loggedInUserEmail != "" &&
-                (uiState.loggedInUserType == "client" || uiState.isEverythingConfirmed)
+        gesturesEnabled = uiState.loggedInUserEmail != "" && (uiState.loggedInUserType == "client" || uiState.isEverythingConfirmed),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.primary)
     ) {
         BarberBookerScaffold(
             navHostController,
@@ -138,7 +133,6 @@ fun BarberBookerApp(
             coroutineScope
         )
     }
-
 }
 
 @Composable

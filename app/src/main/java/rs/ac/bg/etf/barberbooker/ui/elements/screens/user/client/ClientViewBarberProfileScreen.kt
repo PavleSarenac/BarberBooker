@@ -72,7 +72,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import rs.ac.bg.etf.barberbooker.data.*
 import rs.ac.bg.etf.barberbooker.ui.elements.composables.user.StarRating
-import rs.ac.bg.etf.barberbooker.ui.elements.composables.user.barber.TimeSlotDropdown
+import rs.ac.bg.etf.barberbooker.ui.elements.composables.user.client.TimeSlotDropdown
 import rs.ac.bg.etf.barberbooker.ui.stateholders.user.barber.BarberProfileViewModel
 import rs.ac.bg.etf.barberbooker.ui.stateholders.user.client.ClientArchiveViewModel
 import rs.ac.bg.etf.barberbooker.ui.stateholders.user.client.ClientReviewsViewModel
