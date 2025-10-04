@@ -49,8 +49,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.TimePicker
-import androidx.compose.material3.TimePickerDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
@@ -74,6 +72,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import rs.ac.bg.etf.barberbooker.data.*
 import rs.ac.bg.etf.barberbooker.ui.elements.composables.user.StarRating
+import rs.ac.bg.etf.barberbooker.ui.elements.composables.user.barber.TimeSlotDropdown
 import rs.ac.bg.etf.barberbooker.ui.stateholders.user.barber.BarberProfileViewModel
 import rs.ac.bg.etf.barberbooker.ui.stateholders.user.client.ClientArchiveViewModel
 import rs.ac.bg.etf.barberbooker.ui.stateholders.user.client.ClientReviewsViewModel
@@ -335,8 +334,9 @@ fun ClientViewBarberProfileScreen(
                         todayContentColor = MaterialTheme.colorScheme.onPrimary,
                         todayDateBorderColor = MaterialTheme.colorScheme.onPrimary,
                         selectedDayContainerColor = MaterialTheme.colorScheme.secondary,
+                        yearContentColor = MaterialTheme.colorScheme.onPrimary,
                         currentYearContentColor = MaterialTheme.colorScheme.onPrimary,
-                        selectedYearContainerColor = MaterialTheme.colorScheme.onPrimary,
+                        selectedYearContainerColor = MaterialTheme.colorScheme.secondary,
                         dayContentColor = MaterialTheme.colorScheme.onPrimary,
                         disabledDayContentColor = MaterialTheme.colorScheme.secondary,
                     ),
@@ -344,25 +344,22 @@ fun ClientViewBarberProfileScreen(
                 )
             }
             Divider()
-            Spacer(modifier = Modifier.height(24.dp))
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp),
+                    .padding(vertical = 12.dp, horizontal = 90.dp),
                 horizontalArrangement = Arrangement.Center
             ) {
-                TimePicker(
-                    state = timePickerState,
-                    modifier = Modifier.padding(horizontal = 48.dp, vertical = 8.dp),
-                    colors = TimePickerDefaults.colors(
-                        clockDialColor = MaterialTheme.colorScheme.secondary
-                    )
+                val validSlots = listOf("09:00 - 09:30", "09:30 - 10:00", "10:00 - 10:30", "10:30 - 11:00", "11:00 - 11:30", "11:30 - 12:00", "12:00 - 12:30", "12:30 - 13:00")
+                TimeSlotDropdown(
+                    timeSlots = validSlots,
+                    onTimeSelected = { chosen ->
+                        println("User picked: $chosen")
+                    }
                 )
             }
             Divider()
-            Row(
-                modifier = Modifier.padding(8.dp)
-            ) {
+            Row {
                 OutlinedButton(
                     onClick = {
                         barberProfileViewModel.clientCreateReservationRequest(
@@ -377,7 +374,7 @@ fun ClientViewBarberProfileScreen(
                     border = BorderStroke(2.dp, MaterialTheme.colorScheme.onPrimary),
                     shape = MaterialTheme.shapes.medium,
                     modifier = Modifier
-                        .padding(horizontal = 48.dp, vertical = 12.dp)
+                        .padding(horizontal = 90.dp, vertical = 12.dp)
                         .fillMaxWidth(),
                     colors = ButtonDefaults.outlinedButtonColors(
                         MaterialTheme.colorScheme.secondary,

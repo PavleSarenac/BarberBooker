@@ -87,8 +87,7 @@ class BarberProfileViewModel @Inject constructor(
             )
         }
 
-        validDaysOfWeekIntegers.contains(dayOfWeek)
-                && (dateInMillis + 24 * 60 * 60 * 1000) > currentDateTimeInMillis
+        validDaysOfWeekIntegers.contains(dayOfWeek) && (dateInMillis + 24 * 60 * 60 * 1000) > currentDateTimeInMillis
     }
 
     fun getFirstValidDateInMillis(currentDateInMillis: Long): Long {
