@@ -32,7 +32,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -140,9 +139,9 @@ fun ClientTopBar(
                             openAccountDialog = false
                             navHostController.navigate("${staticRoutes[CLIENT_VIEW_PROFILE_SCREEN_ROUTE_INDEX]}/${clientEmail}")
                         },
-                        border = BorderStroke(1.dp, Color.White),
+                        border = BorderStroke(2.dp, MaterialTheme.colorScheme.onSecondary),
                         modifier = Modifier
-                            .padding(vertical = 8.dp)
+                            .padding(vertical = 8.dp, horizontal = 40.dp)
                             .fillMaxWidth(),
                         colors = ButtonDefaults.outlinedButtonColors(
                             MaterialTheme.colorScheme.primary,
@@ -160,9 +159,9 @@ fun ClientTopBar(
                             openAccountDialog = false
                             navHostController.navigate("${staticRoutes[CLIENT_EDIT_PROFILE_SCREEN_ROUTE_INDEX]}/${clientEmail}")
                         },
-                        border = BorderStroke(1.dp, Color.White),
+                        border = BorderStroke(2.dp, MaterialTheme.colorScheme.onSecondary),
                         modifier = Modifier
-                            .padding(vertical = 8.dp)
+                            .padding(vertical = 8.dp, horizontal = 40.dp)
                             .fillMaxWidth(),
                         colors = ButtonDefaults.outlinedButtonColors(
                             MaterialTheme.colorScheme.primary,
@@ -179,9 +178,9 @@ fun ClientTopBar(
                         onClick = {
                             barberBookerViewModel.logOut(context, navHostController)
                         },
-                        border = BorderStroke(1.dp, Color.White),
+                        border = BorderStroke(2.dp, MaterialTheme.colorScheme.onSecondary),
                         modifier = Modifier
-                            .padding(vertical = 8.dp)
+                            .padding(vertical = 8.dp, horizontal = 40.dp)
                             .fillMaxWidth(),
                         colors = ButtonDefaults.outlinedButtonColors(
                             MaterialTheme.colorScheme.primary,
