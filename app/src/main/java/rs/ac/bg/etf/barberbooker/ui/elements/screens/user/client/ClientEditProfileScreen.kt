@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -29,7 +30,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -93,7 +93,8 @@ fun ClientEditProfileScreen(
                     text = "e.g., Milos",
                     color = MaterialTheme.colorScheme.onPrimary
                 )
-            }
+            },
+            shape = RoundedCornerShape(16.dp)
         )
         OutlinedTextField(
             value = uiState.surname,
@@ -125,7 +126,8 @@ fun ClientEditProfileScreen(
                     text = "e.g., Milosevic",
                     color = MaterialTheme.colorScheme.onPrimary
                 )
-            }
+            },
+            shape = RoundedCornerShape(16.dp)
         )
         OutlinedButton(
             onClick = {
@@ -135,10 +137,10 @@ fun ClientEditProfileScreen(
                     snackbarCoroutineScope
                 )
             },
-            border = BorderStroke(1.dp, Color.White),
+            border = BorderStroke(2.dp, MaterialTheme.colorScheme.onSecondary),
             shape = MaterialTheme.shapes.medium,
             modifier = Modifier
-                .padding(horizontal = 48.dp, vertical = 32.dp)
+                .padding(horizontal = 80.dp, vertical = 32.dp)
                 .fillMaxWidth(),
             colors = ButtonDefaults.outlinedButtonColors(
                 MaterialTheme.colorScheme.secondary,
