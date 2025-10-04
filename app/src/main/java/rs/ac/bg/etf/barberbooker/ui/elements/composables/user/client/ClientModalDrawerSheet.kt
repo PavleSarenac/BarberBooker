@@ -81,8 +81,7 @@ fun ClientModalDrawerSheet(
                     modifier = Modifier
                         .padding(vertical = 8.dp)
                         .fillMaxWidth(),
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    thickness = 2.dp
+                    thickness = 1.dp
                 )
                 NavigationDrawerItem(
                     label = { Text(text = "Appointments") },
@@ -137,8 +136,7 @@ fun ClientModalDrawerSheet(
                     modifier = Modifier
                         .padding(vertical = 8.dp)
                         .fillMaxWidth(),
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    thickness = 2.dp
+                    thickness = 1.dp
                 )
                 NavigationDrawerItem(
                     label = { Text(text = "Rejections") },

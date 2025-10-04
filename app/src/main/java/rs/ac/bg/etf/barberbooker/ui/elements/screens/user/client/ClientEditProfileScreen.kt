@@ -140,7 +140,7 @@ fun ClientEditProfileScreen(
             border = BorderStroke(2.dp, MaterialTheme.colorScheme.onSecondary),
             shape = MaterialTheme.shapes.medium,
             modifier = Modifier
-                .padding(horizontal = 80.dp, vertical = 32.dp)
+                .padding(horizontal = 120.dp, vertical = 32.dp)
                 .fillMaxWidth(),
             colors = ButtonDefaults.outlinedButtonColors(
                 MaterialTheme.colorScheme.secondary,
