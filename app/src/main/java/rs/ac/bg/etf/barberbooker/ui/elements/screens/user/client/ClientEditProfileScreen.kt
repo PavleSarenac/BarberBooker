@@ -138,7 +138,7 @@ fun ClientEditProfileScreen(
                 )
             },
             border = BorderStroke(2.dp, MaterialTheme.colorScheme.onSecondary),
-            shape = MaterialTheme.shapes.medium,
+            shape = RoundedCornerShape(16.dp),
             modifier = Modifier
                 .padding(horizontal = 120.dp, vertical = 32.dp)
                 .fillMaxWidth(),
