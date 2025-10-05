@@ -180,7 +180,7 @@ fun BarberBookerScaffold(
                 SignUpAsBarberScreen(navHostController, paddingValues, snackbarHostState)
             }
             composable(route = staticRoutes[LOG_IN_AS_CLIENT_SCREEN_ROUTE_INDEX]) {
-                LogInAsClientScreen(navHostController, paddingValues, snackbarHostState)
+                LogInAsClientScreen(navHostController, snackbarHostState)
             }
             composable(route = staticRoutes[LOG_IN_AS_BARBER_SCREEN_ROUTE_INDEX]) {
                 LogInAsBarberScreen(navHostController, snackbarHostState)

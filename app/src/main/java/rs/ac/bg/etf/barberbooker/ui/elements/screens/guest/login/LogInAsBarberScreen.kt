@@ -166,7 +166,7 @@ fun LogInAsBarberScreen(
                     )
                 },
                 border = BorderStroke(2.dp, MaterialTheme.colorScheme.onPrimary),
-                shape = MaterialTheme.shapes.medium,
+                shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp),
