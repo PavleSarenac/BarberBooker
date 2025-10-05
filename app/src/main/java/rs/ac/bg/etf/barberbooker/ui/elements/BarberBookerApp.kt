@@ -168,7 +168,7 @@ fun BarberBookerScaffold(
                 InitialScreen(navHostController)
             }
             composable(route = staticRoutes[LOGIN_SCREEN_ROUTE_INDEX]) {
-                LogInScreen(navHostController, paddingValues)
+                LogInScreen(navHostController)
             }
             composable(route = staticRoutes[SIGN_UP_SCREEN_ROUTE_INDEX]) {
                 SignUpScreen(navHostController, paddingValues)
@@ -496,7 +496,7 @@ fun ScaffoldTopBar(
 ) {
     when {
         currentRoute == staticRoutes[LOGIN_SCREEN_ROUTE_INDEX] -> GuestTopBar(
-            topBarTitle = "Log in to BarberBooker",
+            topBarTitle = "Sign in to BarberBooker",
             navHostController = navHostController
         )
         currentRoute == staticRoutes[SIGN_UP_SCREEN_ROUTE_INDEX] -> GuestTopBar(
@@ -512,11 +512,11 @@ fun ScaffoldTopBar(
             navHostController = navHostController
         )
         currentRoute == staticRoutes[LOG_IN_AS_CLIENT_SCREEN_ROUTE_INDEX] -> GuestTopBar(
-            topBarTitle = "Log in as a client",
+            topBarTitle = "Sign in as a client",
             navHostController = navHostController
         )
         currentRoute == staticRoutes[LOG_IN_AS_BARBER_SCREEN_ROUTE_INDEX] -> GuestTopBar(
-            topBarTitle = "Log in as a barber",
+            topBarTitle = "Sign in as a barber",
             navHostController = navHostController
         )
         currentRoute.split("/")[0] == staticRoutes[CLIENT_INITIAL_SCREEN_ROUTE_INDEX]

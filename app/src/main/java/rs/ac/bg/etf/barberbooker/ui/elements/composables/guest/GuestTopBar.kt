@@ -34,7 +34,8 @@ fun GuestTopBar(
             IconButton(onClick = { navHostController.popBackStack() }) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBackIos,
-                    contentDescription = "Go back to previous screen"
+                    contentDescription = "Go back to previous screen",
+                    tint = MaterialTheme.colorScheme.onSecondary
                 )
             }
         }
