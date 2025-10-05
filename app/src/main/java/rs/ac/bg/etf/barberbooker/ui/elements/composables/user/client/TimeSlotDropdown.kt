@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -24,22 +25,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import rs.ac.bg.etf.barberbooker.ui.stateholders.user.barber.BarberProfileViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TimeSlotDropdown(
-    timeSlots: List<String>,
+    barberProfileViewModel: BarberProfileViewModel,
     onTimeSelected: (String) -> Unit
 ) {
+    val barberProfileUiState by barberProfileViewModel.uiState.collectAsState()
     var expanded by rememberSaveable { mutableStateOf(false) }
-    var selectedTime by rememberSaveable { mutableStateOf(timeSlots.first()) }
 
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = { expanded = !expanded }
     ) {
         TextField(
-            value = selectedTime,
+            value = barberProfileUiState.selectedTimeSlot,
             onValueChange = {},
             readOnly = true,
             label = { Text("Select Time Slot") },
@@ -71,7 +73,7 @@ fun TimeSlotDropdown(
             modifier = Modifier
                 .background(color = MaterialTheme.colorScheme.secondary)
         ) {
-            timeSlots.forEachIndexed { index, slot ->
+            barberProfileUiState.validTimeSlots.forEachIndexed { index, slot ->
                 Column(modifier = Modifier.fillMaxWidth())
                 {
                     DropdownMenuItem(
@@ -81,9 +83,8 @@ fun TimeSlotDropdown(
                             modifier = Modifier.fillMaxWidth()
                         ) },
                         onClick = {
-                            selectedTime = slot
-                            expanded = false
                             onTimeSelected(slot)
+                            expanded = false
                         },
                         colors = MenuDefaults.itemColors(
                             textColor = MaterialTheme.colorScheme.onSecondary,
@@ -92,7 +93,7 @@ fun TimeSlotDropdown(
                         modifier = Modifier
                             .background(color = MaterialTheme.colorScheme.secondary)
                     )
-                    if (index < timeSlots.lastIndex)
+                    if (index < barberProfileUiState.validTimeSlots.lastIndex)
                     {
                         Divider(
                             color = MaterialTheme.colorScheme.onSecondary,

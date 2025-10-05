@@ -9,26 +9,19 @@ import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.ExtendedReser
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.ExtendedReservationWithClient
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.tables.Reservation
 
-const val RESERVATION_URL = "http://192.168.0.39:8080/reservation/"
+const val RESERVATION_URL = "http://192.168.0.26:8080/reservation/"
 
 interface ReservationApi {
 
     @POST("addNewReservation")
     suspend fun addNewReservation(@Body reservation: Reservation)
 
-    @GET("getBarberReservationByDateTime")
-    suspend fun getBarberReservationByDateTime(
-        @Query("barberEmail") barberEmail: String,
-        @Query("date") date: String,
-        @Query("time") time: String
-    ): Response<Reservation>
-
-    @GET("getClientReservationByDateTime")
-    suspend fun getClientReservationByDateTime(
+    @GET("getAllValidTimeSlots")
+    suspend fun getAllValidTimeSlots(
         @Query("clientEmail") clientEmail: String,
-        @Query("date") date: String,
-        @Query("time") time: String
-    ): Response<Reservation>
+        @Query("barberEmail") barberEmail: String,
+        @Query("date") date: String
+    ): Response<List<String>>
 
     @GET("updateReservationStatuses")
     suspend fun updateReservationStatuses(
@@ -41,14 +34,6 @@ interface ReservationApi {
         @Query("currentDate") currentDate: String,
         @Query("currentTime") currentTime: String
     )
-
-    @GET("getRejectedReservationRequest")
-    suspend fun getRejectedReservationRequest(
-        @Query("clientEmail") clientEmail: String,
-        @Query("barberEmail") barberEmail: String,
-        @Query("date") date: String,
-        @Query("time") time: String
-    ): Response<Reservation>
 
     @GET("getClientPendingReservationRequests")
     suspend fun getClientPendingReservationRequests(

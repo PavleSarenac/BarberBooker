@@ -11,35 +11,17 @@ import javax.inject.Singleton
 class ReservationRepository @Inject constructor(
     private val reservationApi: ReservationApi
 ) {
-
     suspend fun addNewReservation(reservation: Reservation) {
         reservationApi.addNewReservation(reservation)
     }
 
-    suspend fun getBarberReservationByDateTime(
-        barberEmail: String,
-        date: String,
-        time: String
-    ): Reservation? {
-        val response = reservationApi.getBarberReservationByDateTime(barberEmail, date, time)
-        return if (response.isSuccessful) {
-            response.body()
-        } else {
-            null
-        }
-    }
-
-    suspend fun getClientReservationByDateTime(
+    suspend fun getAllValidTimeSlots(
         clientEmail: String,
-        date: String,
-        time: String
-    ): Reservation? {
-        val response = reservationApi.getClientReservationByDateTime(clientEmail, date, time)
-        return if (response.isSuccessful) {
-            response.body()
-        } else {
-            null
-        }
+        barberEmail: String,
+        date: String
+    ): List<String> {
+        val response = reservationApi.getAllValidTimeSlots(clientEmail, barberEmail, date)
+        return response.body() ?: listOf()
     }
 
     suspend fun updateReservationStatuses(currentDate: String, currentTime: String) {
@@ -48,20 +30,6 @@ class ReservationRepository @Inject constructor(
 
     suspend fun updatePendingRequests(currentDate: String, currentTime: String) {
         reservationApi.updatePendingRequests(currentDate, currentTime)
-    }
-
-    suspend fun getRejectedReservationRequest(
-        clientEmail: String,
-        barberEmail: String,
-        date: String,
-        time: String
-    ): Reservation? {
-        val response = reservationApi.getRejectedReservationRequest(clientEmail, barberEmail, date, time)
-        return if (response.isSuccessful) {
-            response.body()
-        } else {
-            null
-        }
     }
 
     suspend fun getClientPendingReservationRequests(clientEmail: String): List<ExtendedReservationWithBarber> {

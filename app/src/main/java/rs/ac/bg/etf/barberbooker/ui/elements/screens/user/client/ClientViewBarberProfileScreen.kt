@@ -38,6 +38,7 @@ import androidx.compose.material.icons.filled.StarRate
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.Divider
@@ -50,7 +51,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberDatePickerState
-import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -59,6 +59,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -111,10 +112,20 @@ fun ClientViewBarberProfileScreen(
 
     if (!isDataFetched) return
 
-    val timePickerState = rememberTimePickerState(is24Hour = true)
     val datePickerState = rememberDatePickerState(
         initialSelectedDateMillis = barberProfileViewModel.getFirstValidDateInMillis(System.currentTimeMillis())
     )
+
+    LaunchedEffect(datePickerState) {
+        snapshotFlow { datePickerState.selectedDateMillis }
+            .collect { selectedDateMillis ->
+                selectedDateMillis?.let {
+                    uiState.selectedTimeSlot = ""
+                    val fetchValidTimeSlotsJob = barberProfileViewModel.getAllValidTimeSlotsForSelectedDate(clientEmail, barberEmail, barberProfileViewModel.convertDateMillisToString(it))
+                    fetchValidTimeSlotsJob.join()
+                }
+            }
+    }
 
     Column(
         modifier = Modifier
@@ -350,13 +361,20 @@ fun ClientViewBarberProfileScreen(
                     .padding(vertical = 12.dp, horizontal = 90.dp),
                 horizontalArrangement = Arrangement.Center
             ) {
-                val validSlots = listOf("09:00 - 09:30", "09:30 - 10:00", "10:00 - 10:30", "10:30 - 11:00", "11:00 - 11:30", "11:30 - 12:00", "12:00 - 12:30", "12:30 - 13:00", "11:00 - 11:30", "11:30 - 12:00", "12:00 - 12:30", "12:30 - 13:00", "11:00 - 11:30", "11:30 - 12:00", "12:00 - 12:30", "12:30 - 13:00", "11:00 - 11:30", "11:30 - 12:00", "12:00 - 12:30", "12:30 - 13:00", "11:00 - 11:30", "11:30 - 12:00", "12:00 - 12:30", "12:30 - 13:00")
-                TimeSlotDropdown(
-                    timeSlots = validSlots,
-                    onTimeSelected = { chosen ->
-                        println("User picked: $chosen")
-                    }
-                )
+                if (uiState.validTimeSlots.isNotEmpty()) {
+                    TimeSlotDropdown(
+                        barberProfileViewModel,
+                        onTimeSelected = {
+                            barberProfileViewModel.updateSelectedTimeSlot(it)
+                        }
+                    )
+                } else {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(32.dp),
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        strokeWidth = 3.dp
+                    )
+                }
             }
             Divider()
             Row {
@@ -366,7 +384,7 @@ fun ClientViewBarberProfileScreen(
                             barberEmail,
                             clientEmail,
                             barberProfileViewModel.convertDateMillisToString(datePickerState.selectedDateMillis!!),
-                            String.format("%02d:%02d", timePickerState.hour, timePickerState.minute),
+                            uiState.selectedTimeSlot,
                             snackbarHostState,
                             snackbarCoroutineScope
                         )
@@ -379,7 +397,8 @@ fun ClientViewBarberProfileScreen(
                     colors = ButtonDefaults.outlinedButtonColors(
                         MaterialTheme.colorScheme.secondary,
                         MaterialTheme.colorScheme.onSecondary
-                    )
+                    ),
+                    enabled = uiState.selectedTimeSlot.isNotEmpty()
                 ) {
                     Text(
                         text = "Submit request"
@@ -388,10 +407,8 @@ fun ClientViewBarberProfileScreen(
             }
         }
 
-        if (
-            clientArchiveUiState.archive.any { it.barberEmail == barberEmail && it.status == "DONE_SUCCESS" } &&
-            clientReviewsUiState.pastReviewsForThisBarber.isEmpty()
-            ) {
+        if (clientArchiveUiState.archive.any { it.barberEmail == barberEmail && it.status == "DONE_SUCCESS" } &&
+            clientReviewsUiState.pastReviewsForThisBarber.isEmpty()) {
             Spacer(modifier = Modifier.height(24.dp))
             Card(
                 colors = CardDefaults.cardColors(

@@ -47,7 +47,10 @@ data class BarberProfileUiState(
     var isCountryValid: Boolean = true,
     var isCityValid: Boolean = true,
     var isMunicipalityValid: Boolean = true,
-    var isAddressValid: Boolean = true
+    var isAddressValid: Boolean = true,
+
+    var validTimeSlots: List<String> = listOf(),
+    var selectedTimeSlot: String = ""
 )
 
 @HiltViewModel
@@ -134,53 +137,37 @@ class BarberProfileViewModel @Inject constructor(
         reservationRepository.updatePendingRequests(currentDateString, currentTimeString)
     }
 
+    fun getAllValidTimeSlotsForSelectedDate(
+        clientEmail: String,
+        barberEmail: String,
+        selectedDate: String
+    ) = viewModelScope.launch(Dispatchers.IO) {
+        val validTimeSlots = reservationRepository.getAllValidTimeSlots(clientEmail, barberEmail, selectedDate)
+        withContext(Dispatchers.Main) {
+            _uiState.update { it.copy(
+                validTimeSlots = validTimeSlots,
+                selectedTimeSlot = validTimeSlots.first()
+            ) }
+        }
+    }
+
+    fun updateSelectedTimeSlot(selectedTimeSlot: String) = viewModelScope.launch(Dispatchers.Main) {
+        _uiState.update {it.copy(
+            selectedTimeSlot = selectedTimeSlot
+        ) }
+    }
+
     fun clientCreateReservationRequest(
         barberEmail: String,
         clientEmail: String,
         date: String,
-        time: String,
+        timeSlot: String,
         snackbarHostState: SnackbarHostState,
         snackbarCoroutineScope: CoroutineScope
     ) = viewModelScope.launch(Dispatchers.IO) {
-        if (!isReservationDateTimeValid(date, time)) {
-            snackbarCoroutineScope.launch(Dispatchers.Main) {
-                snackbarHostState.showSnackbar(
-                    message = "Invalid reservation time!",
-                    withDismissAction = true
-                )
-            }
-            return@launch
-        }
-
-        if (!isClientAvailable(clientEmail, date, time)) {
-            snackbarCoroutineScope.launch(Dispatchers.Main) {
-                snackbarHostState.showSnackbar(
-                    message = "You are unavailable at the selected time!",
-                    withDismissAction = true
-                )
-            }
-            return@launch
-        }
-
-        if (!isBarberAvailable(barberEmail, date, time)) {
-            snackbarCoroutineScope.launch(Dispatchers.Main) {
-                snackbarHostState.showSnackbar(
-                    message = "Barber is unavailable at the selected time!",
-                    withDismissAction = true
-                )
-            }
-            return@launch
-        }
-
-        if (!isRequestAlreadyRejected(clientEmail, barberEmail, date, time)) {
-            snackbarCoroutineScope.launch(Dispatchers.Main) {
-                snackbarHostState.showSnackbar(
-                    message = "Request already rejected!",
-                    withDismissAction = true
-                )
-            }
-            return@launch
-        }
+        val splittedTimeSlot = timeSlot.split(" - ")
+        val startTime = splittedTimeSlot[0]
+        val endTime = splittedTimeSlot[1]
 
         reservationRepository.addNewReservation(
             Reservation(
@@ -188,11 +175,14 @@ class BarberProfileViewModel @Inject constructor(
                 clientEmail = clientEmail,
                 barberEmail = barberEmail,
                 date = date,
-                startTime = time,
-                endTime = getReservationEndTime(time),
+                startTime = startTime,
+                endTime = endTime,
                 status = "PENDING"
             )
         )
+
+        val updateValidTimeSlotsJob = getAllValidTimeSlotsForSelectedDate(clientEmail, barberEmail, date)
+        updateValidTimeSlotsJob.join()
 
         notificationRepository.sendNotification(
             NotificationData(
@@ -211,57 +201,6 @@ class BarberProfileViewModel @Inject constructor(
             )
         }
 
-    }
-
-    private fun getReservationEndTime(startTime: String): String {
-        val startHourInt = startTime.substring(0, 2).toInt()
-        val startMinuteInt = startTime.substring(3).toInt()
-
-        return if (startMinuteInt == 30) {
-            val endHourInt = (startHourInt + 1) % 24
-            val endMinuteInt = 0
-            String.format("%02d:%02d", endHourInt, endMinuteInt)
-        } else {
-            val endMinuteInt = 30
-            String.format("%02d:%02d", startHourInt, endMinuteInt)
-        }
-    }
-
-    private suspend fun isRequestAlreadyRejected(
-        clientEmail: String,
-        barberEmail: String,
-        date: String,
-        time: String
-    ): Boolean {
-        return reservationRepository.getRejectedReservationRequest(clientEmail, barberEmail, date, time) == null
-    }
-
-    private suspend fun isClientAvailable(clientEmail: String, date: String, time: String): Boolean {
-        return reservationRepository.getClientReservationByDateTime(clientEmail, date, time) == null
-    }
-
-    private suspend fun isBarberAvailable(barberEmail: String, date: String, time: String): Boolean {
-        return reservationRepository.getBarberReservationByDateTime(barberEmail, date, time) == null
-    }
-
-    private fun isReservationDateTimeValid(
-        date: String,
-        time: String
-    ): Boolean {
-        val barberStartWorkTime = _uiState.value.workingHours.substring(0, 5)
-        var barberEndWorkTime = _uiState.value.workingHours.substring(8)
-        if (barberEndWorkTime == "00:00") barberEndWorkTime = "24:00"
-
-        val currentDateTimeInMillis = System.currentTimeMillis()
-        val currentDateString = convertDateMillisToString(currentDateTimeInMillis)
-        val currentTimeString = convertTimeMillisToString(currentDateTimeInMillis)
-        if (date < currentDateString) return false
-
-        if (date == currentDateString && time < currentTimeString) return false
-        if (time < barberStartWorkTime || time >= barberEndWorkTime) return false
-        if (time.substring(3, 5) != "00" && time.substring(3, 5) != "30") return false
-
-        return true
     }
 
     fun convertDateMillisToString(dateTimeInMillis: Long): String {
