@@ -183,7 +183,7 @@ fun BarberBookerScaffold(
                 LogInAsClientScreen(navHostController, paddingValues, snackbarHostState)
             }
             composable(route = staticRoutes[LOG_IN_AS_BARBER_SCREEN_ROUTE_INDEX]) {
-                LogInAsBarberScreen(navHostController, paddingValues, snackbarHostState)
+                LogInAsBarberScreen(navHostController, snackbarHostState)
             }
             composable(
                 route = "${staticRoutes[CLIENT_INITIAL_SCREEN_ROUTE_INDEX]}/{clientEmail}",
