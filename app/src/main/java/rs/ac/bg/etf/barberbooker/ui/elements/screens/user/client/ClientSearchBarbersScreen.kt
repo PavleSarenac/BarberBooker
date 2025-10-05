@@ -379,7 +379,8 @@ fun ClientSearchBarbersScreen(
                         onCheckedChange = null
                     )
                     Text(
-                        text = "Sort by average grade"
+                        text = "Sort by average grade",
+                        color = MaterialTheme.colorScheme.onSecondary
                     )
                 }
                 Row(
@@ -402,7 +403,8 @@ fun ClientSearchBarbersScreen(
                         enabled = sortingByGradeState
                     )
                     Text(
-                        text = "Ascending"
+                        text = "Ascending",
+                        color = MaterialTheme.colorScheme.onSecondary
                     )
                 }
                 Row(
@@ -425,7 +427,8 @@ fun ClientSearchBarbersScreen(
                         enabled = sortingByGradeState
                     )
                     Text(
-                        text = "Descending"
+                        text = "Descending",
+                        color = MaterialTheme.colorScheme.onSecondary
                     )
                 }
                 Row(
@@ -442,7 +445,8 @@ fun ClientSearchBarbersScreen(
                         onCheckedChange = null
                     )
                     Text(
-                        text = "Sort by price"
+                        text = "Sort by price",
+                        color = MaterialTheme.colorScheme.onSecondary
                     )
                 }
                 Row(
@@ -465,7 +469,8 @@ fun ClientSearchBarbersScreen(
                         enabled = sortingByPriceState
                     )
                     Text(
-                        text = "Ascending"
+                        text = "Ascending",
+                        color = MaterialTheme.colorScheme.onSecondary
                     )
                 }
                 Row(
@@ -488,7 +493,8 @@ fun ClientSearchBarbersScreen(
                         enabled = sortingByPriceState
                     )
                     Text(
-                        text = "Descending"
+                        text = "Descending",
+                        color = MaterialTheme.colorScheme.onSecondary
                     )
                 }
             }
