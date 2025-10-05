@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -361,19 +362,44 @@ fun ClientViewBarberProfileScreen(
                     .padding(vertical = 12.dp, horizontal = 90.dp),
                 horizontalArrangement = Arrangement.Center
             ) {
-                if (uiState.validTimeSlots.isNotEmpty()) {
-                    TimeSlotDropdown(
-                        barberProfileViewModel,
-                        onTimeSelected = {
-                            barberProfileViewModel.updateSelectedTimeSlot(it)
+                when {
+                    uiState.areTimeSlotsLoading -> {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(56.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator(
+                                color = MaterialTheme.colorScheme.onPrimary,
+                                strokeWidth = 3.dp,
+                                modifier = Modifier
+                                    .height(32.dp)
+                                    .width(32.dp)
+                            )
                         }
-                    )
-                } else {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(32.dp),
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        strokeWidth = 3.dp
-                    )
+                    }
+                    uiState.validTimeSlots.isNotEmpty() -> {
+                        TimeSlotDropdown(
+                            barberProfileViewModel,
+                            onTimeSelected = {
+                                barberProfileViewModel.updateSelectedTimeSlot(it)
+                            }
+                        )
+                    }
+                    else -> {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(56.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = "No time slots available.",
+                                color = MaterialTheme.colorScheme.onPrimary
+                            )
+                        }
+                    }
                 }
             }
             Divider()
@@ -395,8 +421,10 @@ fun ClientViewBarberProfileScreen(
                         .padding(horizontal = 90.dp, vertical = 12.dp)
                         .fillMaxWidth(),
                     colors = ButtonDefaults.outlinedButtonColors(
-                        MaterialTheme.colorScheme.secondary,
-                        MaterialTheme.colorScheme.onSecondary
+                        containerColor = MaterialTheme.colorScheme.secondary,
+                        contentColor = MaterialTheme.colorScheme.onSecondary,
+                        disabledContainerColor = MaterialTheme.colorScheme.secondary,
+                        disabledContentColor = MaterialTheme.colorScheme.onSecondary
                     ),
                     enabled = uiState.selectedTimeSlot.isNotEmpty()
                 ) {

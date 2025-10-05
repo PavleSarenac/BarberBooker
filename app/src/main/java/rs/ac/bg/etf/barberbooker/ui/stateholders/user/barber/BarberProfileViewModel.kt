@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -50,6 +51,7 @@ data class BarberProfileUiState(
     var isAddressValid: Boolean = true,
 
     var validTimeSlots: List<String> = listOf(),
+    var areTimeSlotsLoading: Boolean = false,
     var selectedTimeSlot: String = ""
 )
 
@@ -142,11 +144,18 @@ class BarberProfileViewModel @Inject constructor(
         barberEmail: String,
         selectedDate: String
     ) = viewModelScope.launch(Dispatchers.IO) {
+        withContext(Dispatchers.Main) {
+            _uiState.update { it.copy(
+                areTimeSlotsLoading = true
+            ) }
+        }
         val validTimeSlots = reservationRepository.getAllValidTimeSlots(clientEmail, barberEmail, selectedDate)
+        delay(300)
         withContext(Dispatchers.Main) {
             _uiState.update { it.copy(
                 validTimeSlots = validTimeSlots,
-                selectedTimeSlot = validTimeSlots.first()
+                areTimeSlotsLoading = false,
+                selectedTimeSlot = validTimeSlots.firstOrNull() ?: ""
             ) }
         }
     }
