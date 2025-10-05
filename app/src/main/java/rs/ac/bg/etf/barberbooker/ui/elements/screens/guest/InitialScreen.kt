@@ -68,7 +68,10 @@ fun InitialScreen(navHostController: NavHostController) {
                     contentColor = MaterialTheme.colorScheme.onSecondary
                 )
             ) {
-                Text("Sign in", style = MaterialTheme.typography.bodyLarge)
+                Text(
+                    text = "Sign in",
+                    style = MaterialTheme.typography.bodyLarge
+                )
             }
 
             OutlinedButton(
@@ -83,7 +86,10 @@ fun InitialScreen(navHostController: NavHostController) {
                     contentColor = MaterialTheme.colorScheme.onSecondary
                 )
             ) {
-                Text("Sign up", style = MaterialTheme.typography.bodyLarge)
+                Text(
+                    text = "Sign up",
+                    style = MaterialTheme.typography.bodyLarge
+                )
             }
         }
 

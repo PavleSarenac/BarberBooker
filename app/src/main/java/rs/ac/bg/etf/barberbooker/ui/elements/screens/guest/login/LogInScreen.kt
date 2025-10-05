@@ -71,7 +71,10 @@ fun LogInScreen(
                     contentColor = MaterialTheme.colorScheme.onSecondary
                 )
             ) {
-                Text("Sign in as a client", style = MaterialTheme.typography.bodyLarge)
+                Text(
+                    text = "Sign in as a client",
+                    style = MaterialTheme.typography.bodyLarge
+                )
             }
 
             OutlinedButton(
@@ -86,7 +89,10 @@ fun LogInScreen(
                     contentColor = MaterialTheme.colorScheme.onSecondary
                 )
             ) {
-                Text("Sign in as a barber", style = MaterialTheme.typography.bodyLarge)
+                Text(
+                    text = "Sign in as a barber",
+                    style = MaterialTheme.typography.bodyLarge
+                )
             }
         }
 

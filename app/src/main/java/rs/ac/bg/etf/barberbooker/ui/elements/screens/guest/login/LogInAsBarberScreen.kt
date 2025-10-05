@@ -176,7 +176,8 @@ fun LogInAsBarberScreen(
                 )
             ) {
                 Text(
-                    text = "Sign in"
+                    text = "Sign in",
+                    style = MaterialTheme.typography.bodyLarge
                 )
             }
         }
