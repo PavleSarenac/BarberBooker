@@ -23,8 +23,15 @@ fun ClientBottomBar(clientEmail: String, navHostController: NavHostController) {
 
     NavigationBar {
         NavigationBarItem(
-            icon = { Icon(Icons.Filled.Schedule, contentDescription = "Appointments") },
-            label = { Text(text = "Appointments") },
+            icon = { Icon(
+                imageVector = Icons.Filled.Schedule,
+                contentDescription = "Appointments",
+                tint = MaterialTheme.colorScheme.onPrimary
+            ) },
+            label = { Text(
+                text = "Appointments",
+                color = MaterialTheme.colorScheme.onPrimary
+            ) },
             selected = currentRoute?.contains("${staticRoutes[CLIENT_INITIAL_SCREEN_ROUTE_INDEX]}/") ?: false,
             onClick = {
                 if (currentRoute?.contains("${staticRoutes[CLIENT_INITIAL_SCREEN_ROUTE_INDEX]}/") == true) {
@@ -38,8 +45,15 @@ fun ClientBottomBar(clientEmail: String, navHostController: NavHostController) {
             )
         )
         NavigationBarItem(
-            icon = { Icon(Icons.Filled.Search, contentDescription = "Search") },
-            label = { Text(text = "Search") },
+            icon = { Icon(
+                imageVector = Icons.Filled.Search,
+                contentDescription = "Search",
+                tint = MaterialTheme.colorScheme.onPrimary
+            ) },
+            label = { Text(
+                text = "Search",
+                color = MaterialTheme.colorScheme.onPrimary
+            ) },
             selected = currentRoute?.contains("${staticRoutes[CLIENT_SEARCH_BARBERS_SCREEN_ROUTE_INDEX]}/") ?: false,
             onClick = {
                 if (currentRoute?.contains("${staticRoutes[CLIENT_SEARCH_BARBERS_SCREEN_ROUTE_INDEX]}/") == true) {
@@ -53,8 +67,15 @@ fun ClientBottomBar(clientEmail: String, navHostController: NavHostController) {
             )
         )
         NavigationBarItem(
-            icon = { Icon(Icons.Filled.HourglassTop, contentDescription = "Pending") },
-            label = { Text(text = "Pending") },
+            icon = { Icon(
+                imageVector = Icons.Filled.HourglassTop,
+                contentDescription = "Pending",
+                tint = MaterialTheme.colorScheme.onPrimary
+            ) },
+            label = { Text(
+                text = "Pending",
+                color = MaterialTheme.colorScheme.onPrimary
+            ) },
             selected = currentRoute?.contains("${staticRoutes[CLIENT_PENDING_SCREEN_ROUTE_INDEX]}/") ?: false,
             onClick = {
                 if (currentRoute?.contains("${staticRoutes[CLIENT_PENDING_SCREEN_ROUTE_INDEX]}/") == true) {

@@ -31,8 +31,8 @@ class BarberRejectionsViewModel @Inject constructor(
         var rejections = reservationRepository.getBarberRejections(barberEmail)
         val dateFormat = SimpleDateFormat("dd/MM/yyyy")
 
-        rejections = rejections.sortedBy { it.startTime }
-        rejections = rejections.sortedBy { dateFormat.parse(it.date) }
+        rejections = rejections.sortedByDescending { it.startTime }
+        rejections = rejections.sortedByDescending { dateFormat.parse(it.date) }
 
         withContext(Dispatchers.Main) {
             _uiState.update { it.copy(rejections = rejections) }

@@ -78,7 +78,8 @@ fun BarberTopBar(
             } ) {
                 Icon(
                     imageVector = Icons.Filled.Menu,
-                    contentDescription = "Show menu"
+                    contentDescription = "Show menu",
+                    tint = MaterialTheme.colorScheme.onSecondary
                 )
             }
         },
