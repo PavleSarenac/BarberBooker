@@ -169,7 +169,7 @@ fun LogInAsClientScreen(
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 8.dp),
+                    .padding(vertical = 16.dp),
                 colors = ButtonDefaults.outlinedButtonColors(
                     MaterialTheme.colorScheme.secondary,
                     MaterialTheme.colorScheme.onSecondary

@@ -21,6 +21,8 @@ import rs.ac.bg.etf.barberbooker.data.retrofit.entities.tables.Barber
 import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.BarberRepository
 import rs.ac.bg.etf.barberbooker.data.*
 import java.security.MessageDigest
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 data class BarberRegistrationUiState(
@@ -48,7 +50,13 @@ data class BarberRegistrationUiState(
     var isCityValid: Boolean = true,
     var isMunicipalityValid: Boolean = true,
     var isStreetNameValid: Boolean = true,
-    var isStreetNumberValid: Boolean = true
+    var isStreetNumberValid: Boolean = true,
+
+    var allValidWorkingDayTimes: List<String> = listOf(),
+    var validWorkingDayStartTimes: List<String> = listOf(),
+    var validWorkingDayEndTimes: List<String> = listOf(),
+    var selectedWorkingDayStartTime: String = "",
+    var selectedWorkingDayEndTime: String = ""
 )
 
 @HiltViewModel
@@ -144,9 +152,7 @@ class BarberRegistrationViewModel @Inject constructor(
                 municipality,
                 streetName,
                 streetNumber,
-                workingDayStartTime,
-                workingDayEndTime,
-                selectedWorkingDays
+                workingDayStartTime
         )) {
             snackbarCoroutineScope.launch {
                 snackbarHostState.showSnackbar(
@@ -247,8 +253,6 @@ class BarberRegistrationViewModel @Inject constructor(
         municipality: String,
         streetName: String,
         streetNumber: String,
-        workingDayStartTime: String,
-        workingDayEndTime: String,
         selectedWorkingDays: String
     ): Boolean {
         var isDataValid = true
@@ -262,7 +266,6 @@ class BarberRegistrationViewModel @Inject constructor(
         if (!isMunicipalityValid(municipality)) isDataValid = false
         if (!isStreetNameValid(streetName)) isDataValid = false
         if (!isStreetNumberValid(streetNumber)) isDataValid = false
-        if (!areWorkingHoursValid(workingDayStartTime, workingDayEndTime)) isDataValid = false
         if (!areSelectedWorkingDaysValid(selectedWorkingDays)) isDataValid = false
         return isDataValid
     }
@@ -410,17 +413,62 @@ class BarberRegistrationViewModel @Inject constructor(
         return isStreetNumberValid
     }
 
-    private fun areWorkingHoursValid(
-        workingDayStartTime: String,
-        workingDayEndTime: String
-    ): Boolean {
-        return ((workingDayEndTime > workingDayStartTime) || (workingDayStartTime == workingDayEndTime && workingDayStartTime == "00:00"))
-                        && (workingDayEndTime.substring(3, 5) == "00" || workingDayEndTime.substring(3, 5) == "30")
-                        && (workingDayStartTime.substring(3, 5) == "00" || workingDayStartTime.substring(3, 5) == "30")
-    }
-
     private fun areSelectedWorkingDaysValid(selectedWorkingDays: String): Boolean {
         return selectedWorkingDays.isNotEmpty()
     }
 
+    fun generateValidWorkingHours() = viewModelScope.launch(Dispatchers.Default) {
+        val formatter = DateTimeFormatter.ofPattern("HH:mm")
+        val startTime = LocalTime.MIN
+
+        val validWorkingHours = generateSequence(startTime) { time ->
+            val next = time.plusMinutes(30)
+            if (!next.equals(LocalTime.parse("00:00", formatter))) next else null
+        }
+            .map { it.format(formatter) }
+            .toList()
+
+        val validWorkingDayStartTimes = validWorkingHours.toList()
+        val validWorkingDayEndTimes = validWorkingHours.toList()
+
+        withContext(Dispatchers.Main) {
+            _uiState.update { it.copy(
+                allValidWorkingDayTimes = validWorkingHours,
+                validWorkingDayStartTimes = validWorkingDayStartTimes,
+                validWorkingDayEndTimes = validWorkingDayEndTimes,
+                selectedWorkingDayStartTime = validWorkingDayStartTimes.first(),
+                selectedWorkingDayEndTime = validWorkingDayEndTimes.first()
+            ) }
+        }
+    }
+
+    fun updateSelectedWorkingDayStartTime(selectedTime: String) = viewModelScope.launch(Dispatchers.Main) {
+        val formatter = DateTimeFormatter.ofPattern("HH:mm")
+        val selectedLocalTime = LocalTime.parse(selectedTime, formatter)
+        var newValidWorkingDayEndTimes: List<String>
+        withContext(Dispatchers.Default) {
+            newValidWorkingDayEndTimes = _uiState.value.allValidWorkingDayTimes.filter { LocalTime.parse(it, formatter).isAfter(selectedLocalTime) || it == "00:00" }
+        }
+
+        _uiState.update { it.copy(
+            selectedWorkingDayStartTime = selectedTime,
+            validWorkingDayEndTimes = newValidWorkingDayEndTimes,
+            selectedWorkingDayEndTime = newValidWorkingDayEndTimes.first()
+        ) }
+    }
+
+    fun updateSelectedWorkingDayEndTime(selectedTime: String) = viewModelScope.launch(Dispatchers.Main) {
+        val formatter = DateTimeFormatter.ofPattern("HH:mm")
+        val selectedLocalTime = LocalTime.parse(selectedTime, formatter)
+        var newValidWorkingDayStartTimes: List<String>
+        withContext(Dispatchers.Default) {
+            newValidWorkingDayStartTimes = _uiState.value.allValidWorkingDayTimes.filter { LocalTime.parse(it, formatter).isBefore(selectedLocalTime) || it == "00:00" }
+        }
+
+        _uiState.update { it.copy(
+            selectedWorkingDayEndTime = selectedTime,
+            validWorkingDayStartTimes = newValidWorkingDayStartTimes,
+            selectedWorkingDayStartTime = newValidWorkingDayStartTimes.first()
+        ) }
+    }
 }

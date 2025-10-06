@@ -1,4 +1,4 @@
-package rs.ac.bg.etf.barberbooker.ui.elements.composables.user.client
+package rs.ac.bg.etf.barberbooker.ui.elements.composables.guest
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -25,15 +25,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import rs.ac.bg.etf.barberbooker.ui.stateholders.user.barber.BarberProfileViewModel
+import rs.ac.bg.etf.barberbooker.ui.stateholders.guest.registration.BarberRegistrationViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TimeSlotDropdown(
-    barberProfileViewModel: BarberProfileViewModel,
+fun WorkingHoursDropdown(
+    barberRegistrationViewModel: BarberRegistrationViewModel,
+    areWorkingDayStartTimes: Boolean,
     onTimeSelected: (String) -> Unit
 ) {
-    val barberProfileUiState by barberProfileViewModel.uiState.collectAsState()
+    val barberRegistrationUiState by barberRegistrationViewModel.uiState.collectAsState()
     var expanded by rememberSaveable { mutableStateOf(false) }
 
     ExposedDropdownMenuBox(
@@ -41,11 +42,11 @@ fun TimeSlotDropdown(
         onExpandedChange = { expanded = !expanded }
     ) {
         TextField(
-            value = barberProfileUiState.selectedTimeSlot,
+            value = if (areWorkingDayStartTimes) barberRegistrationUiState.selectedWorkingDayStartTime else barberRegistrationUiState.selectedWorkingDayEndTime,
             onValueChange = {},
             readOnly = true,
             label = { Text(
-                text = "Select Time Slot",
+                text = "Select " + (if (areWorkingDayStartTimes) "Start" else "End") + " Time",
                 color = MaterialTheme.colorScheme.onSecondary
             ) },
             trailingIcon = {
@@ -76,7 +77,8 @@ fun TimeSlotDropdown(
             modifier = Modifier
                 .background(color = MaterialTheme.colorScheme.secondary)
         ) {
-            barberProfileUiState.validTimeSlots.forEachIndexed { index, slot ->
+            val workingDayTimesList = if (areWorkingDayStartTimes) barberRegistrationUiState.validWorkingDayStartTimes else barberRegistrationUiState.validWorkingDayEndTimes
+            workingDayTimesList.forEachIndexed { index, slot ->
                 Column(modifier = Modifier.fillMaxWidth())
                 {
                     DropdownMenuItem(
@@ -96,7 +98,7 @@ fun TimeSlotDropdown(
                         modifier = Modifier
                             .background(color = MaterialTheme.colorScheme.secondary)
                     )
-                    if (index < barberProfileUiState.validTimeSlots.lastIndex)
+                    if (index < workingDayTimesList.lastIndex)
                     {
                         Divider(
                             color = MaterialTheme.colorScheme.onSecondary,
