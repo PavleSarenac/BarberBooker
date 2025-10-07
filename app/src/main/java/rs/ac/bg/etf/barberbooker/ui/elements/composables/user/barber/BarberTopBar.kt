@@ -32,7 +32,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -123,9 +122,9 @@ fun BarberTopBar(
                             openAccountDialog = false
                             navHostController.navigate("${staticRoutes[BARBER_VIEW_PROFILE_SCREEN_ROUTE_INDEX]}/${barberEmail}")
                         },
-                        border = BorderStroke(1.dp, Color.White),
+                        border = BorderStroke(2.dp, MaterialTheme.colorScheme.onSecondary),
                         modifier = Modifier
-                            .padding(vertical = 8.dp)
+                            .padding(vertical = 8.dp, horizontal = 40.dp)
                             .fillMaxWidth(),
                         colors = ButtonDefaults.outlinedButtonColors(
                             MaterialTheme.colorScheme.primary,
@@ -133,7 +132,8 @@ fun BarberTopBar(
                         )
                     ) {
                         Text(
-                            text = "View profile"
+                            text = "View profile",
+                            color = MaterialTheme.colorScheme.onPrimary
                         )
                     }
                 }
@@ -143,9 +143,9 @@ fun BarberTopBar(
                             openAccountDialog = false
                             navHostController.navigate("${staticRoutes[BARBER_EDIT_PROFILE_SCREEN_ROUTE_INDEX]}/${barberEmail}")
                         },
-                        border = BorderStroke(1.dp, Color.White),
+                        border = BorderStroke(2.dp, MaterialTheme.colorScheme.onSecondary),
                         modifier = Modifier
-                            .padding(vertical = 8.dp)
+                            .padding(vertical = 8.dp, horizontal = 40.dp)
                             .fillMaxWidth(),
                         colors = ButtonDefaults.outlinedButtonColors(
                             MaterialTheme.colorScheme.primary,
@@ -153,7 +153,8 @@ fun BarberTopBar(
                         )
                     ) {
                         Text(
-                            text = "Edit profile"
+                            text = "Edit profile",
+                            color = MaterialTheme.colorScheme.onPrimary
                         )
                     }
                 }
@@ -162,9 +163,9 @@ fun BarberTopBar(
                         onClick = {
                             barberBookerViewModel.logOut(context, navHostController)
                         },
-                        border = BorderStroke(1.dp, Color.White),
+                        border = BorderStroke(2.dp, MaterialTheme.colorScheme.onSecondary),
                         modifier = Modifier
-                            .padding(vertical = 8.dp)
+                            .padding(vertical = 8.dp, horizontal = 40.dp)
                             .fillMaxWidth(),
                         colors = ButtonDefaults.outlinedButtonColors(
                             MaterialTheme.colorScheme.primary,
@@ -172,7 +173,8 @@ fun BarberTopBar(
                         )
                     ) {
                         Text(
-                            text = "Log out"
+                            text = "Log out",
+                            color = MaterialTheme.colorScheme.onPrimary
                         )
                     }
                 }

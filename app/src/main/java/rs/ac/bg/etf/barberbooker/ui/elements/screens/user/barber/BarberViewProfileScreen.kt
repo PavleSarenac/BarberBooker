@@ -2,6 +2,7 @@ package rs.ac.bg.etf.barberbooker.ui.elements.screens.user.barber
 
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -83,7 +84,10 @@ fun BarberViewProfileScreen(
                 containerColor = MaterialTheme.colorScheme.secondary,
                 contentColor = MaterialTheme.colorScheme.onSecondary
             ),
-            modifier = Modifier.width(1000.dp)
+            border = BorderStroke(2.dp, MaterialTheme.colorScheme.onSecondary),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
         ) {
             Row(
                 modifier = Modifier.padding(8.dp)

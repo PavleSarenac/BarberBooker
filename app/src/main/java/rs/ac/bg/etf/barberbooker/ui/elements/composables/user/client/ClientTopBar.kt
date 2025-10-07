@@ -149,7 +149,8 @@ fun ClientTopBar(
                         )
                     ) {
                         Text(
-                            text = "View profile"
+                            text = "View profile",
+                            color = MaterialTheme.colorScheme.onPrimary
                         )
                     }
                 }
@@ -169,7 +170,8 @@ fun ClientTopBar(
                         )
                     ) {
                         Text(
-                            text = "Edit profile"
+                            text = "Edit profile",
+                            color = MaterialTheme.colorScheme.onPrimary
                         )
                     }
                 }
@@ -188,7 +190,8 @@ fun ClientTopBar(
                         )
                     ) {
                         Text(
-                            text = "Log out"
+                            text = "Log out",
+                            color = MaterialTheme.colorScheme.onPrimary
                         )
                     }
                 }
