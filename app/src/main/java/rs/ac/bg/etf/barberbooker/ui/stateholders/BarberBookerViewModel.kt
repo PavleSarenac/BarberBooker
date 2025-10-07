@@ -5,6 +5,8 @@ import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.ktx.messaging
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -138,6 +140,8 @@ class BarberBookerViewModel @Inject constructor(
 
     fun logOut(context: Context, navHostController: NavHostController) = viewModelScope.launch(Dispatchers.Main) {
         withContext(Dispatchers.IO) {
+            Firebase.messaging.deleteToken()
+
             val sharedPreferences: SharedPreferences = context.getSharedPreferences("login_data", Context.MODE_PRIVATE)
             with(sharedPreferences.edit()) {
                 putBoolean("is_logged_in", false)
@@ -146,12 +150,14 @@ class BarberBookerViewModel @Inject constructor(
                 apply()
             }
         }
+
         _uiState.update {
             it.copy(
                 loggedInUserType = "",
                 loggedInUserEmail = ""
             )
         }
+
         navHostController.navigate(staticRoutes[INITIAL_SCREEN_ROUTE_INDEX])
     }
 

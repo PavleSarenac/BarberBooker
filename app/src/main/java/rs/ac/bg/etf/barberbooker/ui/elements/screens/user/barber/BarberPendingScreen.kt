@@ -32,6 +32,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import rs.ac.bg.etf.barberbooker.ui.stateholders.user.barber.BarberProfileViewModel
@@ -118,8 +119,15 @@ fun BarberPendingScreen(
                                     contentColor = MaterialTheme.colorScheme.secondary
                                 )
                             ) {
-                                Icon(Icons.Filled.Check, contentDescription = null)
+                                Icon(
+                                    imageVector = Icons.Filled.Check,
+                                    contentDescription = null,
+                                    tint = Color.Green
+                                )
                             }
+                            
+                            Spacer(modifier = Modifier.width(16.dp))
+                            
                             IconButton(
                                 onClick = {
                                     barberPendingRequestsViewModel.rejectReservationRequest(
@@ -133,7 +141,11 @@ fun BarberPendingScreen(
                                     contentColor = MaterialTheme.colorScheme.secondary
                                 )
                             ) {
-                                Icon(Icons.Filled.Close, contentDescription = null)
+                                Icon(
+                                    imageVector = Icons.Filled.Close,
+                                    contentDescription = null,
+                                    tint = Color.Red
+                                )
                             }
                         }
                     },
