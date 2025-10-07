@@ -22,6 +22,8 @@ import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.ReviewRepository
 import rs.ac.bg.etf.barberbooker.data.*
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -480,9 +482,10 @@ class BarberProfileViewModel @Inject constructor(
         workingDayStartTime: String,
         workingDayEndTime: String
     ): Boolean {
-        return ((workingDayEndTime > workingDayStartTime) || (workingDayStartTime == workingDayEndTime && workingDayStartTime == "00:00"))
-                && (workingDayEndTime.substring(3, 5) == "00" || workingDayEndTime.substring(3, 5) == "30")
-                && (workingDayStartTime.substring(3, 5) == "00" || workingDayStartTime.substring(3, 5) == "30")
+        val formatter = DateTimeFormatter.ofPattern("HH:mm")
+        val localStartTime = LocalTime.parse(workingDayStartTime, formatter)
+        val localEndTime = LocalTime.parse(workingDayEndTime, formatter)
+        return localEndTime.isAfter(localStartTime) || workingDayEndTime == "00:00"
     }
 
     private fun areSelectedWorkingDaysValid(selectedWorkingDays: String): Boolean {
