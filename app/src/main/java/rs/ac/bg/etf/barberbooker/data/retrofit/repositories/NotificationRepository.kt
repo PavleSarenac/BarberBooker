@@ -1,5 +1,7 @@
 package rs.ac.bg.etf.barberbooker.data.retrofit.repositories
 
+import android.util.Log
+import retrofit2.HttpException
 import rs.ac.bg.etf.barberbooker.data.retrofit.apis.NotificationApi
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.NotificationData
 import javax.inject.Inject
@@ -11,7 +13,11 @@ class NotificationRepository @Inject constructor(
 ) {
 
     suspend fun sendNotification(notificationData: NotificationData) {
-        notificationApi.sendNotification(notificationData)
+        try {
+            notificationApi.sendNotification(notificationData)
+        } catch (e: HttpException){
+            Log.e("NotificationRepository", "Notification sending has failed: ${e.response()}")
+        }
     }
 
 }
