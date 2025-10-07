@@ -115,10 +115,8 @@ class PushNotificationService: FirebaseMessagingService() {
         NotificationManagerCompat.from(this).notify(notificationId, notification)
     }
 
-
     override fun onDestroy() {
         super.onDestroy()
         serviceJob.cancel()
     }
-
 }

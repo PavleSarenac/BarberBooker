@@ -435,7 +435,7 @@ fun ClientViewBarberProfileScreen(
             }
         }
 
-        if (clientArchiveUiState.archive.any { it.barberEmail == barberEmail && it.status == "DONE_SUCCESS" } &&
+        if (clientArchiveUiState.archive.any { it.barberEmail == barberEmail && it.status == reservationStatuses[DONE_SUCCESS_RESERVATION_STATUS_INDEX] } &&
             clientReviewsUiState.pastReviewsForThisBarber.isEmpty()) {
             Spacer(modifier = Modifier.height(24.dp))
             Card(

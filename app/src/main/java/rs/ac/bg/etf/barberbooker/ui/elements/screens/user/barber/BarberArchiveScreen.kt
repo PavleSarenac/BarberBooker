@@ -33,6 +33,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import rs.ac.bg.etf.barberbooker.data.DONE_SUCCESS_RESERVATION_STATUS_INDEX
+import rs.ac.bg.etf.barberbooker.data.reservationStatuses
 import rs.ac.bg.etf.barberbooker.ui.stateholders.user.barber.BarberProfileViewModel
 
 @Composable
@@ -103,7 +105,7 @@ fun BarberArchiveScreen(
                         }
                     },
                     trailingContent = {
-                        if (currentRequest.status == "DONE_SUCCESS") {
+                        if (currentRequest.status == reservationStatuses[DONE_SUCCESS_RESERVATION_STATUS_INDEX]) {
                             Icon(
                                 imageVector = Icons.Filled.Check,
                                 contentDescription = null,

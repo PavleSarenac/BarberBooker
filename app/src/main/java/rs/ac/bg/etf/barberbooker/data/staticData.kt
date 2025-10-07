@@ -64,6 +64,10 @@ val daysOfTheWeek = listOf(
     "SUN"
 )
 
+const val PENDING_RESERVATION_STATUS_INDEX = 0
+const val DONE_SUCCESS_RESERVATION_STATUS_INDEX = 4
+const val DONE_FAILURE_RESERVATION_STATUS_INDEX = 5
+
 val reservationStatuses = listOf(
     "PENDING",
     "ACCEPTED",

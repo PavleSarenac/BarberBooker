@@ -188,7 +188,7 @@ class BarberProfileViewModel @Inject constructor(
                 date = date,
                 startTime = startTime,
                 endTime = endTime,
-                status = "PENDING"
+                status = reservationStatuses[PENDING_RESERVATION_STATUS_INDEX]
             )
         )
 

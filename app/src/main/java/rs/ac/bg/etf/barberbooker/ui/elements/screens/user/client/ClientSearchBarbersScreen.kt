@@ -108,7 +108,7 @@ fun ClientSearchBarbersScreen(
     val (sortingByPriceDescendingState, onSortingByPriceDescendingStateChange) = rememberSaveable { mutableStateOf(false) }
 
     val barbershopSuggestions = clientArchiveUiState.archive
-        .filter { it.status == "DONE_SUCCESS" }
+        .filter { it.status == reservationStatuses[DONE_SUCCESS_RESERVATION_STATUS_INDEX] }
         .distinctBy { it.barberEmail }
         .filter { currentRequest ->
             uiState.query.isBlank() ||

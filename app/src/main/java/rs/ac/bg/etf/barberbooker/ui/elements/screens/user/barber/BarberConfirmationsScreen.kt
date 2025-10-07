@@ -33,6 +33,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import rs.ac.bg.etf.barberbooker.data.DONE_FAILURE_RESERVATION_STATUS_INDEX
+import rs.ac.bg.etf.barberbooker.data.DONE_SUCCESS_RESERVATION_STATUS_INDEX
+import rs.ac.bg.etf.barberbooker.data.reservationStatuses
 import rs.ac.bg.etf.barberbooker.ui.stateholders.BarberBookerViewModel
 import rs.ac.bg.etf.barberbooker.ui.stateholders.user.barber.BarberConfirmationsViewModel
 import rs.ac.bg.etf.barberbooker.ui.stateholders.user.barber.BarberProfileViewModel
@@ -112,7 +115,7 @@ fun BarberConfirmationsScreen(
                                     barberConfirmationsViewModel.confirmPositiveReservation(
                                         barberEmail,
                                         currentRequest.reservationId,
-                                        "DONE_SUCCESS",
+                                        reservationStatuses[DONE_SUCCESS_RESERVATION_STATUS_INDEX],
                                         barberBookerViewModel
                                     )
                                 },
@@ -127,7 +130,7 @@ fun BarberConfirmationsScreen(
                                     barberConfirmationsViewModel.confirmNegativeReservation(
                                         barberEmail,
                                         currentRequest.reservationId,
-                                        "DONE_FAILURE",
+                                        reservationStatuses[DONE_FAILURE_RESERVATION_STATUS_INDEX],
                                         barberBookerViewModel
                                     )
                                 },

@@ -126,7 +126,7 @@ fun ClientArchiveScreen(
                         }
                     },
                     trailingContent = {
-                        if (currentRequest.status == "DONE_SUCCESS") {
+                        if (currentRequest.status == reservationStatuses[DONE_SUCCESS_RESERVATION_STATUS_INDEX]) {
                             Icon(
                                 imageVector = Icons.Filled.Check,
                                 contentDescription = null,
