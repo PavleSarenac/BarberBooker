@@ -471,4 +471,12 @@ class BarberRegistrationViewModel @Inject constructor(
             selectedWorkingDayStartTime = newValidWorkingDayStartTimes.first()
         ) }
     }
+
+    fun setSelectedWorkingDayStartTime(selectedWorkingDayStartTime: String) = viewModelScope.launch(Dispatchers.Main) {
+        _uiState.update { it.copy(selectedWorkingDayStartTime = selectedWorkingDayStartTime) }
+    }
+
+    fun setSelectedWorkingDayEndTime(selectedWorkingDayEndTime: String) = viewModelScope.launch(Dispatchers.Main) {
+        _uiState.update { it.copy(selectedWorkingDayEndTime = selectedWorkingDayEndTime) }
+    }
 }

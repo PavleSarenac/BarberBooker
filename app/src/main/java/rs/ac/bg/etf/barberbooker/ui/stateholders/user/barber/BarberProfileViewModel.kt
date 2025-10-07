@@ -288,14 +288,31 @@ class BarberProfileViewModel @Inject constructor(
                 country,
                 city,
                 municipality,
-                address,
-                workingDayStartTime,
-                workingDayEndTime,
-                selectedWorkingDays
+                address
             )) {
             snackbarCoroutineScope.launch {
                 snackbarHostState.showSnackbar(
                     message = "Invalid data format!",
+                    withDismissAction = true
+                )
+            }
+            return@launch
+        }
+
+        if (!areSelectedWorkingDaysValid(selectedWorkingDays)) {
+            snackbarCoroutineScope.launch {
+                snackbarHostState.showSnackbar(
+                    message = "You must work at least 1 day!",
+                    withDismissAction = true
+                )
+            }
+            return@launch
+        }
+
+        if (!areWorkingHoursValid(workingDayStartTime, workingDayEndTime)) {
+            snackbarCoroutineScope.launch {
+                snackbarHostState.showSnackbar(
+                    message = "Invalid working times!",
                     withDismissAction = true
                 )
             }
@@ -332,10 +349,7 @@ class BarberProfileViewModel @Inject constructor(
         country: String,
         city: String,
         municipality: String,
-        address: String,
-        workingDayStartTime: String,
-        workingDayEndTime: String,
-        selectedWorkingDays: String
+        address: String
     ): Boolean {
         var isDataValid = true
         if (!isBarbershopNameValid(barbershopName)) isDataValid = false
@@ -345,8 +359,6 @@ class BarberProfileViewModel @Inject constructor(
         if (!isCityValid(city)) isDataValid = false
         if (!isMunicipalityValid(municipality)) isDataValid = false
         if (!isAddressValid(address)) isDataValid = false
-        if (!areWorkingHoursValid(workingDayStartTime, workingDayEndTime)) isDataValid = false
-        if (!areSelectedWorkingDaysValid(selectedWorkingDays)) isDataValid = false
         return isDataValid
     }
 
