@@ -5,7 +5,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.JwtAuthenticationRepository
-import rs.ac.bg.etf.barberbooker.data.retrofit.utils.JwtAuthenticator
+import rs.ac.bg.etf.barberbooker.data.retrofit.utils.authenticators.JwtAuthenticator
 import javax.inject.Singleton
 
 @Module

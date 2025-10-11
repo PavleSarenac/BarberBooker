@@ -19,7 +19,7 @@ import rs.ac.bg.etf.barberbooker.data.retrofit.apis.RESERVATION_URL
 import rs.ac.bg.etf.barberbooker.data.retrofit.apis.REVIEW_URL
 import rs.ac.bg.etf.barberbooker.data.retrofit.apis.ReservationApi
 import rs.ac.bg.etf.barberbooker.data.retrofit.apis.ReviewApi
-import rs.ac.bg.etf.barberbooker.data.retrofit.utils.JwtAuthenticator
+import rs.ac.bg.etf.barberbooker.data.retrofit.utils.authenticators.JwtAuthenticator
 import rs.ac.bg.etf.barberbooker.data.retrofit.utils.interceptors.JwtAuthenticationInterceptor
 import rs.ac.bg.etf.barberbooker.data.retrofit.utils.interceptors.LoggingInterceptor
 import javax.inject.Singleton
