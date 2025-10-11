@@ -22,6 +22,7 @@ import rs.ac.bg.etf.barberbooker.data.retrofit.apis.REVIEW_URL
 import rs.ac.bg.etf.barberbooker.data.retrofit.apis.ReservationApi
 import rs.ac.bg.etf.barberbooker.data.retrofit.apis.ReviewApi
 import rs.ac.bg.etf.barberbooker.data.retrofit.utils.JwtAuthenticationUtils
+import rs.ac.bg.etf.barberbooker.data.retrofit.utils.JwtAuthenticator
 import javax.inject.Singleton
 
 @Module
@@ -29,7 +30,9 @@ import javax.inject.Singleton
 object RetrofitModule {
     @Singleton
     @Provides
-    fun providesBarberApi(): BarberApi {
+    fun providesBarberApi(
+        jwtAuthenticator: JwtAuthenticator
+    ): BarberApi {
         val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
             setLevel(HttpLoggingInterceptor.Level.BODY)
         }
@@ -47,6 +50,7 @@ object RetrofitModule {
         val okHttpClient = OkHttpClient.Builder().apply {
             addInterceptor(httpLoggingInterceptor)
             addInterceptor(jwtAuthenticationInterceptor)
+            authenticator(jwtAuthenticator)
         }.build()
 
         val retrofit = Retrofit.Builder()
@@ -60,7 +64,9 @@ object RetrofitModule {
 
     @Singleton
     @Provides
-    fun providesClientApi(): ClientApi {
+    fun providesClientApi(
+        jwtAuthenticator: JwtAuthenticator
+    ): ClientApi {
         val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
             setLevel(HttpLoggingInterceptor.Level.BODY)
         }
@@ -78,6 +84,7 @@ object RetrofitModule {
         val okHttpClient = OkHttpClient.Builder().apply {
             addInterceptor(httpLoggingInterceptor)
             addInterceptor(jwtAuthenticationInterceptor)
+            authenticator(jwtAuthenticator)
         }.build()
 
         val retrofit = Retrofit.Builder()
@@ -91,7 +98,9 @@ object RetrofitModule {
 
     @Singleton
     @Provides
-    fun providesReviewApi(): ReviewApi {
+    fun providesReviewApi(
+        jwtAuthenticator: JwtAuthenticator
+    ): ReviewApi {
         val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
             setLevel(HttpLoggingInterceptor.Level.BODY)
         }
@@ -109,6 +118,7 @@ object RetrofitModule {
         val okHttpClient = OkHttpClient.Builder().apply {
             addInterceptor(httpLoggingInterceptor)
             addInterceptor(jwtAuthenticationInterceptor)
+            authenticator(jwtAuthenticator)
         }.build()
 
         val retrofit = Retrofit.Builder()
@@ -122,7 +132,9 @@ object RetrofitModule {
 
     @Singleton
     @Provides
-    fun providesReservationApi(): ReservationApi {
+    fun providesReservationApi(
+        jwtAuthenticator: JwtAuthenticator
+    ): ReservationApi {
         val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
             setLevel(HttpLoggingInterceptor.Level.BODY)
         }
@@ -140,6 +152,7 @@ object RetrofitModule {
         val okHttpClient = OkHttpClient.Builder().apply {
             addInterceptor(httpLoggingInterceptor)
             addInterceptor(jwtAuthenticationInterceptor)
+            authenticator(jwtAuthenticator)
         }.build()
 
         val retrofit = Retrofit.Builder()
@@ -153,7 +166,9 @@ object RetrofitModule {
 
     @Singleton
     @Provides
-    fun providesNotificationApi(): NotificationApi {
+    fun providesNotificationApi(
+        jwtAuthenticator: JwtAuthenticator
+    ): NotificationApi {
         val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
             setLevel(HttpLoggingInterceptor.Level.BODY)
         }
@@ -171,6 +186,7 @@ object RetrofitModule {
         val okHttpClient = OkHttpClient.Builder().apply {
             addInterceptor(httpLoggingInterceptor)
             addInterceptor(jwtAuthenticationInterceptor)
+            authenticator(jwtAuthenticator)
         }.build()
 
         val retrofit = Retrofit.Builder()
