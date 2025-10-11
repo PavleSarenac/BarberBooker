@@ -4,7 +4,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -20,8 +19,8 @@ import rs.ac.bg.etf.barberbooker.data.retrofit.apis.RESERVATION_URL
 import rs.ac.bg.etf.barberbooker.data.retrofit.apis.REVIEW_URL
 import rs.ac.bg.etf.barberbooker.data.retrofit.apis.ReservationApi
 import rs.ac.bg.etf.barberbooker.data.retrofit.apis.ReviewApi
-import rs.ac.bg.etf.barberbooker.data.retrofit.utils.JwtAuthenticationUtils
 import rs.ac.bg.etf.barberbooker.data.retrofit.utils.JwtAuthenticator
+import rs.ac.bg.etf.barberbooker.data.retrofit.utils.interceptors.JwtAuthenticationInterceptor
 import rs.ac.bg.etf.barberbooker.data.retrofit.utils.interceptors.LoggingInterceptor
 import javax.inject.Singleton
 
@@ -32,18 +31,9 @@ object RetrofitModule {
     @Provides
     fun providesBarberApi(
         loggingInterceptor: LoggingInterceptor,
+        jwtAuthenticationInterceptor: JwtAuthenticationInterceptor,
         jwtAuthenticator: JwtAuthenticator
     ): BarberApi {
-        val jwtAuthenticationInterceptor = Interceptor { chain ->
-            val originalRequest = chain.request()
-            val token = JwtAuthenticationUtils.getJwtAccessToken()
-            val requestBuilder = originalRequest.newBuilder()
-            if (token.isNotEmpty()) {
-                requestBuilder.addHeader("Authorization", "Bearer $token")
-            }
-            chain.proceed(requestBuilder.build())
-        }
-
         val okHttpClient = OkHttpClient.Builder().apply {
             addInterceptor(loggingInterceptor)
             addInterceptor(jwtAuthenticationInterceptor)
@@ -63,18 +53,9 @@ object RetrofitModule {
     @Provides
     fun providesClientApi(
         loggingInterceptor: LoggingInterceptor,
+        jwtAuthenticationInterceptor: JwtAuthenticationInterceptor,
         jwtAuthenticator: JwtAuthenticator
     ): ClientApi {
-        val jwtAuthenticationInterceptor = Interceptor { chain ->
-            val originalRequest = chain.request()
-            val token = JwtAuthenticationUtils.getJwtAccessToken()
-            val requestBuilder = originalRequest.newBuilder()
-            if (token.isNotEmpty()) {
-                requestBuilder.addHeader("Authorization", "Bearer $token")
-            }
-            chain.proceed(requestBuilder.build())
-        }
-
         val okHttpClient = OkHttpClient.Builder().apply {
             addInterceptor(loggingInterceptor)
             addInterceptor(jwtAuthenticationInterceptor)
@@ -94,18 +75,9 @@ object RetrofitModule {
     @Provides
     fun providesReviewApi(
         loggingInterceptor: LoggingInterceptor,
+        jwtAuthenticationInterceptor: JwtAuthenticationInterceptor,
         jwtAuthenticator: JwtAuthenticator
     ): ReviewApi {
-        val jwtAuthenticationInterceptor = Interceptor { chain ->
-            val originalRequest = chain.request()
-            val token = JwtAuthenticationUtils.getJwtAccessToken()
-            val requestBuilder = originalRequest.newBuilder()
-            if (token.isNotEmpty()) {
-                requestBuilder.addHeader("Authorization", "Bearer $token")
-            }
-            chain.proceed(requestBuilder.build())
-        }
-
         val okHttpClient = OkHttpClient.Builder().apply {
             addInterceptor(loggingInterceptor)
             addInterceptor(jwtAuthenticationInterceptor)
@@ -125,18 +97,9 @@ object RetrofitModule {
     @Provides
     fun providesReservationApi(
         loggingInterceptor: LoggingInterceptor,
+        jwtAuthenticationInterceptor: JwtAuthenticationInterceptor,
         jwtAuthenticator: JwtAuthenticator
     ): ReservationApi {
-        val jwtAuthenticationInterceptor = Interceptor { chain ->
-            val originalRequest = chain.request()
-            val token = JwtAuthenticationUtils.getJwtAccessToken()
-            val requestBuilder = originalRequest.newBuilder()
-            if (token.isNotEmpty()) {
-                requestBuilder.addHeader("Authorization", "Bearer $token")
-            }
-            chain.proceed(requestBuilder.build())
-        }
-
         val okHttpClient = OkHttpClient.Builder().apply {
             addInterceptor(loggingInterceptor)
             addInterceptor(jwtAuthenticationInterceptor)
@@ -156,18 +119,9 @@ object RetrofitModule {
     @Provides
     fun providesNotificationApi(
         loggingInterceptor: LoggingInterceptor,
+        jwtAuthenticationInterceptor: JwtAuthenticationInterceptor,
         jwtAuthenticator: JwtAuthenticator
     ): NotificationApi {
-        val jwtAuthenticationInterceptor = Interceptor { chain ->
-            val originalRequest = chain.request()
-            val token = JwtAuthenticationUtils.getJwtAccessToken()
-            val requestBuilder = originalRequest.newBuilder()
-            if (token.isNotEmpty()) {
-                requestBuilder.addHeader("Authorization", "Bearer $token")
-            }
-            chain.proceed(requestBuilder.build())
-        }
-
         val okHttpClient = OkHttpClient.Builder().apply {
             addInterceptor(loggingInterceptor)
             addInterceptor(jwtAuthenticationInterceptor)

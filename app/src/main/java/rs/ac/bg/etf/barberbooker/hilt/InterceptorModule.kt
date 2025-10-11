@@ -4,6 +4,7 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dagger.Provides
+import rs.ac.bg.etf.barberbooker.data.retrofit.utils.interceptors.JwtAuthenticationInterceptor
 import rs.ac.bg.etf.barberbooker.data.retrofit.utils.interceptors.LoggingInterceptor
 import javax.inject.Singleton
 
@@ -13,4 +14,8 @@ object InterceptorModule {
     @Singleton
     @Provides
     fun providesLoggingInterceptor(): LoggingInterceptor = LoggingInterceptor()
+
+    @Singleton
+    @Provides
+    fun providesJwtAuthenticationInterceptor(): JwtAuthenticationInterceptor = JwtAuthenticationInterceptor()
 }
