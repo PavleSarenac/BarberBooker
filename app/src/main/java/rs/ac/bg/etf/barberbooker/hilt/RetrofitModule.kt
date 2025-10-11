@@ -13,6 +13,8 @@ import rs.ac.bg.etf.barberbooker.data.retrofit.apis.BARBER_URL
 import rs.ac.bg.etf.barberbooker.data.retrofit.apis.BarberApi
 import rs.ac.bg.etf.barberbooker.data.retrofit.apis.CLIENT_URL
 import rs.ac.bg.etf.barberbooker.data.retrofit.apis.ClientApi
+import rs.ac.bg.etf.barberbooker.data.retrofit.apis.JWT_AUTHENTICATION_URL
+import rs.ac.bg.etf.barberbooker.data.retrofit.apis.JwtAuthenticationApi
 import rs.ac.bg.etf.barberbooker.data.retrofit.apis.NOTIFICATION_URL
 import rs.ac.bg.etf.barberbooker.data.retrofit.apis.NotificationApi
 import rs.ac.bg.etf.barberbooker.data.retrofit.apis.RESERVATION_URL
@@ -25,7 +27,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object RetrofitModule {
-
     @Singleton
     @Provides
     fun providesBarberApi(): BarberApi {
@@ -181,4 +182,34 @@ object RetrofitModule {
         return retrofit.create(NotificationApi::class.java)
     }
 
+    @Singleton
+    @Provides
+    fun providesJwtAuthenticationApi(): JwtAuthenticationApi {
+        val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
+            setLevel(HttpLoggingInterceptor.Level.BODY)
+        }
+
+        val jwtAuthenticationInterceptor = Interceptor { chain ->
+            val originalRequest = chain.request()
+            val token = JwtAuthenticationUtils.getJwtAccessToken()
+            val requestBuilder = originalRequest.newBuilder()
+            if (token.isNotEmpty()) {
+                requestBuilder.addHeader("Authorization", "Bearer $token")
+            }
+            chain.proceed(requestBuilder.build())
+        }
+
+        val okHttpClient = OkHttpClient.Builder().apply {
+            addInterceptor(httpLoggingInterceptor)
+            addInterceptor(jwtAuthenticationInterceptor)
+        }.build()
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl(JWT_AUTHENTICATION_URL)
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        return retrofit.create(JwtAuthenticationApi::class.java)
+    }
 }

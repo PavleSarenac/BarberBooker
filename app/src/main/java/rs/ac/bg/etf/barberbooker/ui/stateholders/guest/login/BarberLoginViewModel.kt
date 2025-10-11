@@ -15,8 +15,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.FcmTokenUpdateData
-import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.BarberRepository
 import rs.ac.bg.etf.barberbooker.data.*
+import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.LoginData
+import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.BarberRepository
+import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.JwtAuthenticationRepository
+import rs.ac.bg.etf.barberbooker.data.retrofit.utils.JwtAuthenticationUtils
 import java.security.MessageDigest
 import javax.inject.Inject
 
@@ -27,9 +30,9 @@ data class BarberLoginUiState(
 
 @HiltViewModel
 class BarberLoginViewModel @Inject constructor(
-    private val barberRepository: BarberRepository
+    private val barberRepository: BarberRepository,
+    private val jwtAuthenticationRepository: JwtAuthenticationRepository
 ) : ViewModel() {
-
     private val _uiState = MutableStateFlow(BarberLoginUiState())
     val uiState = _uiState
 
@@ -52,7 +55,13 @@ class BarberLoginViewModel @Inject constructor(
 
         var areLoginCredentialsValid: Boolean
         withContext(Dispatchers.IO) {
-             areLoginCredentialsValid = barberRepository.areLoginCredentialsValid(email, hashedPassword)
+             areLoginCredentialsValid = jwtAuthenticationRepository.login(
+                 LoginData(
+                     email = email,
+                     hashedPassword = hashedPassword,
+                     userType = JwtAuthenticationUtils.BARBER_USER_TYPE
+                 )
+             )
         }
 
         if (!areLoginCredentialsValid) {
@@ -83,5 +92,4 @@ class BarberLoginViewModel @Inject constructor(
         val hashBytes = sha256.digest(password.toByteArray())
         return hashBytes.joinToString("") { "%02x".format(it) }
     }
-
 }

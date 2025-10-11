@@ -15,7 +15,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.FcmTokenUpdateData
+import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.LoginData
 import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.ClientRepository
+import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.JwtAuthenticationRepository
+import rs.ac.bg.etf.barberbooker.data.retrofit.utils.JwtAuthenticationUtils
 import java.security.MessageDigest
 import javax.inject.Inject
 
@@ -26,7 +29,8 @@ data class ClientLoginUiState(
 
 @HiltViewModel
 class ClientLoginViewModel @Inject constructor(
-    private val clientRepository: ClientRepository
+    private val clientRepository: ClientRepository,
+    private val jwtAuthenticationRepository: JwtAuthenticationRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ClientLoginUiState())
@@ -51,7 +55,13 @@ class ClientLoginViewModel @Inject constructor(
 
         var areLoginCredentialsValid: Boolean
         withContext(Dispatchers.IO) {
-            areLoginCredentialsValid = clientRepository.areLoginCredentialsValid(email, hashedPassword)
+            areLoginCredentialsValid = jwtAuthenticationRepository.login(
+                LoginData(
+                    email = email,
+                    hashedPassword = hashedPassword,
+                    userType = JwtAuthenticationUtils.CLIENT_USER_TYPE
+                )
+            )
         }
 
         if (!areLoginCredentialsValid) {

@@ -7,6 +7,9 @@ object JwtAuthenticationUtils {
     private const val KEY_JWT_ACCESS_TOKEN = "jwt_access_token"
     private const val KEY_JWT_REFRESH_TOKEN = "jwt_refresh_token"
 
+    const val CLIENT_USER_TYPE = "client"
+    const val BARBER_USER_TYPE = "barber"
+
     private lateinit var applicationContext: Context
 
     fun initializeApplicationContext(context: Context) {
