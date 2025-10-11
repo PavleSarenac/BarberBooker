@@ -20,15 +20,13 @@ import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.ReservationRepositor
 import rs.ac.bg.etf.barberbooker.data.*
 import rs.ac.bg.etf.barberbooker.data.retrofit.utils.JwtAuthenticationUtils
 import rs.ac.bg.etf.barberbooker.utils.events.SessionExpiredEventBus
-import java.util.Calendar
 import javax.inject.Inject
 
 data class BarberBookerUiState(
     var startDestination: String = staticRoutes[INITIAL_SCREEN_ROUTE_INDEX],
     var loggedInUserType: String = "",
     var loggedInUserEmail: String = "",
-    var confirmations: List<ExtendedReservationWithClient> = listOf(),
-    var isEverythingConfirmed: Boolean = false
+    var confirmations: List<ExtendedReservationWithClient> = listOf()
 )
 
 @HiltViewModel
@@ -86,16 +84,10 @@ class BarberBookerViewModel @Inject constructor(
                 }
             }
             isLoggedIn && userType == "barber" -> {
-                val job = getConfirmations(userEmail!!)
-                job.join()
-                if (_uiState.value.isEverythingConfirmed) {
-                    if (notificationRoute == "") {
-                        "${staticRoutes[BARBER_PENDING_SCREEN_ROUTE_INDEX]}/$userEmail"
-                    } else {
-                        notificationRoute
-                    }
+                if (notificationRoute == "") {
+                    "${staticRoutes[BARBER_PENDING_SCREEN_ROUTE_INDEX]}/$userEmail"
                 } else {
-                    "${staticRoutes[BARBER_CONFIRMATIONS_SCREEN_ROUTE_INDEX]}/$userEmail"
+                    notificationRoute
                 }
             }
             else -> staticRoutes[INITIAL_SCREEN_ROUTE_INDEX]
@@ -114,42 +106,11 @@ class BarberBookerViewModel @Inject constructor(
 
     fun getConfirmations(barberEmail: String) = viewModelScope.launch(Dispatchers.IO) {
         val confirmations = reservationRepository.getBarberConfirmations(barberEmail)
-        val isEverythingConfirmed = !confirmations.any {
-            getDateTimeInMillis(it.date, it.endTime) < getCurrentDateTimeMidnightMillis()
-        }
         withContext(Dispatchers.Main) {
             _uiState.update { it.copy(
-                confirmations = confirmations,
-                isEverythingConfirmed = isEverythingConfirmed
+                confirmations = confirmations
             ) }
         }
-    }
-
-    private fun getCurrentDateTimeMidnightMillis(): Long {
-        val calendar = Calendar.getInstance()
-
-        calendar.set(Calendar.HOUR_OF_DAY, 0)
-        calendar.set(Calendar.MINUTE, 0)
-        calendar.set(Calendar.SECOND, 0)
-        calendar.set(Calendar.MILLISECOND, 0)
-
-        return calendar.timeInMillis
-    }
-
-    private fun getDateTimeInMillis(date: String, time: String): Long {
-        val calendar = Calendar.getInstance()
-
-        val day = date.substring(0, 2).toInt()
-        val month = date.substring(3, 5).toInt() - 1
-        val year = date.substring(6).toInt()
-
-        val hour = time.split(":")[0].toInt()
-        val minute = time.split(":")[1].toInt()
-
-        calendar.set(year, month, day, hour, minute, 0)
-        calendar.set(Calendar.MILLISECOND, 0)
-
-        return calendar.timeInMillis
     }
 
     fun logOut(context: Context, navHostController: NavHostController) = viewModelScope.launch(Dispatchers.Main) {

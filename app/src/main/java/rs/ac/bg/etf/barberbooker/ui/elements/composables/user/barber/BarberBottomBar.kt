@@ -11,23 +11,18 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import rs.ac.bg.etf.barberbooker.data.*
-import rs.ac.bg.etf.barberbooker.ui.stateholders.BarberBookerViewModel
 
 @Composable
 fun BarberBottomBar(
     barberEmail: String,
-    navHostController: NavHostController,
-    barberBookerViewModel: BarberBookerViewModel
+    navHostController: NavHostController
 ) {
     val navBackStackEntry by navHostController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-
-    val uiState by barberBookerViewModel.uiState.collectAsState()
 
     NavigationBar {
         NavigationBarItem(
@@ -42,12 +37,10 @@ fun BarberBottomBar(
             ) },
             selected = currentRoute?.contains("${staticRoutes[BARBER_PENDING_SCREEN_ROUTE_INDEX]}/") ?: false,
             onClick = {
-                if (uiState.isEverythingConfirmed) {
-                    if (currentRoute?.contains("${staticRoutes[BARBER_PENDING_SCREEN_ROUTE_INDEX]}/") == true) {
+                if (currentRoute?.contains("${staticRoutes[BARBER_PENDING_SCREEN_ROUTE_INDEX]}/") == true) {
                         return@NavigationBarItem
                     }
                     navHostController.navigate("${staticRoutes[BARBER_PENDING_SCREEN_ROUTE_INDEX]}/${barberEmail}")
-                }
             },
             colors = NavigationBarItemDefaults.colors(
                 selectedTextColor = MaterialTheme.colorScheme.onPrimary,
@@ -66,12 +59,10 @@ fun BarberBottomBar(
             ) },
             selected = currentRoute?.contains("${staticRoutes[BARBER_INITIAL_SCREEN_ROUTE_INDEX]}/") ?: false,
             onClick = {
-                if (uiState.isEverythingConfirmed) {
-                    if (currentRoute?.contains("${staticRoutes[BARBER_INITIAL_SCREEN_ROUTE_INDEX]}/") == true) {
+                if (currentRoute?.contains("${staticRoutes[BARBER_INITIAL_SCREEN_ROUTE_INDEX]}/") == true) {
                         return@NavigationBarItem
                     }
-                    navHostController.navigate("${staticRoutes[BARBER_INITIAL_SCREEN_ROUTE_INDEX]}/${barberEmail}")
-                }
+                navHostController.navigate("${staticRoutes[BARBER_INITIAL_SCREEN_ROUTE_INDEX]}/${barberEmail}")
             },
             colors = NavigationBarItemDefaults.colors(
                 selectedTextColor = MaterialTheme.colorScheme.onPrimary,
@@ -90,12 +81,10 @@ fun BarberBottomBar(
             ) },
             selected = currentRoute?.contains("${staticRoutes[BARBER_CONFIRMATIONS_SCREEN_ROUTE_INDEX]}/") ?: false,
             onClick = {
-                if (uiState.isEverythingConfirmed) {
-                    if (currentRoute?.contains("${staticRoutes[BARBER_CONFIRMATIONS_SCREEN_ROUTE_INDEX]}/") == true) {
-                        return@NavigationBarItem
-                    }
-                    navHostController.navigate("${staticRoutes[BARBER_CONFIRMATIONS_SCREEN_ROUTE_INDEX]}/${barberEmail}")
+                if (currentRoute?.contains("${staticRoutes[BARBER_CONFIRMATIONS_SCREEN_ROUTE_INDEX]}/") == true) {
+                    return@NavigationBarItem
                 }
+                navHostController.navigate("${staticRoutes[BARBER_CONFIRMATIONS_SCREEN_ROUTE_INDEX]}/${barberEmail}")
             },
             colors = NavigationBarItemDefaults.colors(
                 selectedTextColor = MaterialTheme.colorScheme.onPrimary,

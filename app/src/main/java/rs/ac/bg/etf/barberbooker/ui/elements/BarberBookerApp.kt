@@ -119,7 +119,7 @@ fun BarberBookerApp(
                 BarberModalDrawerSheet(drawerState, navHostController, barberBookerViewModel)
             }
         },
-        gesturesEnabled = uiState.loggedInUserEmail != "" && (uiState.loggedInUserType == "client" || uiState.isEverythingConfirmed),
+        gesturesEnabled = uiState.loggedInUserEmail != "",
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.primary)
@@ -155,7 +155,7 @@ fun BarberBookerScaffold(
             ScaffoldTopBar(currentRoute, navHostController, drawerState, context, uiState, barberBookerViewModel)
         },
         bottomBar = {
-            ScaffoldBottomBar(navHostController, uiState, barberBookerViewModel)
+            ScaffoldBottomBar(navHostController, uiState)
         },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) { paddingValues ->
@@ -467,19 +467,7 @@ fun BarberBookerScaffold(
                 )
             ) {navBackStackEntry ->
                 val barberEmail = navBackStackEntry.arguments?.getString("barberEmail") ?: ""
-                if (uiState.isEverythingConfirmed) {
-                    LoggedInBarberRegularScreenBackHandler(drawerState, navHostController, barberEmail)
-                } else {
-                    BackHandler {
-                        if (drawerState.isOpen) {
-                            coroutineScope.launch {
-                                drawerState.close()
-                            }
-                        } else {
-                            barberBookerActivity?.finish()
-                        }
-                    }
-                }
+                LoggedInBarberRegularScreenBackHandler(drawerState, navHostController, barberEmail)
                 if (uiState.loggedInUserEmail != "") {
                     BarberConfirmationsScreen(barberEmail, barberBookerViewModel)
                 }
@@ -691,11 +679,10 @@ fun ScaffoldTopBar(
 @Composable
 fun ScaffoldBottomBar(
     navHostController: NavHostController,
-    uiState: BarberBookerUiState,
-    barberBookerViewModel: BarberBookerViewModel
+    uiState: BarberBookerUiState
 ) {
     if (uiState.loggedInUserEmail != "" && uiState.loggedInUserType == "barber") {
-        BarberBottomBar(uiState.loggedInUserEmail, navHostController, barberBookerViewModel)
+        BarberBottomBar(uiState.loggedInUserEmail, navHostController)
     }
     if (uiState.loggedInUserEmail != "" && uiState.loggedInUserType == "client") {
         ClientBottomBar(uiState.loggedInUserEmail, navHostController)
