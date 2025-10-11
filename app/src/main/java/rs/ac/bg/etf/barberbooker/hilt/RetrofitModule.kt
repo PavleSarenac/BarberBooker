@@ -6,7 +6,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import rs.ac.bg.etf.barberbooker.data.retrofit.apis.BARBER_URL
@@ -23,6 +22,7 @@ import rs.ac.bg.etf.barberbooker.data.retrofit.apis.ReservationApi
 import rs.ac.bg.etf.barberbooker.data.retrofit.apis.ReviewApi
 import rs.ac.bg.etf.barberbooker.data.retrofit.utils.JwtAuthenticationUtils
 import rs.ac.bg.etf.barberbooker.data.retrofit.utils.JwtAuthenticator
+import rs.ac.bg.etf.barberbooker.data.retrofit.utils.interceptors.LoggingInterceptor
 import javax.inject.Singleton
 
 @Module
@@ -31,12 +31,9 @@ object RetrofitModule {
     @Singleton
     @Provides
     fun providesBarberApi(
+        loggingInterceptor: LoggingInterceptor,
         jwtAuthenticator: JwtAuthenticator
     ): BarberApi {
-        val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
-            setLevel(HttpLoggingInterceptor.Level.BODY)
-        }
-
         val jwtAuthenticationInterceptor = Interceptor { chain ->
             val originalRequest = chain.request()
             val token = JwtAuthenticationUtils.getJwtAccessToken()
@@ -48,7 +45,7 @@ object RetrofitModule {
         }
 
         val okHttpClient = OkHttpClient.Builder().apply {
-            addInterceptor(httpLoggingInterceptor)
+            addInterceptor(loggingInterceptor)
             addInterceptor(jwtAuthenticationInterceptor)
             authenticator(jwtAuthenticator)
         }.build()
@@ -65,12 +62,9 @@ object RetrofitModule {
     @Singleton
     @Provides
     fun providesClientApi(
+        loggingInterceptor: LoggingInterceptor,
         jwtAuthenticator: JwtAuthenticator
     ): ClientApi {
-        val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
-            setLevel(HttpLoggingInterceptor.Level.BODY)
-        }
-
         val jwtAuthenticationInterceptor = Interceptor { chain ->
             val originalRequest = chain.request()
             val token = JwtAuthenticationUtils.getJwtAccessToken()
@@ -82,7 +76,7 @@ object RetrofitModule {
         }
 
         val okHttpClient = OkHttpClient.Builder().apply {
-            addInterceptor(httpLoggingInterceptor)
+            addInterceptor(loggingInterceptor)
             addInterceptor(jwtAuthenticationInterceptor)
             authenticator(jwtAuthenticator)
         }.build()
@@ -99,12 +93,9 @@ object RetrofitModule {
     @Singleton
     @Provides
     fun providesReviewApi(
+        loggingInterceptor: LoggingInterceptor,
         jwtAuthenticator: JwtAuthenticator
     ): ReviewApi {
-        val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
-            setLevel(HttpLoggingInterceptor.Level.BODY)
-        }
-
         val jwtAuthenticationInterceptor = Interceptor { chain ->
             val originalRequest = chain.request()
             val token = JwtAuthenticationUtils.getJwtAccessToken()
@@ -116,7 +107,7 @@ object RetrofitModule {
         }
 
         val okHttpClient = OkHttpClient.Builder().apply {
-            addInterceptor(httpLoggingInterceptor)
+            addInterceptor(loggingInterceptor)
             addInterceptor(jwtAuthenticationInterceptor)
             authenticator(jwtAuthenticator)
         }.build()
@@ -133,12 +124,9 @@ object RetrofitModule {
     @Singleton
     @Provides
     fun providesReservationApi(
+        loggingInterceptor: LoggingInterceptor,
         jwtAuthenticator: JwtAuthenticator
     ): ReservationApi {
-        val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
-            setLevel(HttpLoggingInterceptor.Level.BODY)
-        }
-
         val jwtAuthenticationInterceptor = Interceptor { chain ->
             val originalRequest = chain.request()
             val token = JwtAuthenticationUtils.getJwtAccessToken()
@@ -150,7 +138,7 @@ object RetrofitModule {
         }
 
         val okHttpClient = OkHttpClient.Builder().apply {
-            addInterceptor(httpLoggingInterceptor)
+            addInterceptor(loggingInterceptor)
             addInterceptor(jwtAuthenticationInterceptor)
             authenticator(jwtAuthenticator)
         }.build()
@@ -167,12 +155,9 @@ object RetrofitModule {
     @Singleton
     @Provides
     fun providesNotificationApi(
+        loggingInterceptor: LoggingInterceptor,
         jwtAuthenticator: JwtAuthenticator
     ): NotificationApi {
-        val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
-            setLevel(HttpLoggingInterceptor.Level.BODY)
-        }
-
         val jwtAuthenticationInterceptor = Interceptor { chain ->
             val originalRequest = chain.request()
             val token = JwtAuthenticationUtils.getJwtAccessToken()
@@ -184,7 +169,7 @@ object RetrofitModule {
         }
 
         val okHttpClient = OkHttpClient.Builder().apply {
-            addInterceptor(httpLoggingInterceptor)
+            addInterceptor(loggingInterceptor)
             addInterceptor(jwtAuthenticationInterceptor)
             authenticator(jwtAuthenticator)
         }.build()
@@ -201,24 +186,7 @@ object RetrofitModule {
     @Singleton
     @Provides
     fun providesJwtAuthenticationApi(): JwtAuthenticationApi {
-        val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
-            setLevel(HttpLoggingInterceptor.Level.BODY)
-        }
-
-        val jwtAuthenticationInterceptor = Interceptor { chain ->
-            val originalRequest = chain.request()
-            val token = JwtAuthenticationUtils.getJwtAccessToken()
-            val requestBuilder = originalRequest.newBuilder()
-            if (token.isNotEmpty()) {
-                requestBuilder.addHeader("Authorization", "Bearer $token")
-            }
-            chain.proceed(requestBuilder.build())
-        }
-
-        val okHttpClient = OkHttpClient.Builder().apply {
-            addInterceptor(httpLoggingInterceptor)
-            addInterceptor(jwtAuthenticationInterceptor)
-        }.build()
+        val okHttpClient = OkHttpClient.Builder().build()
 
         val retrofit = Retrofit.Builder()
             .baseUrl(JWT_AUTHENTICATION_URL)

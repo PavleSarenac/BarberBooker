@@ -1,14 +1,16 @@
 package rs.ac.bg.etf.barberbooker.data.retrofit.utils
 
 import okhttp3.Authenticator
+import okhttp3.Request
 import okhttp3.Response
+import okhttp3.Route
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.JwtAuthenticationData
 import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.JwtAuthenticationRepository
 
 class JwtAuthenticator(
     private val jwtAuthenticationRepository: JwtAuthenticationRepository
 ) : Authenticator {
-    override fun authenticate(route: okhttp3.Route?, response: Response): okhttp3.Request? {
+    override fun authenticate(route: Route?, response: Response): Request? {
         if (response.request.header("Authorization")?.startsWith("Bearer") == true &&
             responseCount(response) >= 2
         ) return null
