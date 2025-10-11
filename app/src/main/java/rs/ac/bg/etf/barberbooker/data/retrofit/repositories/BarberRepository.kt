@@ -1,5 +1,7 @@
 package rs.ac.bg.etf.barberbooker.data.retrofit.repositories
 
+import android.util.Log
+import retrofit2.HttpException
 import rs.ac.bg.etf.barberbooker.data.retrofit.apis.BarberApi
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.ExtendedBarberWithAverageGrade
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.FcmTokenUpdateData
@@ -11,22 +13,38 @@ import javax.inject.Singleton
 class BarberRepository @Inject constructor(
     private val barberApi: BarberApi
 ) {
+    private val httpExceptionLogTag = "BarberRepository"
+
     suspend fun addNewBarber(barber: Barber) {
-        barberApi.addNewBarber(barber)
+        try {
+            barberApi.addNewBarber(barber)
+        } catch (exception: HttpException) {
+            Log.e(httpExceptionLogTag, exception.message())
+        }
     }
 
     suspend fun isEmailAlreadyTaken(email: String): Boolean {
-        val response = barberApi.getBarberByEmail(email)
-        return response.isSuccessful
+        try {
+            val response = barberApi.getBarberByEmail(email)
+            return response.isSuccessful
+        } catch (exception: HttpException) {
+            Log.e(httpExceptionLogTag, exception.message())
+        }
+        return true
     }
 
     suspend fun getBarberByEmail(email: String): Barber? {
-        val response = barberApi.getBarberByEmail(email)
-        return if (response.isSuccessful) {
-            response.body()
-        } else {
-            null
+        try {
+            val response = barberApi.getBarberByEmail(email)
+            return if (response.isSuccessful) {
+                response.body()
+            } else {
+                null
+            }
+        } catch (exception: HttpException) {
+            Log.e(httpExceptionLogTag, exception.message())
         }
+        return null
     }
 
     suspend fun updateBarberProfile(
@@ -41,26 +59,38 @@ class BarberRepository @Inject constructor(
         workingDays: String,
         workingHours: String
     ) {
-        barberApi.updateBarberProfile(
-            email,
-            barbershopName,
-            price,
-            phone,
-            country,
-            city,
-            municipality,
-            address,
-            workingDays,
-            workingHours
-        )
+        try {
+            barberApi.updateBarberProfile(
+                email,
+                barbershopName,
+                price,
+                phone,
+                country,
+                city,
+                municipality,
+                address,
+                workingDays,
+                workingHours
+            )
+        } catch (exception: HttpException) {
+            Log.e(httpExceptionLogTag, exception.message())
+        }
     }
 
     suspend fun getSearchResults(query: String): List<ExtendedBarberWithAverageGrade> {
-        return barberApi.getSearchResults(query)
+        try {
+            return barberApi.getSearchResults(query)
+        } catch (exception: HttpException) {
+            Log.e(httpExceptionLogTag, exception.message())
+        }
+        return listOf()
     }
 
     suspend fun updateFcmToken(fcmTokenUpdateData: FcmTokenUpdateData) {
-        barberApi.updateFcmToken(fcmTokenUpdateData)
+        try {
+            barberApi.updateFcmToken(fcmTokenUpdateData)
+        } catch (exception: HttpException) {
+            Log.e(httpExceptionLogTag, exception.message())
+        }
     }
-
 }

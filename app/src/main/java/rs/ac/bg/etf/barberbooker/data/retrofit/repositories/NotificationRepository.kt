@@ -11,12 +11,13 @@ import javax.inject.Singleton
 class NotificationRepository @Inject constructor(
     private val notificationApi: NotificationApi
 ) {
+    private val httpExceptionLogTag = "NotificationRepository"
 
     suspend fun sendNotification(notificationData: NotificationData) {
         try {
             notificationApi.sendNotification(notificationData)
-        } catch (e: HttpException){
-            Log.e("NotificationRepository", "Notification sending has failed: ${e.response()}")
+        } catch (exception: HttpException){
+            Log.e(httpExceptionLogTag, exception.message())
         }
     }
 

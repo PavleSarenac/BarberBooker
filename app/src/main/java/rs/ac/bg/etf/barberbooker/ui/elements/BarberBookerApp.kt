@@ -95,6 +95,9 @@ fun BarberBookerApp(
         val job = barberBookerViewModel.updateStartDestination(context, notificationRoute)
         job.join()
         isStartDestinationLoaded = true
+        barberBookerViewModel.logoutRequested.collect {
+            barberBookerViewModel.logOut(context, navHostController)
+        }
     }
 
     if (!isStartDestinationLoaded) {

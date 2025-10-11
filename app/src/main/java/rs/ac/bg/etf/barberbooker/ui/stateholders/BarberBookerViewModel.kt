@@ -9,7 +9,9 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.ktx.messaging
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -17,6 +19,7 @@ import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.ExtendedReser
 import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.ReservationRepository
 import rs.ac.bg.etf.barberbooker.data.*
 import rs.ac.bg.etf.barberbooker.data.retrofit.utils.JwtAuthenticationUtils
+import rs.ac.bg.etf.barberbooker.utils.events.SessionExpiredEventBus
 import java.util.Calendar
 import javax.inject.Inject
 
@@ -32,9 +35,19 @@ data class BarberBookerUiState(
 class BarberBookerViewModel @Inject constructor(
     private val reservationRepository: ReservationRepository
 ) : ViewModel() {
-
     private val _uiState = MutableStateFlow(BarberBookerUiState())
     val uiState = _uiState
+
+    private val _logoutRequested = MutableSharedFlow<Unit>()
+    val logoutRequested = _logoutRequested.asSharedFlow()
+
+    init {
+        viewModelScope.launch(Dispatchers.Main) {
+            SessionExpiredEventBus.sessionExpired.collect {
+                _logoutRequested.emit(Unit)
+            }
+        }
+    }
 
     fun updateLoginData(
         context: Context,
@@ -163,5 +176,4 @@ class BarberBookerViewModel @Inject constructor(
 
         navHostController.navigate(staticRoutes[INITIAL_SCREEN_ROUTE_INDEX])
     }
-
 }
