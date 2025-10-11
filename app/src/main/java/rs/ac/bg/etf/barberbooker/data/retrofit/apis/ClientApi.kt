@@ -6,12 +6,12 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.FcmTokenUpdateData
+import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.JwtAuthenticationData
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.tables.Client
 
-const val CLIENT_URL = "http://192.168.0.26:8080/client/"
+const val CLIENT_URL = "http://192.168.212.92:8080/client/"
 
 interface ClientApi {
-
     @POST("addNewClient")
     suspend fun addNewClient(@Body client: Client)
 
@@ -22,7 +22,7 @@ interface ClientApi {
     suspend fun getClientByEmailAndPassword(
         @Query("email") email: String,
         @Query("password") hashedPassword: String
-    ): Response<Client>
+    ): Response<JwtAuthenticationData>
 
     @GET("updateClientProfile")
     suspend fun updateClientProfile(
@@ -33,5 +33,4 @@ interface ClientApi {
 
     @POST("updateFcmToken")
     suspend fun updateFcmToken(@Body fcmTokenUpdateData: FcmTokenUpdateData)
-
 }

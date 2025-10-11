@@ -4,6 +4,7 @@ import rs.ac.bg.etf.barberbooker.data.retrofit.apis.BarberApi
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.ExtendedBarberWithAverageGrade
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.FcmTokenUpdateData
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.tables.Barber
+import rs.ac.bg.etf.barberbooker.data.retrofit.utils.JwtAuthenticationUtils
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -11,7 +12,6 @@ import javax.inject.Singleton
 class BarberRepository @Inject constructor(
     private val barberApi: BarberApi
 ) {
-
     suspend fun addNewBarber(barber: Barber) {
         barberApi.addNewBarber(barber)
     }
@@ -22,8 +22,12 @@ class BarberRepository @Inject constructor(
     }
 
     suspend fun areLoginCredentialsValid(email: String, hashedPassword: String): Boolean {
-        val response = barberApi.getBarberByEmailAndPassword(email, hashedPassword)
-        return response.isSuccessful
+        val jwtAuthenticationDataResponse = barberApi.getBarberByEmailAndPassword(email, hashedPassword)
+        if (jwtAuthenticationDataResponse.isSuccessful) {
+            JwtAuthenticationUtils.saveJwtAccessToken(jwtAuthenticationDataResponse.body()?.jwtAccessToken ?: "")
+            JwtAuthenticationUtils.saveJwtRefreshToken(jwtAuthenticationDataResponse.body()?.jwtRefreshToken ?: "")
+        }
+        return jwtAuthenticationDataResponse.isSuccessful
     }
 
     suspend fun getBarberByEmail(email: String): Barber? {

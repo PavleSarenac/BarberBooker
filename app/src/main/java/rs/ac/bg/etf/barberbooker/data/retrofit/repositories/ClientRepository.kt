@@ -3,6 +3,7 @@ package rs.ac.bg.etf.barberbooker.data.retrofit.repositories
 import rs.ac.bg.etf.barberbooker.data.retrofit.apis.ClientApi
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.FcmTokenUpdateData
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.tables.Client
+import rs.ac.bg.etf.barberbooker.data.retrofit.utils.JwtAuthenticationUtils
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -10,7 +11,6 @@ import javax.inject.Singleton
 class ClientRepository @Inject constructor(
     private val clientApi: ClientApi
 ) {
-
     suspend fun addNewClient(client: Client) {
         clientApi.addNewClient(client)
     }
@@ -21,8 +21,12 @@ class ClientRepository @Inject constructor(
     }
 
     suspend fun areLoginCredentialsValid(email: String, hashedPassword: String): Boolean {
-        val response = clientApi.getClientByEmailAndPassword(email, hashedPassword)
-        return response.isSuccessful
+        val jwtAuthenticationDataResponse = clientApi.getClientByEmailAndPassword(email, hashedPassword)
+        if (jwtAuthenticationDataResponse.isSuccessful) {
+            JwtAuthenticationUtils.saveJwtAccessToken(jwtAuthenticationDataResponse.body()?.jwtAccessToken ?: "")
+            JwtAuthenticationUtils.saveJwtRefreshToken(jwtAuthenticationDataResponse.body()?.jwtRefreshToken ?: "")
+        }
+        return jwtAuthenticationDataResponse.isSuccessful
     }
 
     suspend fun getClientByEmail(email: String): Client? {
@@ -41,5 +45,4 @@ class ClientRepository @Inject constructor(
     suspend fun updateFcmToken(fcmTokenUpdateData: FcmTokenUpdateData) {
         clientApi.updateFcmToken(fcmTokenUpdateData)
     }
-
 }

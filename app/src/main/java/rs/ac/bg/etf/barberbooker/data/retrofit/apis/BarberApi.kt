@@ -7,12 +7,12 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.ExtendedBarberWithAverageGrade
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.FcmTokenUpdateData
+import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.JwtAuthenticationData
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.tables.Barber
 
-const val BARBER_URL = "http://192.168.0.26:8080/barber/"
+const val BARBER_URL = "http://192.168.212.92:8080/barber/"
 
 interface BarberApi {
-
     @POST("addNewBarber")
     suspend fun addNewBarber(@Body barber: Barber)
 
@@ -23,7 +23,7 @@ interface BarberApi {
     suspend fun getBarberByEmailAndPassword(
         @Query("email") email: String,
         @Query("password") hashedPassword: String
-    ): Response<Barber>
+    ): Response<JwtAuthenticationData>
 
     @GET("updateBarberProfile")
     suspend fun updateBarberProfile(
@@ -44,5 +44,4 @@ interface BarberApi {
 
     @POST("updateFcmToken")
     suspend fun updateFcmToken(@Body fcmTokenUpdateData: FcmTokenUpdateData)
-
 }

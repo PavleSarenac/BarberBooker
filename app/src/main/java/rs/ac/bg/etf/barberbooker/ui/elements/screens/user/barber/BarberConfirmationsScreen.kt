@@ -31,6 +31,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import rs.ac.bg.etf.barberbooker.data.DONE_FAILURE_RESERVATION_STATUS_INDEX
@@ -123,7 +124,11 @@ fun BarberConfirmationsScreen(
                                     contentColor = MaterialTheme.colorScheme.secondary
                                 )
                             ) {
-                                Icon(Icons.Filled.Check, contentDescription = null)
+                                Icon(
+                                    imageVector = Icons.Filled.Check,
+                                    contentDescription = null,
+                                    tint = Color.Green
+                                )
                             }
                             IconButton(
                                 onClick = {
@@ -138,7 +143,11 @@ fun BarberConfirmationsScreen(
                                     contentColor = MaterialTheme.colorScheme.secondary
                                 )
                             ) {
-                                Icon(Icons.Filled.Close, contentDescription = null)
+                                Icon(
+                                    imageVector = Icons.Filled.Close,
+                                    contentDescription = null,
+                                    tint = Color.Red
+                                )
                             }
                         }
                     },

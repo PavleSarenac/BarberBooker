@@ -13,6 +13,7 @@ import android.Manifest.permission.POST_NOTIFICATIONS
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationManagerCompat
+import rs.ac.bg.etf.barberbooker.data.retrofit.utils.JwtAuthenticationUtils
 
 const val REQUESTS_CHANNEL_ID = "REQUESTS_NOTIFICATIONS"
 const val REQUESTS_CHANNEL_NAME = "Reservation requests"
@@ -34,6 +35,7 @@ const val APPOINTMENTS_CHANNEL_DESCRIPTION = "New appointments"
 class BarberBookerActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         requestNotificationsPermission()
         createRequestsNotificationChannel()
         createReviewsNotificationChannel()
@@ -41,6 +43,8 @@ class BarberBookerActivity : ComponentActivity() {
         createAppointmentsNotificationChannel()
 
         val notificationRoute = intent.getStringExtra("route") ?: ""
+
+        JwtAuthenticationUtils.initializeApplicationContext(applicationContext)
 
         setContent {
             BarberBookerTheme {

@@ -16,6 +16,7 @@ import kotlinx.coroutines.withContext
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.ExtendedReservationWithClient
 import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.ReservationRepository
 import rs.ac.bg.etf.barberbooker.data.*
+import rs.ac.bg.etf.barberbooker.data.retrofit.utils.JwtAuthenticationUtils
 import java.util.Calendar
 import javax.inject.Inject
 
@@ -149,6 +150,8 @@ class BarberBookerViewModel @Inject constructor(
                 putString("user_type", "")
                 apply()
             }
+
+            JwtAuthenticationUtils.deleteJwtTokens()
         }
 
         _uiState.update {

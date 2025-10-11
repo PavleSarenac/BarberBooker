@@ -82,5 +82,4 @@ class ClientLoginViewModel @Inject constructor(
         val hashBytes = sha256.digest(password.toByteArray())
         return hashBytes.joinToString("") { "%02x".format(it) }
     }
-
 }
