@@ -1,5 +1,9 @@
 package rs.ac.bg.etf.barberbooker.ui.elements.screens.guest.registration
 
+import android.app.Activity
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -46,6 +50,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -56,7 +61,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.common.api.ApiException
+import kotlinx.coroutines.launch
 import rs.ac.bg.etf.barberbooker.ui.elements.composables.guest.WorkingHoursDropdown
+import rs.ac.bg.etf.barberbooker.ui.stateholders.BarberBookerViewModel
 import rs.ac.bg.etf.barberbooker.ui.stateholders.guest.registration.BarberRegistrationViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
@@ -64,6 +73,7 @@ import rs.ac.bg.etf.barberbooker.ui.stateholders.guest.registration.BarberRegist
 fun SignUpAsBarberScreen(
     navHostController: NavHostController,
     snackbarHostState: SnackbarHostState,
+    barberBookerViewModel: BarberBookerViewModel,
     barberRegistrationViewModel: BarberRegistrationViewModel = hiltViewModel()
 ) {
     val snackbarCoroutineScope = rememberCoroutineScope()
@@ -88,6 +98,30 @@ fun SignUpAsBarberScreen(
         "Sat" to saturdayCheckedState,
         "Sun" to sundayCheckedState
     )
+
+    val context = LocalContext.current as? Activity
+
+    val googleSignInLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        val data = result.data
+        val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+        try {
+            val account = task.getResult(ApiException::class.java)
+            Log.d("GoogleSignIn", "Server Auth Code: ${account.serverAuthCode}")
+            Log.d("GoogleSignIn", "Email: ${account.email}")
+            Log.d("GoogleSignIn", "Name: ${account.displayName}")
+            Log.d("GoogleSignIn", "ID: ${account.id}")
+            snackbarCoroutineScope.launch {
+                snackbarHostState.showSnackbar(
+                    message = "Hello, ${account.displayName}!",
+                    withDismissAction = true
+                )
+            }
+        } catch (e: ApiException) {
+            Log.e("GoogleSignIn", "Sign-in failed with status code ${e.statusCode}")
+        }
+    }
 
     var isPasswordVisible by rememberSaveable { mutableStateOf(false) }
 
@@ -628,6 +662,29 @@ fun SignUpAsBarberScreen(
                     color = MaterialTheme.colorScheme.onPrimary
                 ) },
             )
+
+            OutlinedButton(
+                onClick = {
+                    context?.let {
+                        val googleSignInIntent = barberBookerViewModel.googleSignInClient.signInIntent
+                        googleSignInLauncher.launch(googleSignInIntent)
+                    }
+                },
+                border = BorderStroke(2.dp, MaterialTheme.colorScheme.onPrimary),
+                shape = RoundedCornerShape(16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 16.dp),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    MaterialTheme.colorScheme.secondary,
+                    MaterialTheme.colorScheme.onSecondary
+                )
+            ) {
+                Text(
+                    text = "Connect with Google",
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            }
 
             OutlinedButton(
                 onClick = {

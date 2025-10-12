@@ -26,7 +26,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -75,7 +74,7 @@ import rs.ac.bg.etf.barberbooker.ui.stateholders.BarberBookerViewModel
 @Composable
 fun BarberBookerApp(
     notificationRoute: String,
-    barberBookerViewModel: BarberBookerViewModel = hiltViewModel()
+    barberBookerViewModel: BarberBookerViewModel
 ) {
     val navHostController = rememberNavController()
     val currentBackStackEntry by navHostController.currentBackStackEntryAsState()
@@ -180,7 +179,7 @@ fun BarberBookerScaffold(
                 SignUpAsClientScreen(navHostController, snackbarHostState)
             }
             composable(route = staticRoutes[SIGN_UP_AS_BARBER_SCREEN_ROUTE_INDEX]) {
-                SignUpAsBarberScreen(navHostController, snackbarHostState)
+                SignUpAsBarberScreen(navHostController, snackbarHostState, barberBookerViewModel)
             }
             composable(route = staticRoutes[LOG_IN_AS_CLIENT_SCREEN_ROUTE_INDEX]) {
                 LogInAsClientScreen(navHostController, snackbarHostState)

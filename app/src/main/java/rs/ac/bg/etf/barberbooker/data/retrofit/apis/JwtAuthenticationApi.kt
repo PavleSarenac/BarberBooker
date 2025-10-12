@@ -7,7 +7,7 @@ import retrofit2.http.POST
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.JwtAuthenticationData
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.LoginData
 
-const val JWT_AUTHENTICATION_URL = "http://192.168.0.32:8080/jwt/"
+const val JWT_AUTHENTICATION_URL = "http://192.168.212.92:8080/jwt/"
 
 interface JwtAuthenticationApi {
     @POST("login")

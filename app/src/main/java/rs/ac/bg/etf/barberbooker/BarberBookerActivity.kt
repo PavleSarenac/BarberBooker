@@ -10,10 +10,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import rs.ac.bg.etf.barberbooker.ui.elements.BarberBookerApp
 import rs.ac.bg.etf.barberbooker.ui.elements.theme.BarberBookerTheme
 import android.Manifest.permission.POST_NOTIFICATIONS
+import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationManagerCompat
 import rs.ac.bg.etf.barberbooker.data.retrofit.utils.JwtAuthenticationUtils
+import rs.ac.bg.etf.barberbooker.ui.stateholders.BarberBookerViewModel
 
 const val REQUESTS_CHANNEL_ID = "REQUESTS_NOTIFICATIONS"
 const val REQUESTS_CHANNEL_NAME = "Reservation requests"
@@ -33,6 +35,8 @@ const val APPOINTMENTS_CHANNEL_DESCRIPTION = "New appointments"
 
 @AndroidEntryPoint
 class BarberBookerActivity : ComponentActivity() {
+    private val barberBookerViewModel: BarberBookerViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -46,10 +50,16 @@ class BarberBookerActivity : ComponentActivity() {
 
         JwtAuthenticationUtils.initializeApplicationContext(applicationContext)
 
+        barberBookerViewModel.initializeGoogleSignInClient(
+            activity = this,
+            googleWebClientId = getString(R.string.google_web_client_id)
+        )
+
         setContent {
             BarberBookerTheme {
                 BarberBookerApp(
-                    notificationRoute = notificationRoute
+                    notificationRoute = notificationRoute,
+                    barberBookerViewModel = barberBookerViewModel
                 )
             }
         }

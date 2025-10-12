@@ -116,6 +116,9 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     //noinspection UseTomlInstead
     implementation("com.google.firebase:firebase-messaging")
+
+    // GOOGLE SIGN IN
+    implementation("com.google.android.gms:play-services-auth:21.4.0")
 }
 
 kapt {

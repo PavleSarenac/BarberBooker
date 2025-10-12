@@ -1,10 +1,15 @@
 package rs.ac.bg.etf.barberbooker.ui.stateholders
 
+import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.Scope
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.ktx.messaging
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -42,12 +47,26 @@ class BarberBookerViewModel @Inject constructor(
     private val _logoutRequested = MutableSharedFlow<Unit>()
     val logoutRequested = _logoutRequested.asSharedFlow()
 
+    lateinit var googleSignInClient: GoogleSignInClient
+    private lateinit var googleWebClientId: String
+
     init {
         viewModelScope.launch(Dispatchers.Main) {
             SessionExpiredEventBus.sessionExpired.collect {
                 _logoutRequested.emit(Unit)
             }
         }
+    }
+
+    fun initializeGoogleSignInClient(activity: Activity, googleWebClientId: String) {
+        this.googleWebClientId = googleWebClientId
+        val googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .requestProfile()
+            .requestScopes(Scope("https://www.googleapis.com/auth/calendar"))
+            .requestServerAuthCode(googleWebClientId)
+            .build()
+        this.googleSignInClient = GoogleSignIn.getClient(activity, googleSignInOptions)
     }
 
     fun updateLoginData(
