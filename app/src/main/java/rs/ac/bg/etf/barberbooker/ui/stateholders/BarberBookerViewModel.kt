@@ -3,16 +3,20 @@ package rs.ac.bg.etf.barberbooker.ui.stateholders
 import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
+import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.Scope
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.ktx.messaging
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -67,6 +71,24 @@ class BarberBookerViewModel @Inject constructor(
             .requestServerAuthCode(googleWebClientId)
             .build()
         this.googleSignInClient = GoogleSignIn.getClient(activity, googleSignInOptions)
+    }
+
+    fun logSuccessfulGoogleSignIn(
+        googleSignInAccount: GoogleSignInAccount,
+        snackbarCoroutineScope: CoroutineScope,
+        snackbarHostState: SnackbarHostState
+    ) {
+        Log.d("GoogleSignIn", "Server Auth Code: ${googleSignInAccount.serverAuthCode}")
+        Log.d("GoogleSignIn", "Email: ${googleSignInAccount.email}")
+        Log.d("GoogleSignIn", "Name: ${googleSignInAccount.displayName}")
+        Log.d("GoogleSignIn", "ID: ${googleSignInAccount.id}")
+
+        snackbarCoroutineScope.launch {
+            snackbarHostState.showSnackbar(
+                message = "Hello, ${googleSignInAccount.displayName}!",
+                withDismissAction = true
+            )
+        }
     }
 
     fun updateLoginData(

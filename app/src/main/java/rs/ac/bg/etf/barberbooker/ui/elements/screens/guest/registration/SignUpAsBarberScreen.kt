@@ -63,7 +63,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
-import kotlinx.coroutines.launch
 import rs.ac.bg.etf.barberbooker.ui.elements.composables.guest.WorkingHoursDropdown
 import rs.ac.bg.etf.barberbooker.ui.stateholders.BarberBookerViewModel
 import rs.ac.bg.etf.barberbooker.ui.stateholders.guest.registration.BarberRegistrationViewModel
@@ -107,17 +106,13 @@ fun SignUpAsBarberScreen(
         val data = result.data
         val task = GoogleSignIn.getSignedInAccountFromIntent(data)
         try {
-            val account = task.getResult(ApiException::class.java)
-            Log.d("GoogleSignIn", "Server Auth Code: ${account.serverAuthCode}")
-            Log.d("GoogleSignIn", "Email: ${account.email}")
-            Log.d("GoogleSignIn", "Name: ${account.displayName}")
-            Log.d("GoogleSignIn", "ID: ${account.id}")
-            snackbarCoroutineScope.launch {
-                snackbarHostState.showSnackbar(
-                    message = "Hello, ${account.displayName}!",
-                    withDismissAction = true
-                )
-            }
+            val googleSignInAccount = task.getResult(ApiException::class.java)
+            barberBookerViewModel.logSuccessfulGoogleSignIn(
+                googleSignInAccount,
+                snackbarCoroutineScope,
+                snackbarHostState
+            )
+            barberRegistrationViewModel.setGmail(googleSignInAccount.email ?: "")
         } catch (e: ApiException) {
             Log.e("GoogleSignIn", "Sign-in failed with status code ${e.statusCode}")
         }
