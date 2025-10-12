@@ -27,7 +27,9 @@ import kotlinx.coroutines.withContext
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.ExtendedReservationWithClient
 import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.ReservationRepository
 import rs.ac.bg.etf.barberbooker.data.*
+import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.GoogleConnectRequest
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.JwtAuthenticationData
+import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.GoogleRepository
 import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.JwtAuthenticationRepository
 import rs.ac.bg.etf.barberbooker.data.retrofit.utils.JwtAuthenticationUtils
 import rs.ac.bg.etf.barberbooker.utils.events.SessionExpiredEventBus
@@ -43,7 +45,8 @@ data class BarberBookerUiState(
 @HiltViewModel
 class BarberBookerViewModel @Inject constructor(
     private val reservationRepository: ReservationRepository,
-    private val jwtAuthenticationRepository: JwtAuthenticationRepository
+    private val jwtAuthenticationRepository: JwtAuthenticationRepository,
+    private val googleRepository: GoogleRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(BarberBookerUiState())
     val uiState = _uiState
@@ -71,6 +74,20 @@ class BarberBookerViewModel @Inject constructor(
             .requestServerAuthCode(googleWebClientId)
             .build()
         this.googleSignInClient = GoogleSignIn.getClient(activity, googleSignInOptions)
+    }
+
+    fun connectWithGoogle(
+        googleSignInAccount: GoogleSignInAccount,
+        context: Context
+    ) = viewModelScope.launch(Dispatchers.IO) {
+        val sharedPreferences: SharedPreferences = context.getSharedPreferences("login_data", Context.MODE_PRIVATE)
+        val userEmail = sharedPreferences.getString("user_email", "") ?: ""
+        val userType = sharedPreferences.getString("user_type", "") ?: ""
+        googleRepository.connect(GoogleConnectRequest(
+            userEmail = userEmail,
+            userType = userType,
+            serverAuthCode = googleSignInAccount.serverAuthCode ?: ""
+        ))
     }
 
     fun logSuccessfulGoogleSignIn(

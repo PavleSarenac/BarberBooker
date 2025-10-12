@@ -13,5 +13,7 @@ data class Barber(
     var address: String,
     var workingDays: String,
     var workingHours: String,
-    var fcmToken: String
+    var fcmToken: String = "",
+    var googleAccessToken: String = "",
+    var googleRefreshToken: String = ""
 )

@@ -1,6 +1,7 @@
 package rs.ac.bg.etf.barberbooker.ui.elements.screens.user.barber
 
 import android.app.Activity
+import android.content.Context
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -98,7 +99,8 @@ fun BarberEditProfileScreen(
 
     if (!isDataFetched) return
 
-    val context = LocalContext.current as? Activity
+    val activityContext = LocalContext.current as? Activity
+    val regularContext = LocalContext.current as? Context
 
     val googleSignInLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
@@ -112,8 +114,11 @@ fun BarberEditProfileScreen(
                 snackbarCoroutineScope,
                 snackbarHostState
             )
+            barberBookerViewModel.connectWithGoogle(googleSignInAccount, regularContext!!)
         } catch (e: ApiException) {
             Log.e("GoogleSignIn", "Sign-in failed with status code ${e.statusCode}")
+        } catch (e: Exception) {
+            Log.e("BarberEditProfileScreen", e.message ?: "ERROR")
         }
     }
 
@@ -533,7 +538,7 @@ fun BarberEditProfileScreen(
 
             OutlinedButton(
                 onClick = {
-                    context?.let {
+                    activityContext?.let {
                         val googleSignInIntent = barberBookerViewModel.googleSignInClient.signInIntent
                         googleSignInLauncher.launch(googleSignInIntent)
                     }

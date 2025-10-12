@@ -11,6 +11,8 @@ import rs.ac.bg.etf.barberbooker.data.retrofit.apis.BARBER_URL
 import rs.ac.bg.etf.barberbooker.data.retrofit.apis.BarberApi
 import rs.ac.bg.etf.barberbooker.data.retrofit.apis.CLIENT_URL
 import rs.ac.bg.etf.barberbooker.data.retrofit.apis.ClientApi
+import rs.ac.bg.etf.barberbooker.data.retrofit.apis.GOOGLE_URL
+import rs.ac.bg.etf.barberbooker.data.retrofit.apis.GoogleApi
 import rs.ac.bg.etf.barberbooker.data.retrofit.apis.JWT_AUTHENTICATION_URL
 import rs.ac.bg.etf.barberbooker.data.retrofit.apis.JwtAuthenticationApi
 import rs.ac.bg.etf.barberbooker.data.retrofit.apis.NOTIFICATION_URL
@@ -146,6 +148,30 @@ object RetrofitModule {
             .build()
 
         return retrofit.create(NotificationApi::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun providesGoogleApi(
+        loggingInterceptor: LoggingInterceptor,
+        jwtAuthenticationInterceptor: JwtAuthenticationInterceptor,
+        jwtAuthenticator: JwtAuthenticator,
+        sessionExpiredInterceptor: SessionExpiredInterceptor
+    ): GoogleApi {
+        val okHttpClient = OkHttpClient.Builder().apply {
+            addInterceptor(loggingInterceptor)
+            addInterceptor(jwtAuthenticationInterceptor)
+            authenticator(jwtAuthenticator)
+            addInterceptor(sessionExpiredInterceptor)
+        }.build()
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl(GOOGLE_URL)
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        return retrofit.create(GoogleApi::class.java)
     }
 
     @Singleton
