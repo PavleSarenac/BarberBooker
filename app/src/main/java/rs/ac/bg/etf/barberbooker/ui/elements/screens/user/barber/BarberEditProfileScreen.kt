@@ -1,5 +1,9 @@
 package rs.ac.bg.etf.barberbooker.ui.elements.screens.user.barber
 
+import android.app.Activity
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -41,14 +45,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.common.api.ApiException
 import rs.ac.bg.etf.barberbooker.data.daysOfTheWeek
 import rs.ac.bg.etf.barberbooker.ui.elements.composables.guest.WorkingHoursDropdown
+import rs.ac.bg.etf.barberbooker.ui.stateholders.BarberBookerViewModel
 import rs.ac.bg.etf.barberbooker.ui.stateholders.guest.registration.BarberRegistrationViewModel
 import rs.ac.bg.etf.barberbooker.ui.stateholders.user.barber.BarberProfileViewModel
 
@@ -57,6 +65,7 @@ import rs.ac.bg.etf.barberbooker.ui.stateholders.user.barber.BarberProfileViewMo
 fun BarberEditProfileScreen(
     barberEmail: String,
     snackbarHostState: SnackbarHostState,
+    barberBookerViewModel: BarberBookerViewModel,
     barberProfileViewModel: BarberProfileViewModel = hiltViewModel(),
     barberRegistrationViewModel: BarberRegistrationViewModel = hiltViewModel()
 ) {
@@ -88,6 +97,25 @@ fun BarberEditProfileScreen(
     }
 
     if (!isDataFetched) return
+
+    val context = LocalContext.current as? Activity
+
+    val googleSignInLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        val data = result.data
+        val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+        try {
+            val googleSignInAccount = task.getResult(ApiException::class.java)
+            barberBookerViewModel.logSuccessfulGoogleSignIn(
+                googleSignInAccount,
+                snackbarCoroutineScope,
+                snackbarHostState
+            )
+        } catch (e: ApiException) {
+            Log.e("GoogleSignIn", "Sign-in failed with status code ${e.statusCode}")
+        }
+    }
 
     val (mondayCheckedState, onMondayStateChange) = remember { mutableStateOf(
         uiState.workingDays.contains(daysOfTheWeek[0])
@@ -502,6 +530,29 @@ fun BarberEditProfileScreen(
                     color = MaterialTheme.colorScheme.onPrimary
                 ) },
             )
+
+            OutlinedButton(
+                onClick = {
+                    context?.let {
+                        val googleSignInIntent = barberBookerViewModel.googleSignInClient.signInIntent
+                        googleSignInLauncher.launch(googleSignInIntent)
+                    }
+                },
+                border = BorderStroke(2.dp, MaterialTheme.colorScheme.onPrimary),
+                shape = RoundedCornerShape(16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 16.dp),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    MaterialTheme.colorScheme.secondary,
+                    MaterialTheme.colorScheme.onSecondary
+                )
+            ) {
+                Text(
+                    text = "Connect with Google",
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            }
 
             OutlinedButton(
                 onClick = {

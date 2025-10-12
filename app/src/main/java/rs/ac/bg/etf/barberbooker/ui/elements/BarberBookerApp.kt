@@ -179,7 +179,7 @@ fun BarberBookerScaffold(
                 SignUpAsClientScreen(navHostController, snackbarHostState)
             }
             composable(route = staticRoutes[SIGN_UP_AS_BARBER_SCREEN_ROUTE_INDEX]) {
-                SignUpAsBarberScreen(navHostController, snackbarHostState, barberBookerViewModel)
+                SignUpAsBarberScreen(navHostController, snackbarHostState)
             }
             composable(route = staticRoutes[LOG_IN_AS_CLIENT_SCREEN_ROUTE_INDEX]) {
                 LogInAsClientScreen(navHostController, snackbarHostState)
@@ -314,7 +314,7 @@ fun BarberBookerScaffold(
                 val barberEmail = navBackStackEntry.arguments?.getString("barberEmail") ?: ""
                 LoggedInBarberRegularScreenBackHandler(drawerState, navHostController, barberEmail)
                 if (uiState.loggedInUserEmail != "") {
-                    BarberEditProfileScreen(barberEmail, snackbarHostState)
+                    BarberEditProfileScreen(barberEmail, snackbarHostState, barberBookerViewModel)
                 }
             }
             composable(

@@ -130,6 +130,9 @@ fun BarberConfirmationsScreen(
                                     tint = Color.Green
                                 )
                             }
+
+                            Spacer(modifier = Modifier.width(16.dp))
+
                             IconButton(
                                 onClick = {
                                     barberConfirmationsViewModel.confirmNegativeReservation(

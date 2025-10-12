@@ -36,8 +36,6 @@ data class BarberRegistrationUiState(
     var streetName: String = "",
     var streetNumber: String = "",
 
-    var gmail: String = "",
-
     var isEmailValid: Boolean = true,
     var isEmailAlreadyTaken: Boolean = false,
     var isPasswordValid: Boolean = true,
@@ -68,10 +66,6 @@ class BarberRegistrationViewModel @Inject constructor(
 
     fun setEmail(email: String) {
         _uiState.update { it.copy(email = email) }
-    }
-
-    fun setGmail(gmail: String) {
-        _uiState.update { it.copy(gmail = gmail) }
     }
 
     fun setPassword(password: String) {
@@ -344,9 +338,7 @@ class BarberRegistrationViewModel @Inject constructor(
 
     private fun isEmailValid(email: String): Boolean {
         val emailRegex = Regex("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$", RegexOption.IGNORE_CASE)
-        val isEmailPatternValid = emailRegex.matches(email)
-        val isEmailEqualToGmail = (email == _uiState.value.gmail || _uiState.value.gmail == "")
-        val isEmailValid = isEmailPatternValid && isEmailEqualToGmail
+        val isEmailValid = emailRegex.matches(email)
         if (!isEmailValid) _uiState.update { it.copy(isEmailValid = false) }
         else _uiState.update { it.copy(isEmailValid = true) }
         return isEmailValid
