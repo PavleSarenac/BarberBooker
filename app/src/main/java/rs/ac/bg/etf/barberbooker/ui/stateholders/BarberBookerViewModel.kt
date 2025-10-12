@@ -66,14 +66,14 @@ class BarberBookerViewModel @Inject constructor(
     }
 
     fun initializeGoogleSignInClient(activity: Activity, googleWebClientId: String) {
-        this.googleWebClientId = googleWebClientId
         val googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestEmail()
             .requestProfile()
             .requestScopes(Scope("https://www.googleapis.com/auth/calendar"))
-            .requestServerAuthCode(googleWebClientId)
+            .requestServerAuthCode(googleWebClientId, true)
             .build()
         this.googleSignInClient = GoogleSignIn.getClient(activity, googleSignInOptions)
+        this.googleWebClientId = googleWebClientId
     }
 
     fun connectWithGoogle(

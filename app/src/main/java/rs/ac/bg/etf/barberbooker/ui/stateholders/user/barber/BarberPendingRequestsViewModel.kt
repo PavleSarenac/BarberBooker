@@ -16,7 +16,14 @@ import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.NotificationD
 import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.NotificationRepository
 import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.ReservationRepository
 import rs.ac.bg.etf.barberbooker.data.*
+import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.CreateGoogleCalendarEventRequest
+import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.GoogleRepository
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 data class BarberPendingRequestsUiState(
@@ -26,9 +33,9 @@ data class BarberPendingRequestsUiState(
 @HiltViewModel
 class BarberPendingRequestsViewModel @Inject constructor(
     private val reservationRepository: ReservationRepository,
-    private val notificationRepository: NotificationRepository
+    private val notificationRepository: NotificationRepository,
+    private val googleRepository: GoogleRepository
 ) : ViewModel() {
-
     private val _uiState = MutableStateFlow(BarberPendingRequestsUiState())
     val uiState = _uiState
 
@@ -47,18 +54,26 @@ class BarberPendingRequestsViewModel @Inject constructor(
 
     fun acceptReservationRequest(
         barberEmail: String,
-        reservationId: Int,
-        clientEmail: String,
-        fcmToken: String
+        reservationRequest: ExtendedReservationWithClient
     ) = viewModelScope.launch(Dispatchers.IO) {
-        reservationRepository.acceptReservationRequest(reservationId)
+        reservationRepository.acceptReservationRequest(reservationRequest.reservationId)
+
+        googleRepository.createGoogleCalendarEvent(CreateGoogleCalendarEventRequest(
+            userEmail = barberEmail,
+            userType = "barber",
+            summary = "${reservationRequest.clientName} ${reservationRequest.clientSurname}",
+            startDateTime = getIso8601DateTime(reservationRequest.date, reservationRequest.startTime),
+            endDateTime = getIso8601DateTime(reservationRequest.date, reservationRequest.endTime),
+        ))
+
         getPendingReservationRequests(barberEmail)
+
         notificationRepository.sendNotification(
             NotificationData(
-                token = fcmToken,
+                token = reservationRequest.fcmToken,
                 title = "New notification",
                 body = "Your reservation request was accepted",
-                route = "${staticRoutes[CLIENT_INITIAL_SCREEN_ROUTE_INDEX]}/${clientEmail}",
+                route = "${staticRoutes[CLIENT_INITIAL_SCREEN_ROUTE_INDEX]}/${reservationRequest.clientEmail}",
                 channelId = APPOINTMENTS_CHANNEL_ID
             )
         )
@@ -83,4 +98,14 @@ class BarberPendingRequestsViewModel @Inject constructor(
         )
     }
 
+    private fun getIso8601DateTime(
+        dateString: String,
+        timeString: String,
+        timeZoneString: String = "Europe/Belgrade"
+    ): String {
+        val date = LocalDate.parse(dateString, DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+        val time = LocalTime.parse(timeString, DateTimeFormatter.ofPattern("HH:mm"))
+        val zonedDateTime = ZonedDateTime.of(date, time, ZoneId.of(timeZoneString))
+        return zonedDateTime.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+    }
 }

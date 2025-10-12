@@ -110,9 +110,7 @@ fun BarberPendingScreen(
                                 onClick = {
                                     barberPendingRequestsViewModel.acceptReservationRequest(
                                         barberEmail,
-                                        currentRequest.reservationId,
-                                        currentRequest.clientEmail,
-                                        currentRequest.fcmToken
+                                        currentRequest
                                     )
                                 },
                                 colors = IconButtonDefaults.iconButtonColors(
