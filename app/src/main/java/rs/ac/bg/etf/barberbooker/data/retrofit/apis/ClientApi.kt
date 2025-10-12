@@ -8,7 +8,7 @@ import retrofit2.http.Query
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.FcmTokenUpdateData
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.tables.Client
 
-const val CLIENT_URL = "http://192.168.212.92:8080/client/"
+const val CLIENT_URL = "http://192.168.0.32:8080/client/"
 
 interface ClientApi {
     @POST("addNewClient")

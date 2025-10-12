@@ -9,7 +9,7 @@ import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.ExtendedBarbe
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.FcmTokenUpdateData
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.tables.Barber
 
-const val BARBER_URL = "http://192.168.212.92:8080/barber/"
+const val BARBER_URL = "http://192.168.0.32:8080/barber/"
 
 interface BarberApi {
     @POST("addNewBarber")

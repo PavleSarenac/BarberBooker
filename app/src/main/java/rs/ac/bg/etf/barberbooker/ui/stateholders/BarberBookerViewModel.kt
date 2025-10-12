@@ -18,6 +18,8 @@ import kotlinx.coroutines.withContext
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.ExtendedReservationWithClient
 import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.ReservationRepository
 import rs.ac.bg.etf.barberbooker.data.*
+import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.JwtAuthenticationData
+import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.JwtAuthenticationRepository
 import rs.ac.bg.etf.barberbooker.data.retrofit.utils.JwtAuthenticationUtils
 import rs.ac.bg.etf.barberbooker.utils.events.SessionExpiredEventBus
 import javax.inject.Inject
@@ -31,7 +33,8 @@ data class BarberBookerUiState(
 
 @HiltViewModel
 class BarberBookerViewModel @Inject constructor(
-    private val reservationRepository: ReservationRepository
+    private val reservationRepository: ReservationRepository,
+    private val jwtAuthenticationRepository: JwtAuthenticationRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(BarberBookerUiState())
     val uiState = _uiState
@@ -125,6 +128,9 @@ class BarberBookerViewModel @Inject constructor(
                 apply()
             }
 
+            jwtAuthenticationRepository.revoke(JwtAuthenticationData(
+                jwtRefreshToken = JwtAuthenticationUtils.getJwtRefreshToken()
+            ))
             JwtAuthenticationUtils.deleteJwtTokens()
         }
 

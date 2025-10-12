@@ -28,4 +28,8 @@ class JwtAuthenticationRepository @Inject constructor(
         }
         return jwtAuthenticationDataResponse.isSuccessful
     }
+
+    suspend fun revoke(jwtAuthenticationData: JwtAuthenticationData) {
+        jwtAuthenticationApi.revoke(jwtAuthenticationData)
+    }
 }
