@@ -1,7 +1,7 @@
 package rs.ac.bg.etf.barberbooker.data.retrofit.repositories
 
 import android.util.Log
-import retrofit2.HttpException
+import rs.ac.bg.etf.barberbooker.data.retrofit.apis.GOOGLE_URL
 import rs.ac.bg.etf.barberbooker.data.retrofit.apis.GoogleApi
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.CreateGoogleCalendarEventRequest
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.GoogleConnectRequest
@@ -12,21 +12,25 @@ import javax.inject.Singleton
 class GoogleRepository @Inject constructor(
     private val googleApi: GoogleApi
 ) {
-    private val httpExceptionLogTag = "GoogleRepository"
+    private val logTag = "GoogleRepository"
 
     suspend fun connect(googleConnectRequest: GoogleConnectRequest) {
-        try {
-            googleApi.connect(googleConnectRequest)
-        } catch (exception: HttpException) {
-            Log.e(httpExceptionLogTag, exception.message())
+        val messageResponse = googleApi.connect(googleConnectRequest).body()
+        val logMessage = "${GOOGLE_URL}connect response status: ${messageResponse?.status}; message: ${messageResponse?.message}"
+        if (messageResponse?.status in 200..299) {
+            Log.d(logTag, logMessage)
+        } else {
+            Log.e(logTag, logMessage)
         }
     }
 
     suspend fun createGoogleCalendarEvent(createGoogleCalendarEventRequest: CreateGoogleCalendarEventRequest) {
-        try {
-            googleApi.createGoogleCalendarEvent(createGoogleCalendarEventRequest)
-        } catch (exception: HttpException) {
-            Log.e(httpExceptionLogTag, exception.message())
+        val messageResponse = googleApi.createGoogleCalendarEvent(createGoogleCalendarEventRequest).body()
+        val logMessage = "${GOOGLE_URL}createGoogleCalendarEvent response status: ${messageResponse?.status}; message: ${messageResponse?.message}"
+        if (messageResponse?.status in 200..299) {
+            Log.d(logTag, logMessage)
+        } else {
+            Log.e(logTag, logMessage)
         }
     }
 }
