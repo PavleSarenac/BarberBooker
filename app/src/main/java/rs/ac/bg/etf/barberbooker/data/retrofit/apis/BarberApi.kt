@@ -7,6 +7,7 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.ExtendedBarberWithAverageGrade
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.FcmTokenUpdateData
+import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.MessageResponse
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.tables.Barber
 
 const val BARBER_URL = "http://192.168.0.31:8080/barber/"
@@ -37,4 +38,7 @@ interface BarberApi {
 
     @POST("updateFcmToken")
     suspend fun updateFcmToken(@Body fcmTokenUpdateData: FcmTokenUpdateData)
+
+    @GET("isBarberConnectedToGoogle")
+    suspend fun isBarberConnectedToGoogle(@Query("email") email: String): Response<MessageResponse>
 }

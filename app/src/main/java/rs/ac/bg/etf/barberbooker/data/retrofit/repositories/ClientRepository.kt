@@ -61,4 +61,9 @@ class ClientRepository @Inject constructor(
             Log.e(httpExceptionLogTag, exception.message())
         }
     }
+
+    suspend fun isClientConnectedToGoogle(email: String): Boolean {
+        val messageResponse = clientApi.isClientConnectedToGoogle(email).body()
+        return messageResponse?.message == "true"
+    }
 }

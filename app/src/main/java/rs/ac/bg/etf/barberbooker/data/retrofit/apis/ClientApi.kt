@@ -6,6 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.FcmTokenUpdateData
+import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.MessageResponse
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.tables.Client
 
 const val CLIENT_URL = "http://192.168.0.31:8080/client/"
@@ -26,4 +27,7 @@ interface ClientApi {
 
     @POST("updateFcmToken")
     suspend fun updateFcmToken(@Body fcmTokenUpdateData: FcmTokenUpdateData)
+
+    @GET("isClientConnectedToGoogle")
+    suspend fun isClientConnectedToGoogle(@Query("email") email: String): Response<MessageResponse>
 }

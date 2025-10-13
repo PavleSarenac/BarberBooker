@@ -29,6 +29,8 @@ import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.ReservationRepositor
 import rs.ac.bg.etf.barberbooker.data.*
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.GoogleConnectRequest
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.JwtAuthenticationData
+import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.BarberRepository
+import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.ClientRepository
 import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.GoogleRepository
 import rs.ac.bg.etf.barberbooker.data.retrofit.repositories.JwtAuthenticationRepository
 import rs.ac.bg.etf.barberbooker.data.retrofit.utils.JwtAuthenticationUtils
@@ -39,14 +41,18 @@ data class BarberBookerUiState(
     var startDestination: String = staticRoutes[INITIAL_SCREEN_ROUTE_INDEX],
     var loggedInUserType: String = "",
     var loggedInUserEmail: String = "",
-    var confirmations: List<ExtendedReservationWithClient> = listOf()
+    var confirmations: List<ExtendedReservationWithClient> = listOf(),
+    var isClientConnectedToGoogle: Boolean = false,
+    var isBarberConnectedToGoogle: Boolean = false
 )
 
 @HiltViewModel
 class BarberBookerViewModel @Inject constructor(
     private val reservationRepository: ReservationRepository,
     private val jwtAuthenticationRepository: JwtAuthenticationRepository,
-    private val googleRepository: GoogleRepository
+    private val googleRepository: GoogleRepository,
+    private val clientRepository: ClientRepository,
+    private val barberRepository: BarberRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(BarberBookerUiState())
     val uiState = _uiState
@@ -105,6 +111,20 @@ class BarberBookerViewModel @Inject constructor(
                 message = "Hello, ${googleSignInAccount.displayName}!",
                 withDismissAction = true
             )
+        }
+    }
+
+    fun updateBarberGoogleConnectionStatus(email: String) = viewModelScope.launch(Dispatchers.IO) {
+        val isBarberConnectedToGoogle = barberRepository.isBarberConnectedToGoogle(email)
+        withContext(Dispatchers.Main) {
+            _uiState.update { it.copy(isBarberConnectedToGoogle = isBarberConnectedToGoogle) }
+        }
+    }
+
+    fun updateClientGoogleConnectionStatus(email: String) = viewModelScope.launch(Dispatchers.IO) {
+        val isClientConnectedToGoogle = clientRepository.isClientConnectedToGoogle(email)
+        withContext(Dispatchers.Main) {
+            _uiState.update { it.copy(isClientConnectedToGoogle = isClientConnectedToGoogle) }
         }
     }
 

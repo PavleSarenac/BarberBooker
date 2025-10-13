@@ -24,6 +24,8 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
@@ -31,10 +33,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
+import rs.ac.bg.etf.barberbooker.R
 import rs.ac.bg.etf.barberbooker.data.*
 import rs.ac.bg.etf.barberbooker.ui.stateholders.BarberBookerViewModel
 
@@ -50,6 +55,12 @@ fun BarberTopBar(
 ) {
     val coroutineScope = rememberCoroutineScope()
     var openAccountDialog by rememberSaveable { mutableStateOf(false) }
+    val uiState by barberBookerViewModel.uiState.collectAsState()
+
+    LaunchedEffect(Unit) {
+        val job = barberBookerViewModel.updateBarberGoogleConnectionStatus(barberEmail)
+        job.join()
+    }
 
     CenterAlignedTopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
@@ -78,14 +89,26 @@ fun BarberTopBar(
             }
         },
         actions = {
-            IconButton(onClick = {
-                openAccountDialog = true
-            }) {
-                Icon(
-                    imageVector = Icons.Filled.AccountCircle,
-                    contentDescription = "Show account",
-                    tint = MaterialTheme.colorScheme.onSecondary
-                )
+            if (uiState.isBarberConnectedToGoogle) {
+                IconButton(onClick = {
+                    openAccountDialog = true
+                }) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_google_logo),
+                        contentDescription = "Connected to Google",
+                        tint = Color.Unspecified
+                    )
+                }
+            } else {
+                IconButton(onClick = {
+                    openAccountDialog = true
+                }) {
+                    Icon(
+                        imageVector = Icons.Filled.AccountCircle,
+                        contentDescription = "Show account",
+                        tint = MaterialTheme.colorScheme.onSecondary
+                    )
+                }
             }
         }
     )

@@ -93,4 +93,9 @@ class BarberRepository @Inject constructor(
             Log.e(httpExceptionLogTag, exception.message())
         }
     }
+
+    suspend fun isBarberConnectedToGoogle(email: String): Boolean {
+        val messageResponse = barberApi.isBarberConnectedToGoogle(email).body()
+        return messageResponse?.message == "true"
+    }
 }
