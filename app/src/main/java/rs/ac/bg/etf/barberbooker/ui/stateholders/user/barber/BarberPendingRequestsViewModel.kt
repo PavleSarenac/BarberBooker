@@ -59,6 +59,14 @@ class BarberPendingRequestsViewModel @Inject constructor(
         reservationRepository.acceptReservationRequest(reservationRequest.reservationId)
 
         googleRepository.createGoogleCalendarEvent(CreateGoogleCalendarEventRequest(
+            userEmail = reservationRequest.clientEmail,
+            userType = "client",
+            summary = reservationRequest.barberEmail,
+            startDateTime = getIso8601DateTime(reservationRequest.date, reservationRequest.startTime),
+            endDateTime = getIso8601DateTime(reservationRequest.date, reservationRequest.endTime),
+        ))
+
+        googleRepository.createGoogleCalendarEvent(CreateGoogleCalendarEventRequest(
             userEmail = barberEmail,
             userType = "barber",
             summary = "${reservationRequest.clientName} ${reservationRequest.clientSurname}",
