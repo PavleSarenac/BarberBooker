@@ -132,7 +132,9 @@ fun ClientEditProfileScreen(
                 keyboardActions = KeyboardActions(onNext = {
                     focusManager.moveFocus(FocusDirection.Down)
                 }),
-                modifier = Modifier.padding(vertical = 8.dp),
+                modifier = Modifier
+                    .padding(vertical = 8.dp)
+                    .fillMaxWidth(),
                 isError = !uiState.isNameValid,
                 placeholder = {
                     Text(
@@ -166,7 +168,9 @@ fun ClientEditProfileScreen(
                 keyboardActions = KeyboardActions(onDone = {
                     focusManager.clearFocus()
                 }),
-                modifier = Modifier.padding(vertical = 8.dp),
+                modifier = Modifier
+                    .padding(vertical = 8.dp)
+                    .fillMaxWidth(),
                 isError = !uiState.isSurnameValid,
                 placeholder = {
                     Text(
