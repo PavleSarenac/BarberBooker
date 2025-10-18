@@ -21,7 +21,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import rs.ac.bg.etf.barberbooker.data.*
+import rs.ac.bg.etf.barberbooker.data.LOGIN_SCREEN_ROUTE_INDEX
+import rs.ac.bg.etf.barberbooker.data.SIGN_UP_SCREEN_ROUTE_INDEX
+import rs.ac.bg.etf.barberbooker.data.staticRoutes
 
 @Composable
 fun InitialScreen(navHostController: NavHostController) {
@@ -53,7 +55,7 @@ fun InitialScreen(navHostController: NavHostController) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 64.dp),
+                .padding(horizontal = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             OutlinedButton(

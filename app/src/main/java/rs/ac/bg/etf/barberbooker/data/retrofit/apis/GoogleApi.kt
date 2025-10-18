@@ -7,7 +7,7 @@ import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.CreateGoogleC
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.GoogleConnectRequest
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.MessageResponse
 
-const val GOOGLE_URL = "http://192.168.0.27:8080/google/"
+const val GOOGLE_URL = "http://172.20.10.4:8080/google/"
 
 interface GoogleApi {
     @POST("connect")

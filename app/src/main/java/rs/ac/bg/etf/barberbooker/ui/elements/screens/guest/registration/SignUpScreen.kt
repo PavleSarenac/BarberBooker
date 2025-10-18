@@ -53,7 +53,7 @@ fun SignUpScreen(navHostController: NavHostController) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 64.dp),
+                .padding(horizontal = 50.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             OutlinedButton(
