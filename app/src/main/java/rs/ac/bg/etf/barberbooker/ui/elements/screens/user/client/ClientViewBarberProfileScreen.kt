@@ -373,7 +373,7 @@ fun ClientViewBarberProfileScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 12.dp, horizontal = 50.dp),
+                    .padding(vertical = 12.dp, horizontal = 70.dp),
                 horizontalArrangement = Arrangement.Center
             ) {
                 when {
@@ -434,7 +434,7 @@ fun ClientViewBarberProfileScreen(
                     border = BorderStroke(2.dp, MaterialTheme.colorScheme.onPrimary),
                     shape = MaterialTheme.shapes.medium,
                     modifier = Modifier
-                        .padding(horizontal = 50.dp, vertical = 12.dp)
+                        .padding(horizontal = 70.dp, vertical = 12.dp)
                         .fillMaxWidth(),
                     colors = ButtonDefaults.outlinedButtonColors(
                         containerColor = MaterialTheme.colorScheme.secondary,
