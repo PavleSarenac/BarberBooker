@@ -145,7 +145,7 @@ fun ClientViewBarberProfileScreen(
             border = BorderStroke(2.dp, MaterialTheme.colorScheme.onPrimary),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = 4.dp)
         ) {
             Row(
                 modifier = Modifier
@@ -159,6 +159,7 @@ fun ClientViewBarberProfileScreen(
                     fontWeight = FontWeight.Bold
                 )
             }
+
             Row(
                 modifier = Modifier.padding(8.dp)
             ) {
@@ -166,6 +167,7 @@ fun ClientViewBarberProfileScreen(
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(text = uiState.barbershopName)
             }
+
             Row(
                 modifier = Modifier.padding(8.dp)
             ) {
@@ -190,6 +192,7 @@ fun ClientViewBarberProfileScreen(
                     )
                 }
             }
+
             Row(
                 modifier = Modifier.padding(8.dp)
             ) {
@@ -204,6 +207,7 @@ fun ClientViewBarberProfileScreen(
                     }
                 )
             }
+
             Row(
                 modifier = Modifier.padding(8.dp)
             ) {
@@ -211,6 +215,7 @@ fun ClientViewBarberProfileScreen(
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(text = uiState.workingDays)
             }
+
             Row(
                 modifier = Modifier.padding(8.dp)
             ) {
@@ -218,6 +223,7 @@ fun ClientViewBarberProfileScreen(
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(text = uiState.workingHours)
             }
+
             Row(
                 modifier = Modifier.padding(8.dp)
             ) {
@@ -225,6 +231,7 @@ fun ClientViewBarberProfileScreen(
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(text = "${uiState.price} RSD")
             }
+
             Row(
                 modifier = Modifier.padding(8.dp)
             ) {
@@ -232,6 +239,7 @@ fun ClientViewBarberProfileScreen(
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(text = uiState.country)
             }
+
             Row(
                 modifier = Modifier.padding(8.dp)
             ) {
@@ -239,6 +247,7 @@ fun ClientViewBarberProfileScreen(
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(text = uiState.city)
             }
+
             Row(
                 modifier = Modifier.padding(8.dp)
             ) {
@@ -246,6 +255,7 @@ fun ClientViewBarberProfileScreen(
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(text = uiState.municipality)
             }
+
             Row(
                 modifier = Modifier
                     .padding(8.dp)
@@ -272,6 +282,7 @@ fun ClientViewBarberProfileScreen(
                     fontWeight = FontWeight.Bold
                 )
             }
+
             Row(
                 modifier = Modifier
                     .padding(8.dp)
@@ -290,6 +301,7 @@ fun ClientViewBarberProfileScreen(
                     fontWeight = FontWeight.Bold
                 )
             }
+
             Row(
                 modifier = Modifier
                     .padding(8.dp)
@@ -320,7 +332,7 @@ fun ClientViewBarberProfileScreen(
             border = BorderStroke(2.dp, Color.White),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = 4.dp)
         ) {
             Row(
                 modifier = Modifier
@@ -355,11 +367,13 @@ fun ClientViewBarberProfileScreen(
                     dateValidator = barberProfileViewModel.dateValidator
                 )
             }
+
             Divider()
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 12.dp, horizontal = 90.dp),
+                    .padding(vertical = 12.dp, horizontal = 50.dp),
                 horizontalArrangement = Arrangement.Center
             ) {
                 when {
@@ -402,7 +416,9 @@ fun ClientViewBarberProfileScreen(
                     }
                 }
             }
+
             Divider()
+
             Row {
                 OutlinedButton(
                     onClick = {
@@ -418,7 +434,7 @@ fun ClientViewBarberProfileScreen(
                     border = BorderStroke(2.dp, MaterialTheme.colorScheme.onPrimary),
                     shape = MaterialTheme.shapes.medium,
                     modifier = Modifier
-                        .padding(horizontal = 90.dp, vertical = 12.dp)
+                        .padding(horizontal = 50.dp, vertical = 12.dp)
                         .fillMaxWidth(),
                     colors = ButtonDefaults.outlinedButtonColors(
                         containerColor = MaterialTheme.colorScheme.secondary,
@@ -438,6 +454,7 @@ fun ClientViewBarberProfileScreen(
         if (clientArchiveUiState.archive.any { it.barberEmail == barberEmail && it.status == reservationStatuses[DONE_SUCCESS_RESERVATION_STATUS_INDEX] } &&
             clientReviewsUiState.pastReviewsForThisBarber.isEmpty()) {
             Spacer(modifier = Modifier.height(24.dp))
+
             Card(
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.primary,
@@ -446,7 +463,7 @@ fun ClientViewBarberProfileScreen(
                 border = BorderStroke(2.dp, MaterialTheme.colorScheme.onPrimary),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
+                    .padding(horizontal = 4.dp)
             ) {
                 Row(
                     modifier = Modifier
@@ -460,6 +477,7 @@ fun ClientViewBarberProfileScreen(
                         fontWeight = FontWeight.Bold
                     )
                 }
+
                 Row(
                     modifier = Modifier
                         .padding(8.dp)
@@ -484,6 +502,7 @@ fun ClientViewBarberProfileScreen(
                         )
                     }
                 }
+
                 Row {
                     OutlinedTextField(
                         value = clientReviewsUiState.newReviewText,
@@ -508,7 +527,9 @@ fun ClientViewBarberProfileScreen(
                         )
                     )
                 }
+
                 Divider()
+
                 Row {
                     OutlinedButton(
                         onClick = {

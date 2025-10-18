@@ -9,7 +9,7 @@ import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.FcmTokenUpdat
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.structures.MessageResponse
 import rs.ac.bg.etf.barberbooker.data.retrofit.entities.tables.Client
 
-const val CLIENT_URL = "http://192.168.0.31:8080/client/"
+const val CLIENT_URL = "http://192.168.0.27:8080/client/"
 
 interface ClientApi {
     @POST("addNewClient")
