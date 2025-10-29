@@ -196,8 +196,6 @@ class BarberBookerViewModel @Inject constructor(
 
     fun logOut(context: Context, navHostController: NavHostController) = viewModelScope.launch(Dispatchers.Main) {
         withContext(Dispatchers.IO) {
-            Firebase.messaging.deleteToken()
-
             val sharedPreferences: SharedPreferences = context.getSharedPreferences("login_data", Context.MODE_PRIVATE)
             with(sharedPreferences.edit()) {
                 putBoolean("is_logged_in", false)
